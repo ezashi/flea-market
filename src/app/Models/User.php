@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_image',
+        'postal_code',
+        'address',
+        'is_profile_completed',
     ];
 
     /**
@@ -40,5 +44,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_profile_completed' => 'boolean',
     ];
 }
