@@ -55,6 +55,9 @@
               </div>
             </div>
           </form>
+          <div class="mt-3 text-center">
+            <a href="{{ route('login') }}">ログインはこちら</a>
+          </div>
         </div>
       </div>
     </div>

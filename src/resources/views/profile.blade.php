@@ -6,7 +6,7 @@
       <div class="card">
         <div class="card-header">プロフィール設定</div>
           <div class="card-body">
-            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('index') }}" enctype="multipart/form-data">
               @csrf
               <div class="form-group row mb-3">
                 <label for="profile_image" class="col-md-4">プロフィール画像</label>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 })->middleware('auth')->name('index');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mypage/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/mypage/profile', [ProfileController::class, 'update'])->name('profile.update');
+});

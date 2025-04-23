@@ -48,6 +48,9 @@
               </div>
             </div>
           </form>
+          <div class="mt-3 text-center">
+            <a href="{{ route('register') }}">会員登録はこちら</a>
+          </div>
         </div>
       </div>
     </div>
