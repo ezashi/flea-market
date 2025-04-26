@@ -42,8 +42,8 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.register');
         });
 
-        Fortify::registerResponse(function (Request $request, $user) {
-            return redirect()->route('profile.show');
-        });
+        // Fortify::registerResponse(function (Request $request, $user) {
+        //     return redirect()->route('profile.show');
+        // });
     }
 }

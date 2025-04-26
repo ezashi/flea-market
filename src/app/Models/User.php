@@ -46,4 +46,44 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'is_profile_completed' => 'boolean',
     ];
+
+    /**
+     * Get the items that the user has listed for sale.
+     */
+    public function sellingItems()
+    {
+        return $this->hasMany(Item::class, 'seller_id');
+    }
+
+    /**
+     * Get the items that the user has purchased.
+     */
+    public function purchasedItems()
+    {
+        return $this->hasMany(Item::class, 'buyer_id');
+    }
+
+    /**
+     * Get the comments that the user has made.
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get the likes that the user has made.
+     */
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    /**
+     * Get the liked items.
+     */
+    public function likedItems()
+    {
+        return $this->belongsToMany(Item::class, 'likes');
+    }
 }
