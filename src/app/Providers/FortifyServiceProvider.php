@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
@@ -43,12 +44,12 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.register');
         });
 
-        Fortify::createUsersUsing(RegisteredUserController::class);
+        // 登録後に自動ログイン
+        Fortify::afterRegister(function (Request $request, $user) {
+            Auth::login($user); // ここで自動ログイン！
+            return redirect()->route('profile.show');
+        });
 
-        // Fortify::redirects('register' , '/mypage/profile',);
-
-        // Fortify::registerResponse(function (Request $request, $user) {
-        //     return redirect()->route('profile.show');
-        // });
+        Fortify::createUsersUsing(RegisteredUserController::class.'@store');
     }
 }
