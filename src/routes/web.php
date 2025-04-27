@@ -27,36 +27,36 @@ Route::middleware(['auth'])->group(function () {
     // プロフィール関連
     Route::get('/mypage/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/mypage/profile', [ProfileController::class, 'update'])->name('profile.update');
-    
+
     // マイページ
     Route::get('/mypage', function() {
         return view('mypage.index');
     })->name('mypage');
-    
+
     // マイページ（購入した商品一覧）
     Route::get('/mypage?page=buy', function() {
         $items = auth()->user()->purchasedItems()->latest()->paginate(10);
         return view('mypage.buy', compact('items'));
     })->name('mypage.buy');
-    
+
     // マイページ（出品した商品一覧）
     Route::get('/mypage?page=sell', function() {
         $items = auth()->user()->sellingItems()->latest()->paginate(10);
         return view('mypage.sell', compact('items'));
     })->name('mypage.sell');
-    
+
     // 商品関連
     Route::get('/sell', [ItemController::class, 'create'])->name('items.create');
     Route::post('/sell', [ItemController::class, 'store'])->name('items.store');
-    
+
     // 商品購入
     Route::get('/purchase/{item}', [ItemController::class, 'purchase'])->name('items.purchase');
     Route::post('/purchase/{item}', [ItemController::class, 'completePurchase'])->name('items.completePurchase');
     Route::get('/purchase/address/{item}', [ItemController::class, 'changeAddress'])->name('items.changeAddress');
-    
+
     // いいね機能
     Route::post('/items/{item}/like', [ItemController::class, 'toggleLike'])->name('items.like');
-    
+
     // コメント機能
     Route::post('/items/{item}/comment', [ItemController::class, 'storeComment'])->name('items.comment');
 });

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
@@ -41,6 +42,10 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::registerView(function () {
             return view('auth.register');
         });
+
+        Fortify::createUsersUsing(RegisteredUserController::class);
+
+        // Fortify::redirects('register' , '/mypage/profile',);
 
         // Fortify::registerResponse(function (Request $request, $user) {
         //     return redirect()->route('profile.show');
