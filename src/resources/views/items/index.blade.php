@@ -4,6 +4,12 @@
   <div class="row justify-content-center">
     <div class="col-md-12">
       <div class="card">
+        <form method="POST" action="{{ route('login') }}" style="display: inline;">
+          @csrf
+          <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
+            ログイン
+          </button>
+        </form>
         <div class="card-header">商品一覧</div>
         <div class="card-body">
         <!-- 検索フォーム -->

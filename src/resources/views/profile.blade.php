@@ -4,6 +4,12 @@
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card">
+        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+          @csrf
+          <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
+            ログアウト
+          </button>
+        </form>
         <div class="card-header">プロフィール設定</div>
           <div class="card-body">
             <form method="POST" action="{{ route('index') }}" enctype="multipart/form-data">
@@ -50,6 +56,12 @@
                     <strong>{{ $message }}</strong>
                   </span>
                   @enderror
+                </div>
+              </div>
+              <div class="form-group row mb-3">
+                <label for="address" class="col-md-4">建物名</label>
+                <div class="col-md-6">
+                  <input id="address" type="text" class="form-control-building" name="building">
                 </div>
               </div>
               <div class="form-group row mb-0">
