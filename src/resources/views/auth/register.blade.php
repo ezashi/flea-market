@@ -6,7 +6,7 @@
       <div class="card">
         <div class="card-header">会員登録</div>
         <div class="card-body">
-          <form method="POST" action="{{ route('profile.show') }}">
+          <form method="POST" action="{{ route('register') }}">
             @csrf
             <div class="form-group row">
               <label for="name" class="col-md-4">お名前</label>
