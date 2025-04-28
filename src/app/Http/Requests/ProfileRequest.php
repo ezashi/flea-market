@@ -24,7 +24,19 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'profile_image' => ['required', 'image', 'mimes:jpeg,png'],
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'profile_image.mimes' => '拡張子が.jpegもしくは.pngにしてください',
         ];
     }
 }

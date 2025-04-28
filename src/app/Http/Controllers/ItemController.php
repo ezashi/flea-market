@@ -62,7 +62,7 @@ class ItemController extends Controller
   // 商品出品
   public function store(Request $request)
   {
-    $data = $request->all();
+    $data = $request->validated();
     $data['seller_id'] = Auth::id();
 
     if ($request->hasFile('image')) {
@@ -128,14 +128,6 @@ class ItemController extends Controller
 
   public function storeComment(Request $request, Item $item)
   {
-    if (!Auth::check()) {
-      return redirect()->route('login');
-    }
-
-    $request->validate([
-      'content' => 'required|max:255',
-    ]);
-
     Comment::create([
       'user_id' => Auth::id(),
       'item_id' => $item->id,

@@ -53,9 +53,14 @@
                 </div>
               </div>
               <div class="form-group row mb-3">
-                <label for="address" class="col-md-4">建物名</label>
+                <label for="building" class="col-md-4">建物名</label>
                 <div class="col-md-6">
-                  <input id="address" type="text" class="form-control-building" name="building">
+                  <input id="building" type="text" class="form-control-building" name="building" value="{{ old('building', $user->building) }}">
+                  @error('building')
+                  <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                  </span>
+                  @enderror
                 </div>
               </div>
               <div class="form-group row mb-0">

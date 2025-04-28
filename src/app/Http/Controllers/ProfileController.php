@@ -13,7 +13,7 @@ class ProfileController extends Controller
         return view('profile', ['user' => Auth::user()]);
     }
 
-    public function update(Request $request)
+    public function update(ProfileRequest $request)
     {
         $user = Auth::user();
         $user->name = $request->name;
@@ -24,8 +24,10 @@ class ProfileController extends Controller
             $imagePath = $request->file('profile_image')->store('profile_images', 'public');
             $user->profile_image = $imagePath;
         }
+
         $user->is_profile_completed = true;
         $user->save();
+
         return redirect()->route('index');
     }
 }

@@ -13,7 +13,9 @@
 <body>
     <header>
         <div class="navbar">
-            <a href="{{ route('index') }}" class="navbar-brand">coachtechフリマ</a>
+            <a href="{{ route('index') }}" class="navbar-brand">
+                <img src="{{ asset('images/Free Market App Logo.svg') }}" alt="coachtechフリマ->index"/>
+            </a>
             @auth
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                 @csrf
