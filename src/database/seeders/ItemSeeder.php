@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 use App\Models\Item;
-use App\Models\User;
 use App\Models\Category;
 
 class ItemSeeder extends Seeder
@@ -16,6 +17,13 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
+        $seller = User::create([
+            'name' => 'Test Seller',
+            'email' => 'seller@example.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+        ]);
+
         $categories = [
             'ファッション',
             '家電',

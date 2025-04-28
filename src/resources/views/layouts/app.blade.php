@@ -14,6 +14,16 @@
     <header>
         <div class="navbar">
             <a href="{{ route('index') }}" class="navbar-brand">coachtechフリマ</a>
+            @auth
+                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                @csrf
+                <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
+                    ログアウト
+                </button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="nav-link">ログイン</a>
+            @endauth
         </div>
     </header>
     <main>

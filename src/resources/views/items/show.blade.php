@@ -28,19 +28,15 @@
               <p class="text-muted">出品者: {{ $item->seller->name }}</p>
               <h3 class="text-danger">¥{{ number_format($item->price) }}</h3>
               <div class="d-flex mb-3">
-                @auth
-                  @if($item->seller_id !== Auth::id() && !$item->sold)
-                    <a href="{{ route('items.purchase', $item) }}" class="btn btn-success me-2">購入する</a>
-                  @endif
-                  <form action="{{ route('items.like', $item) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn {{ $isLiked ? 'btn-danger' : 'btn-outline-danger' }}">
-                      <i class="fa fa-heart"></i> いいね {{ $item->likes()->count() }}
-                    </button>
-                  </form>
-                @else
-                  <a href="{{ route('login') }}" class="btn btn-outline-primary me-2">ログインして購入</a>
-                @endauth
+                @if($item->seller_id !== Auth::id() && !$item->sold)
+                  <a href="{{ route('items.purchase', $item) }}" class="btn btn-success me-2">購入手続きへ</a>
+                @endif
+                <form action="{{ route('items.like', $item) }}" method="POST">
+                  @csrf
+                  <button type="submit" class="btn {{ $isLiked ? 'btn-danger' : 'btn-outline-danger' }}">
+                    <i class="fa fa-heart"></i> いいね {{ $item->likes()->count() }}
+                  </button>
+                </form>
               </div>
 
               <div class="mb-3">
@@ -70,24 +66,18 @@
           <!-- コメント欄 -->
           <div class="mt-4">
             <h4>コメント ({{ $item->comments->count() }})</h4>
-            @auth
-              <form action="{{ route('items.comment', $item) }}" method="POST" class="mb-3">
-                @csrf
-                <div class="form-group">
-                  <textarea name="content" class="form-control @error('content') is-invalid @enderror" rows="3" placeholder="コメントを入力"></textarea>
-                  @error('content')
-                    <span class="invalid-feedback" role="alert">
-                      <strong>{{ $message }}</strong>
-                    </span>
-                  @enderror
-                </div>
-                <button type="submit" class="btn btn-primary mt-2">コメントする</button>
-              </form>
-            @else
-              <div class="alert alert-info">
-                コメントを投稿するには<a href="{{ route('login') }}">ログイン</a>してください。
+            <form action="{{ route('items.comment', $item) }}" method="POST" class="mb-3">
+              @csrf
+              <div class="form-group">
+                <textarea name="content" class="form-control @error('content') is-invalid @enderror" rows="3" placeholder="コメントを入力"></textarea>
+                @error('content')
+                  <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                  </span>
+                @enderror
               </div>
-            @endauth
+              <button type="submit" class="btn btn-primary mt-2">コメントする</button>
+            </form>
 
             <div class="mt-3">
               @forelse($item->comments as $comment)

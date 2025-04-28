@@ -4,12 +4,6 @@
   <div class="row justify-content-center">
     <div class="col-md-12">
       <div class="card">
-        <form method="POST" action="{{ route('login') }}" style="display: inline;">
-          @csrf
-          <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
-            ログイン
-          </button>
-        </form>
         <div class="card-header">商品一覧</div>
         <div class="card-body">
         <!-- 検索フォーム -->
@@ -37,9 +31,11 @@
                     @endif
                   </div>
                   <div class="card-body">
-                    <h5 class="card-title">{{ $item->name }}</h5>
-                    <p class="card-text">¥{{ number_format($item->price) }}</p>
-                    <a href="{{ route('items.show', $item) }}" class="btn btn-primary">詳細を見る</a>
+                    <h5 class="card-title">
+                      <a href="{{ route('items.show', $item) }}" class="btn btn-primary">
+                        {{ $item->name }}
+                      </a>
+                    </h5>
                   </div>
                 </div>
               </div>
