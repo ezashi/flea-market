@@ -9,7 +9,7 @@
           <form method="POST" action="{{ route('register') }}">
             @csrf
             <div class="form-group row">
-              <label for="name" class="col-md-4">お名前</label>
+              <label for="name" class="col-md-4">ユーザー名</label>
               <div class="col-md-6">
                 <input id="name" type="text" class="form-control-name" name="name" value="{{ old('name') }}">
                 @error('name')
