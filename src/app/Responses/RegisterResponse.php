@@ -2,6 +2,8 @@
 
 namespace App\Responses;
 
+use App\Http\Requests\AddressRequest;
+use App\Http\Requests\ProfileRequest;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Illuminate\Http\JsonResponse;
 

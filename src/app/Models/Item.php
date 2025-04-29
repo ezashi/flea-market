@@ -20,42 +20,44 @@ class Item extends Model
         'sold',
     ];
 
-    //seller_idから、商品がどのユーザーに出品されたかを取得
+    protected $casts = [
+        'price' => 'integer',
+        'sold' => 'boolean',
+    ];
+
+    // 出品者のリレーション
     public function seller()
     {
         return $this->belongsTo(User::class, 'seller_id');
     }
 
-    //buyer_idから、誰が買ったかを取得
+    // 購入者のリレーション
     public function buyer()
     {
         return $this->belongsTo(User::class, 'buyer_id');
     }
 
+    // カテゴリのリレーション
     public function categories()
     {
         return $this->belongsToMany(Category::class);
     }
 
+    // いいねのリレーション
     public function likes()
     {
         return $this->hasMany(Like::class);
     }
 
+    // コメントのリレーション
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
-    //ログイン中のユーザーがこの商品に「いいね」してるかどうかを判定
+    // ユーザーがいいねしたかどうかを判定するメソッド
     public function isLikedBy($userId)
     {
         return $this->likes()->where('user_id', $userId)->exists();
-    }
-
-    //この商品が何回「いいね」されてるかを取得
-    public function likesCount()
-    {
-        return $this->likes()->count();
     }
 }

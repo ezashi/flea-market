@@ -1,52 +1,57 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">商品一覧</div>
-        <div class="card-body">
-          <!-- 商品一覧 -->
-          <div class="row">
-            @forelse($items as $item)
-              <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                  <div class="position-relative">
-                    @if($item->image)
-                      <img src="{{ asset('storage/' . $item->image) }}" class="card-img-top" alt="{{ $item->name }}">
-                    @else
-                      <div class="card-img-top bg-light text-center py-5">No Image</div>
-                    @endif
+  <div class="row">
+    <div class="col-12">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('index') ? 'active' : '' }}" href="{{ route('index') }}">おすすめ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('mylist') ? 'active' : '' }}" href="{{ route('mylist') }}">マイリスト</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 
-                    @if($item->sold)
-                      <div class="position-absolute top-0 end-0 bg-danger text-white px-2 py-1">Sold</div>
-                    @endif
+  <div class="row mt-4">
+    @if(count($items) > 0)
+      @foreach($items as $item)
+        <div class="col-md-4 mb-4">
+          <a href="{{ route('items.show', $item) }}" class="text-decoration-none text-dark">
+            <div class="card h-100">
+              <div class="position-relative">
+                @if($item->image)
+                  <img src="{{ asset('storage/images/' . $item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
+                @else
+                  <div class="card-img-top bg-light text-center d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <span>商品画像</span>
                   </div>
-                  <div class="card-body">
-                    <h5 class="card-title">
-                      <a href="{{ route('items.show', $item) }}" class="btn btn-primary">
-                        {{ $item->name }}
-                      </a>
-                    </h5>
-                  </div>
-                </div>
+                @endif
+                <!-- 購入時み -->
+                @if($item->sold)
+                  <div class="position-absolute top-0 end-0 bg-danger text-white px-2 py-1">Sold</div>
+                @endif
               </div>
-            @empty
-              <div class="col-12">
-                <div class="alert alert-info">
-                  商品がありません。
-                </div>
+              <div class="card-body">
+                <h5 class="card-title">{{ $item->name }}</h5>
               </div>
-            @endforelse
-          </div>
-
-          <!-- ページネーション -->
-          <div class="d-flex justify-content-center mt-4">
-            {{ $items->links() }}
-          </div>
+            </div>
+          </a>
+        </div>
+      @endforeach
+    @else
+      <div class="col-12">
+        <div class="alert alert-info">
+          商品がありません。
         </div>
       </div>
-    </div>
+    @endif
+  </div>
+
+  <!-- ページネーション -->
+  <div class="d-flex justify-content-center mt-4">
+    {{ $items->links() }}
   </div>
 </div>
 @endsection

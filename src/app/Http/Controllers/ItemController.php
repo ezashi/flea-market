@@ -6,6 +6,11 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Like;
 use App\Models\Comment;
+// use App\Http\Requests\AddressRequest;
+use App\Http\Requests\CommentRequest;
+use App\Http\Requests\ExhibitionRequest;
+// use App\Http\Requests\ProfileRequest;
+use App\Http\Requests\PurchaseRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -35,8 +40,12 @@ class ItemController extends Controller
   public function mylist(Request $request)
   {
     if (!Auth::check()) {
-      return view('auth.login');
+      // 未認証の場合は空のコレクションをビューに渡す
+      $items = collect()->paginate(10);
+      return view('items.index', compact('items'));
     }
+
+    // ログインユーザーがいいねした商品のIDを取得
     $likedItems = Auth::user()->likes()->pluck('item_id');
     $query = Item::whereIn('id', $likedItems);
 
@@ -50,7 +59,7 @@ class ItemController extends Controller
 
     $items = $query->latest()->paginate(10);
 
-    return view('items.mylist', compact('items'));
+    return view('items.index', compact('items'));
   }
 
 

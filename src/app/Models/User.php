@@ -47,43 +47,27 @@ class User extends Authenticatable
         'is_profile_completed' => 'boolean',
     ];
 
-    /**
-     * Get the items that the user has listed for sale.
-     */
+    // 出品中の商品
     public function sellingItems()
     {
         return $this->hasMany(Item::class, 'seller_id');
     }
 
-    /**
-     * Get the items that the user has purchased.
-     */
+    // 購入した商品
     public function purchasedItems()
     {
         return $this->hasMany(Item::class, 'buyer_id');
     }
 
-    /**
-     * Get the comments that the user has made.
-     */
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
-
-    /**
-     * Get the likes that the user has made.
-     */
+    // いいねした商品
     public function likes()
     {
         return $this->hasMany(Like::class);
     }
 
-    /**
-     * Get the liked items.
-     */
-    public function likedItems()
+    // コメント
+    public function comments()
     {
-        return $this->belongsToMany(Item::class, 'likes');
+        return $this->hasMany(Comment::class);
     }
 }
