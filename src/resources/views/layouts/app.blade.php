@@ -30,8 +30,12 @@
                             ログアウト
                         </button>
                     </form>
-                    <!-- <a href="{{ route('logout') }}" class="mb-nav">ログアウト</a> -->
-                    <a href="{{ route('mypage') }}" class="mb-link">マイページ</a>
+                    <form method="GET" action="{{ route('mypage') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="nav-mb" style="background: none; border: none; cursor: pointer;">
+                            マイページ
+                        </button>
+                    </form>
                     <form action="{{ route('items.create') }}" method="GET" class="mb-4">
                         <button type="submit" class="btn btn-primary">出品</button>
                     </form>
@@ -44,8 +48,18 @@
                         <button class="btn btn-outline-secondary" type="submit">検索</button>
                     </form>
 
-                    <a href="{{ route('login') }}" class="nav-link">ログイン</a>
-                    <a href="{{ route('mypage') }}" class="mb-link">マイページ</a>
+                    <form method="GET" action="{{ route('login') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
+                            ログイン
+                        </button>
+                    </form>
+                    <form method="GET" action="{{ route('mypage') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="nav-mb" style="background: none; border: none; cursor: pointer;">
+                            マイページ
+                        </button>
+                    </form>
                     <form action="{{ route('items.create') }}" method="GET" class="mb-4">
                         <button type="submit" class="btn btn-primary">出品</button>
                     </form>
