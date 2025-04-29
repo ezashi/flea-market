@@ -17,14 +17,39 @@
                 <img src="{{ asset('images/Free Market App Logo.svg') }}" alt="coachtechフリマ->index"/>
             </a>
             @auth
-                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                @csrf
-                <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
-                    ログアウト
-                </button>
-                </form>
+                @if (!Route::is('login') && !Route::is('register'))
+                    <!-- 検索フォーム -->
+                    <form action="{{ route('index') }}" method="GET" class="mb-4">
+                        <input type="text" class="form-control" name="search" placeholder=" 何をお探しですか？" value="{{ request('search') }}">
+                        <button class="btn btn-outline-secondary" type="submit">検索</button>
+                    </form>
+
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
+                            ログアウト
+                        </button>
+                    </form>
+                    <!-- <a href="{{ route('logout') }}" class="mb-nav">ログアウト</a> -->
+                    <a href="{{ route('mypage') }}" class="mb-link">マイページ</a>
+                    <form action="{{ route('items.create') }}" method="GET" class="mb-4">
+                        <button type="submit" class="btn btn-primary">出品</button>
+                    </form>
+                @endif
             @else
-                <a href="{{ route('login') }}" class="nav-link">ログイン</a>
+                @if (!Route::is('login') && !Route::is('register'))
+                    <!-- 検索フォーム -->
+                    <form action="{{ route('index') }}" method="GET" class="mb-4">
+                        <input type="text" class="form-control" name="search" placeholder=" 何をお探しですか？" value="{{ request('search') }}">
+                        <button class="btn btn-outline-secondary" type="submit">検索</button>
+                    </form>
+
+                    <a href="{{ route('login') }}" class="nav-link">ログイン</a>
+                    <a href="{{ route('mypage') }}" class="mb-link">マイページ</a>
+                    <form action="{{ route('items.create') }}" method="GET" class="mb-4">
+                        <button type="submit" class="btn btn-primary">出品</button>
+                    </form>
+                @endif
             @endauth
         </div>
     </header>

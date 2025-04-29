@@ -31,6 +31,7 @@ class ItemController extends Controller
     return view('items.index', compact('items'));
   }
 
+
   public function mylist(Request $request)
   {
     if (!Auth::check()) {
@@ -52,12 +53,14 @@ class ItemController extends Controller
     return view('items.mylist', compact('items'));
   }
 
+
   // 商品出品のフォームを表示
   public function create()
   {
     $categories = Category::all();
     return view('items.create', compact('categories'));
   }
+
 
   // 商品出品
   public function store(Request $request)
@@ -76,6 +79,7 @@ class ItemController extends Controller
     return redirect()->route('mypage', ['page' => 'sell'])->with('success', '商品を出品しました');
   }
 
+
   public function show(Item $item)
   {
     $item->load(['categories', 'comments.user']);
@@ -87,6 +91,7 @@ class ItemController extends Controller
 
     return view('items.show', compact('item', 'isLiked'));
   }
+
 
   public function completePurchase(Request $request, Item $item)
   {
@@ -101,6 +106,7 @@ class ItemController extends Controller
 
     return redirect()->route('mypage', ['page' => 'buy'])->with('success', '商品を購入しました');
   }
+
 
   public function toggleLike(Item $item)
   {
@@ -125,6 +131,7 @@ class ItemController extends Controller
 
     return redirect()->back()->with('success', "商品を{$action}しました");
   }
+
 
   public function storeComment(Request $request, Item $item)
   {

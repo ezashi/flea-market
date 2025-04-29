@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Laravel\Fortify\Contracts\LogoutResponse;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
@@ -46,5 +47,13 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::registerView(function () {
             return view('auth.register');
         });
+
+        //ログアウト後、ログイン画面にリダイレクト
+        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
+        public function toResponse($request)
+        {
+            return redirect()->route('login');
+        }
+    });
     }
 }

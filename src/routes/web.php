@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
         return view('mypage.sell', compact('items'));
     })->name('mypage.sell');
 
-    // 商品関連
+    // 商品出品
     Route::get('/sell', [ItemController::class, 'create'])->name('items.create');
     Route::post('/sell', [ItemController::class, 'store'])->name('items.store');
 

@@ -6,14 +6,6 @@
       <div class="card">
         <div class="card-header">商品一覧</div>
         <div class="card-body">
-        <!-- 検索フォーム -->
-          <form action="{{ route('index') }}" method="GET" class="mb-4">
-            <div class="input-group">
-              <input type="text" class="form-control" name="search" placeholder="商品名を検索" value="{{ request('search') }}">
-              <button class="btn btn-outline-secondary" type="submit">検索</button>
-            </div>
-          </form>
-
           <!-- 商品一覧 -->
           <div class="row">
             @forelse($items as $item)
