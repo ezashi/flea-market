@@ -15,15 +15,27 @@ class ProfileController extends Controller
         return view('profile', ['user' => Auth::user()]);
     }
 
-    public function update(ProfileRequest $request)
+    public function update(ProfileRequest $profileRequest, AddressRequest $addressRequest)
     {
-        $user = Auth::user();
-        $user->name = $request->name;
-        $user->postal_code = $request->postal_code;
-        $user->address = $request->address;
+        // バリデーションに成功した値を結合
+        $validatedData = array_merge(
+            $profileRequest->validated(),
+            $addressRequest->validated()
+        );
 
-        if ($request->hasFile('profile_image')) {
-            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+        $user = Auth::user();
+
+        // データの更新
+        $user->name = $validatedData['name'];
+        $user->postal_code = $validatedData['postal_code'];
+        $user->address = $validatedData['address'];
+
+        if (isset($validatedData['building'])) {
+            $user->building = $validatedData['building'];
+        }
+
+        if ($profileRequest->hasFile('profile_image')) {
+            $imagePath = $profileRequest->file('profile_image')->store('profile_images', 'public');
             $user->profile_image = $imagePath;
         }
 
