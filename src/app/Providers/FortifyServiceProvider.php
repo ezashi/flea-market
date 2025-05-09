@@ -11,12 +11,6 @@ use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
-use Laravel\Fortify\Actions\AttemptToAuthenticate;
-use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
-use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
-use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
-use Laravel\Fortify\Features;
-use App\Responses\RegisterResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\LogoutResponse;
 
@@ -84,17 +78,15 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(\Laravel\Fortify\Contracts\CreatesNewUsers::class, function ($app) {
             return new class implements \Laravel\Fortify\Contracts\CreatesNewUsers {
                 public function create(array $input){
-                    $request = new Request($input);
                     $registerRequest = new RegisterRequest();
-
                     $validator = \Illuminate\Support\Facades\Validator::make(
-                        $request->all(),
+                        $input,
                         $registerRequest->rules(),
                         $registerRequest->messages()
                     );
 
                     if ($validator->fails()) {
-                        return back()->withErrors($validator)->withInput();
+                        throw new \Illuminate\Validation\ValidationException($validator);
                     }
 
                     return app(CreateNewUser::class)->create($input);
