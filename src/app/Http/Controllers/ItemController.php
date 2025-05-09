@@ -72,7 +72,7 @@ class ItemController extends Controller
 
 
   // 商品出品
-  public function store(Request $request)
+  public function store(ExhibitionRequest $request)
   {
     $data = $request->validated();
     $data['seller_id'] = Auth::id();

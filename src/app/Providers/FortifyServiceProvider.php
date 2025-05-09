@@ -17,6 +17,7 @@ use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Features;
 use App\Responses\RegisterResponse;
 
+
 class FortifyServiceProvider extends ServiceProvider
 {
     /**

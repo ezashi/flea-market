@@ -6,11 +6,11 @@
       <div class="card">
         <div class="card-header">商品出品</div>
         <div class="card-body">
-          <form method="POST" action="{{ route('items.store') }}" enctype="multipart/form-data">
+          <form method="POST" action="{{ route('items.store') }}" enctype="multipart/form-data" novalidate>
             @csrf
             <!-- 商品名 -->
             <div class="mb-3 row">
-              <label for="name" class="col-md-4 col-form-label text-md-end">商品名</label>
+              <label for="name" class="col-md-4 col-form-label text-md-end" >商品名</label>
               <div class="col-md-6">
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required>
                 @error('name')
@@ -61,9 +61,9 @@
               <label class="col-md-4 col-form-label text-md-end">カテゴリ</label>
               <div class="col-md-6">
                 @foreach($categories as $category)
-                  <div class="form-check">
-                    <input class="form-check-input @error('categories') is-invalid @enderror" type="checkbox" name="categories[]" value="{{ $category->id }}" id="category{{ $category->id }}" {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="category{{ $category->id }}">
+                  <div class="category-button">
+                    <input class="category-input @error('categories') is-invalid @enderror" type="checkbox" name="categories[]" value="{{ $category->id }}" id="category{{ $category->id }}" {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }}>
+                    <label class="category-button" for="category{{ $category->id }}">
                       {{ $category->name }}
                     </label>
                   </div>
