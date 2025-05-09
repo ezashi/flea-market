@@ -48,7 +48,7 @@
             <button class="btn btn-outline-secondary" type="submit" style="background: none; border: none; cursor: pointer;">検索</button>
           </form>
 
-          <form method="GET" action="{{ route('login') }}" style="display: inline;">
+          <form method="GET" action="/login" style="display: inline;">
             @csrf
             <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
               ログイン

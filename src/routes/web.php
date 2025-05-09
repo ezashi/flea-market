@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -15,6 +17,13 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/register', function () {
+    return view('auth.register');
+})->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
+
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 // トップページ（商品一覧）
 Route::get('/', [ItemController::class, 'index'])->name('index');
