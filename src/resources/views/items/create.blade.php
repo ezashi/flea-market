@@ -14,9 +14,7 @@
               <div class="col-md-6">
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required>
                 @error('name')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                  <div class="error-message">{{ $message }}</div>
                 @enderror
               </div>
             </div>
@@ -30,9 +28,7 @@
                   <input id="price" type="number" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ old('price') }}" required>
                 </div>
                 @error('price')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                  <div class="error-message">{{ $message }}</div>
                 @enderror
               </div>
             </div>
@@ -49,9 +45,7 @@
                   <option value="状態が悪い" {{ old('condition') == '状態が悪い' ? 'selected' : '' }}>状態が悪い</option>
                 </select>
                 @error('condition')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                  <div class="error-message">{{ $message }}</div>
                 @enderror
               </div>
             </div>
@@ -69,9 +63,7 @@
                   </div>
                 @endforeach
                 @error('categories')
-                  <span class="invalid-feedback d-block" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                  <div class="error-message">{{ $message }}</div>
                 @enderror
               </div>
             </div>
@@ -82,9 +74,7 @@
               <div class="col-md-6">
                 <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" required>{{ old('description') }}</textarea>
                 @error('description')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                  <div class="error-message">{{ $message }}</div>
                 @enderror
               </div>
             </div>
@@ -95,9 +85,7 @@
               <div class="col-md-6">
                 <input id="image" type="file" class="form-control @error('image') is-invalid @enderror" name="image">
                 @error('image')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                  <div class="error-message">{{ $message }}</div>
                 @enderror
               </div>
             </div>

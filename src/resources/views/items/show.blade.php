@@ -71,9 +71,7 @@
               <div class="form-group">
                 <textarea name="content" class="form-control @error('content') is-invalid @enderror" rows="3" placeholder="コメントを入力"></textarea>
                 @error('content')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                  <div class="error-message">{{ $message }}</div>
                 @enderror
               </div>
               <button type="submit" class="btn btn-primary mt-2">コメントする</button>

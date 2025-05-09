@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
+use App\Models\User;
+use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {

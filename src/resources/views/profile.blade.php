@@ -13,9 +13,7 @@
                 <div class="col-md-6">
                   <input id="profile_image" type="file" class="form-control-profile_image" name="profile_image">
                   @error('profile_image')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                    <div class="error-message">{{ $message }}</div>
                   @enderror
                 </div>
               </div>
@@ -24,9 +22,7 @@
                 <div class="col-md-6">
                   <input id="name" type="text" class="form-control-name" name="name" value="{{ old('name', $user->name) }}">
                   @error('name')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                    <div class="error-message">{{ $message }}</div>
                   @enderror
                 </div>
               </div>
@@ -35,9 +31,7 @@
                 <div class="col-md-6">
                   <input id="postal_code" type="text" class="form-control-postal_code" name="postal_code" value="{{ old('postal_code', $user->postal_code) }}">
                   @error('postal_code')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                    <div class="error-message">{{ $message }}</div>
                   @enderror
                 </div>
               </div>
@@ -46,9 +40,7 @@
                 <div class="col-md-6">
                   <input id="address" type="text" class="form-control-address" name="address" value="{{ old('address', $user->address) }}">
                   @error('address')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                    <div class="error-message">{{ $message }}</div>
                   @enderror
                 </div>
               </div>
@@ -57,9 +49,7 @@
                 <div class="col-md-6">
                   <input id="building" type="text" class="form-control-building" name="building" value="{{ old('building', $user->building) }}">
                   @error('building')
-                  <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                  </span>
+                    <div class="error-message">{{ $message }}</div>
                   @enderror
                 </div>
               </div>

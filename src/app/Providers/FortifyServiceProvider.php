@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use Laravel\Fortify\Contracts\LogoutResponse;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
@@ -16,6 +17,8 @@ use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Features;
 use App\Responses\RegisterResponse;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Fortify\Contracts\LogoutResponse;
 
 
 class FortifyServiceProvider extends ServiceProvider
@@ -47,6 +50,56 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::registerView(function () {
             return view('auth.register');
+        });
+
+        Fortify::authenticateUsing(function (Request $request) {
+            // LoginRequestを使用してバリデーション
+            $loginRequest = new LoginRequest();
+            $validator = \Illuminate\Support\Facades\Validator::make(
+                $request->all(),
+                $loginRequest->rules(),
+                $loginRequest->messages()
+            );
+
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
+            }
+
+            // 認証処理
+            if (Auth::attempt($request->only('email', 'password'))) {
+                return Auth::user();
+            }
+
+            // 認証失敗時のエラーメッセージ
+            return back()->withErrors([
+                'email' => [trans('auth.failed')],
+            ])->withInput();
+        });
+
+        // カスタム登録バリデーション
+        Fortify::registerView(function () {
+            return view('auth.register');
+        });
+
+        $this->app->singleton(\Laravel\Fortify\Contracts\CreatesNewUsers::class, function ($app) {
+            return new class implements \Laravel\Fortify\Contracts\CreatesNewUsers {
+                public function create(array $input){
+                    $request = new Request($input);
+                    $registerRequest = new RegisterRequest();
+
+                    $validator = \Illuminate\Support\Facades\Validator::make(
+                        $request->all(),
+                        $registerRequest->rules(),
+                        $registerRequest->messages()
+                    );
+
+                    if ($validator->fails()) {
+                        return back()->withErrors($validator)->withInput();
+                    }
+
+                    return app(CreateNewUser::class)->create($input);
+                }
+            };
         });
 
         //ログアウト後、ログイン画面にリダイレクト
