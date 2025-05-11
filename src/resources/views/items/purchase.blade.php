@@ -27,11 +27,13 @@
           <div class="mb-4">
             <h5>支払い方法</h5>
             <div class="form-check mb-2">
-              <select id="payment_method" class="form-select @error('payment_method') is-invalid @enderror" name="payment_method" required>
-                <option value="">選択してください</option>
-                <option value="コンビニ払い" {{ old('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
-                <option value="カード払い" {{ old('payment_method') == 'カード払い' ? 'selected' : '' }}>カード払い</option>
-              </select>
+                <select id="payment_method" class="form-select @error('payment_method') is-invalid @enderror" name="payment_method" required onChange="this.form.submit()">
+                  @if(!session('payment_method'))
+                    <option value="" disabled selected>選択してください</option>
+                  @endif
+                  <option value="コンビニ払い" {{ old('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
+                  <option value="カード払い" {{ old('payment_method') == 'カード払い' ? 'selected' : '' }}>カード払い</option>
+                </select>
             </div>
           </div>
 

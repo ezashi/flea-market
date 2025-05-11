@@ -115,6 +115,18 @@ class ItemController extends Controller
   }
 
 
+  public function selectPayment(Request $request, Item $item)
+  {
+    $validated = $request->validate([
+        'payment_method' => 'required|string',
+    ]);
+
+    session(['selected_payment' => $validated['payment_method']]);
+
+    return redirect()->route('items.purchase', $item);
+  }
+
+
   public function changeAddress(Item $item)
   {
     if (!Auth::check()) {
@@ -133,8 +145,11 @@ class ItemController extends Controller
 
     $item->update([
       'buyer_id' => Auth::id(),
-      'sold' => true
+      'sold' => true,
+      'payment_method' => $request->payment_method
     ]);
+
+    session()->forget('selected_payment');
 
     return redirect()->route('mypage', ['page' => 'buy'])->with('success', '商品を購入しました');
   }

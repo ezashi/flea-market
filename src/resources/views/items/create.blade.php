@@ -43,7 +43,9 @@
               <label for="condition" class="col-md-4 col-form-label text-md-end">商品の状態</label>
               <div class="col-md-6">
                 <select id="condition" class="form-select @error('condition') is-invalid @enderror" name="condition" required>
-                  <option value="">選択してください</option>
+                  @if(!session('condition'))
+                    <option value="" disabled selected>選択してください</option>
+                  @endif
                   <option value="良好" {{ old('condition') == '良好' ? 'selected' : '' }}>良好</option>
                   <option value="目立った傷や汚れなし" {{ old('condition') == '目立った傷や汚れなし' ? 'selected' : '' }}>目立った傷や汚れなし</option>
                   <option value="やや傷や汚れあり" {{ old('condition') == 'やや傷や汚れあり' ? 'selected' : '' }}>やや傷や汚れあり</option>

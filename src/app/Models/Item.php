@@ -19,6 +19,7 @@ class Item extends Model
         'seller_id',
         'buyer_id',
         'sold',
+        'payment_method'
     ];
 
     protected $casts = [
