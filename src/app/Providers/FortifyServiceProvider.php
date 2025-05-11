@@ -46,49 +46,6 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.register');
         });
 
-        // ログイン処理のカスタマイズ
-        Fortify::authenticateUsing(function (Request $request) {
-            // LoginRequestを使用してバリデーション
-            $loginRequest = new LoginRequest();
-
-            try {
-                $loginRequest->setContainer($this->app)->setRedirector($this->app['redirect']);
-                $loginRequest->validateResolved();
-            } catch (ValidationException $e) {
-                throw $e;
-            }
-
-            // バリデーション通過後のログイン処理
-            if (Auth::attempt($request->only('email', 'password'))) {
-                return Auth::user();
-            }
-
-            // 認証失敗時の処理
-            throw ValidationException::withMessages([
-                'email' => [trans('auth.failed')],
-            ]);
-        });
-
-        // 会員登録処理のカスタマイズ
-        $this->app->singleton(\Laravel\Fortify\Contracts\CreatesNewUsers::class, function ($app) {
-            return new class implements \Laravel\Fortify\Contracts\CreatesNewUsers {
-                public function create(array $input) {
-                    // RegisterRequestを使用してバリデーション
-                    $registerRequest = new RegisterRequest();
-                    $registerRequest->replace($input);
-
-                    try {
-                        app()->call([$registerRequest, 'validateResolved']);
-                    } catch (ValidationException $e) {
-                        throw $e;
-                    }
-
-                    // バリデーション通過後の処理
-                    return app(CreateNewUser::class)->create($input);
-                }
-            };
-        });
-
         // ログアウト後、ログイン画面にリダイレクト
         $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
             public function toResponse($request)

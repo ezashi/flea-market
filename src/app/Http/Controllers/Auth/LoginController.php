@@ -11,9 +11,6 @@ class LoginController extends Controller
 {
     public function login(LoginRequest $request)
     {
-        if (Auth::attempt($request->only('email', 'password'))) {
-            $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
-        }
+        return redirect()->route('index');
     }
 }

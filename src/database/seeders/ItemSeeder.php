@@ -51,7 +51,7 @@ class ItemSeeder extends Seeder
                 'price' => 15000,
                 'description' => 'スタイリッシュなデザインのメンズ腕時計',
                 'condition' => '良好',
-                'image' => 'watch.jpg',
+                'image' => 'images/items/watch.jpg',
                 'categories' => [1], // ファッション
             ],
             [
@@ -59,7 +59,7 @@ class ItemSeeder extends Seeder
                 'price' => 5000,
                 'description' => '高速で信頼性の高いハードディスク',
                 'condition' => '目立った傷や汚れなし',
-                'image' => 'hdd.jpg',
+                'image' => 'images/items/hdd.jpg',
                 'categories' => [2], // 家電
             ],
             [
@@ -67,7 +67,7 @@ class ItemSeeder extends Seeder
                 'price' => 300,
                 'description' => '新鮮な玉ねぎ3束のセット',
                 'condition' => 'やや傷や汚れあり',
-                'image' => 'onions.jpg',
+                'image' => 'images/items/onions.jpg',
                 'categories' => [10], // キッチン
             ],
             [
@@ -75,7 +75,7 @@ class ItemSeeder extends Seeder
                 'price' => 4000,
                 'description' => 'クラシックなデザインの革靴',
                 'condition' => '状態が悪い',
-                'image' => 'shoes.jpg',
+                'image' => 'images/items/shoes.jpg',
                 'categories' => [1], // ファッション
             ],
             [
@@ -83,7 +83,7 @@ class ItemSeeder extends Seeder
                 'price' => 45000,
                 'description' => '高性能なノートパソコン',
                 'condition' => '良好',
-                'image' => 'laptop.jpg',
+                'image' => 'images/items/laptop.jpg',
                 'categories' => [2], // 家電
             ],
             [
@@ -91,7 +91,7 @@ class ItemSeeder extends Seeder
                 'price' => 8000,
                 'description' => '高音質のレコーディング用マイク',
                 'condition' => '目立った傷や汚れなし',
-                'image' => 'mic.jpg',
+                'image' => 'images/items/mic.jpg',
                 'categories' => [2], // 家電
             ],
             [
@@ -99,7 +99,7 @@ class ItemSeeder extends Seeder
                 'price' => 3500,
                 'description' => 'おしゃれなショルダーバッグ',
                 'condition' => 'やや傷や汚れあり',
-                'image' => 'bag.jpg',
+                'image' => 'images/items/bag.jpg',
                 'categories' => [1], // ファッション
             ],
             [
@@ -107,7 +107,7 @@ class ItemSeeder extends Seeder
                 'price' => 500,
                 'description' => '使いやすいタンブラー',
                 'condition' => '状態が悪い',
-                'image' => 'tumbler.jpg',
+                'image' => 'images/items/tumbler.jpg',
                 'categories' => [10], // キッチン
             ],
             [
@@ -115,7 +115,7 @@ class ItemSeeder extends Seeder
                 'price' => 4000,
                 'description' => '手動のコーヒーミル',
                 'condition' => '良好',
-                'image' => 'coffee_mill.jpg',
+                'image' => 'images/items/coffee_mill.jpg',
                 'categories' => [10], // キッチン
             ],
             [
@@ -123,7 +123,7 @@ class ItemSeeder extends Seeder
                 'price' => 2500,
                 'description' => '便利なメイクアップセット',
                 'condition' => '目立った傷や汚れなし',
-                'image' => 'makeup_set.jpg',
+                'image' => 'images/items/makeup_set.jpg',
                 'categories' => [6], // コスメ
             ],
         ];
@@ -137,5 +137,21 @@ class ItemSeeder extends Seeder
 
             $item->categories()->attach($categoryIds);
         }
+    }
+
+    private function copyImages()
+    {
+        $images = [
+            'watch.jpg',
+            'hdd.jpg',
+            'onions.jpg',
+            'shoes.jpg',
+            'laptop.jpg',
+            'mic.jpg',
+            'bag.jpg',
+            'tumbler.jpg',
+            'coffee_mill.jpg',
+            'makeup_set.jpg',
+        ];
     }
 }

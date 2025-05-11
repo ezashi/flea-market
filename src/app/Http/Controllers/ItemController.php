@@ -14,6 +14,7 @@ use App\Http\Requests\PurchaseRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ItemController extends Controller
 {
@@ -78,8 +79,9 @@ class ItemController extends Controller
     $data['seller_id'] = Auth::id();
 
     if ($request->hasFile('image')) {
-      $imagePath = $request->file('image')->store('items', 'public');
-      $data['image'] = $imagePath;
+      $filename = Str::random(20) . '.' . $request->file('image')->getClientOriginalExtension();
+      $request->file('image')->move(public_path('images/items'), $filename);
+      $data['image'] = 'images/items/' . $filename;
     }
 
     $item = Item::create($data);
@@ -89,6 +91,7 @@ class ItemController extends Controller
   }
 
 
+  //商品詳細
   public function show(Item $item)
   {
     $item->load(['categories', 'comments.user']);

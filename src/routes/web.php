@@ -18,12 +18,16 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
-
-Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 // トップページ（商品一覧）
 Route::get('/', [ItemController::class, 'index'])->name('index');

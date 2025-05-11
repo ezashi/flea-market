@@ -7,6 +7,8 @@ use App\Http\Requests\ProfileRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class ProfileController extends Controller
 {
@@ -35,8 +37,9 @@ class ProfileController extends Controller
         }
 
         if ($profileRequest->hasFile('profile_image')) {
-            $imagePath = $profileRequest->file('profile_image')->store('profile_images', 'public');
-            $user->profile_image = $imagePath;
+            $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
+            $profileRequest->file('profile_image')->move(public_path('images/items'), $filename);
+            $user->profile_image = 'images/items/' . $filename;
         }
 
         $user->is_profile_completed = true;

@@ -46,12 +46,18 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    public function authenticate()
+    public function withValidator($validator)
     {
-        if (!Auth::attempt($this->only('email', 'password'))) {
-            throw ValidationException::withMessages([
-                'email' => ['ログイン情報が登録されていません。'],
-            ]);
-        }
+        $validator->after(function ($validator) {
+            // バリデーションエラーがない場合のみ認証処理を実行
+            if (!$validator->errors()->any()) {
+                if (!Auth::attempt($this->only('email', 'password'))) {
+                    // 認証失敗時のエラーメッセージを追加
+                    throw ValidationException::withMessages([
+                        'email' => ['ログイン情報が登録されていません。'],
+                    ]);
+                }
+            }
+        });
     }
 }

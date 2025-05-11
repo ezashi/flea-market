@@ -15,11 +15,12 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('price');
-            $table->text('description');
-            $table->string('condition');
             $table->string('image')->nullable();
+            $table->string('condition');
+            $table->string('name');
+            $table->string('brand')->nullable();
+            $table->text('description');
+            $table->integer('price');
             $table->foreignId('seller_id')->constrained('users');
             $table->foreignId('buyer_id')->nullable()->constrained('users');
             $table->boolean('sold')->default(false);
