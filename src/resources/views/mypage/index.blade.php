@@ -36,6 +36,16 @@
         </div>
       </div>
     </div>
+    <div class="card mb-4">
+      <div class="list-group list-group-flush">
+        <a href="{{ route('mypage.buy') }}" class="list-group-item list-group-item-action {{ request('page') === 'buy' ? 'active' : '' }}">
+          購入した商品
+        </a>
+        <a href="{{ route('mypage.sell') }}" class="list-group-item list-group-item-action {{ request('page') === 'sell' ? 'active' : '' }}">
+          出品した商品
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 @endsection

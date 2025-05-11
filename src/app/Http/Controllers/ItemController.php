@@ -6,7 +6,7 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Like;
 use App\Models\Comment;
-// use App\Http\Requests\AddressRequest;
+use App\Http\Requests\AddressRequest;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\ExhibitionRequest;
 // use App\Http\Requests\ProfileRequest;
@@ -20,6 +20,8 @@ class ItemController extends Controller
 {
   public function index(Request $request)
   {
+    session()->forget(['selected_payment', 'current_purchase_item_id']);
+
     $query = Item::query();
 
     // 検索機能の実装
@@ -40,6 +42,8 @@ class ItemController extends Controller
 
   public function mylist(Request $request)
   {
+    session()->forget(['selected_payment', 'current_purchase_item_id']);
+
     if (!Auth::check()) {
       // 未認証の場合は空のコレクションをビューに渡す
       $items = collect()->paginate(10);
@@ -67,6 +71,8 @@ class ItemController extends Controller
   // 商品出品のフォームを表示
   public function create()
   {
+    session()->forget(['selected_payment', 'current_purchase_item_id']);
+
     $categories = Category::all();
     return view('items.create', compact('categories'));
   }
@@ -94,6 +100,8 @@ class ItemController extends Controller
   //商品詳細
   public function show(Item $item)
   {
+    session()->forget(['selected_payment', 'current_purchase_item_id']);
+
     $item->load(['categories', 'comments.user']);
     $isLiked = false;
 
@@ -128,12 +136,26 @@ class ItemController extends Controller
 
 
   public function changeAddress(Item $item)
-  {
-    if (!Auth::check()) {
-      return redirect()->route('login');
+    {
+      if (!Auth::check()) {
+        return redirect()->route('login');
+      }
+
+        return view('items.changeAddress', ['user' => Auth::user()], compact('item'));
     }
 
-    return view('items.changeAddress', compact('item'));
+
+  public function AddressUpdate(AddressRequest $addressRequest, Item $item)
+  {
+    $user = Auth::user();
+
+    $user->postal_code = $addressRequest->postal_code;
+    $user->address = $addressRequest->address;
+    $user->building = $addressRequest->building;
+
+    $user->save();
+
+    return redirect()->route('items.purchase', $item);
   }
 
 
@@ -146,10 +168,10 @@ class ItemController extends Controller
     $item->update([
       'buyer_id' => Auth::id(),
       'sold' => true,
-      'payment_method' => $request->payment_method
+      'payment_method' => session('selected_payment')
     ]);
 
-    session()->forget('selected_payment');
+    session()->forget(['selected_payment', 'current_purchase_item_id']);
 
     return redirect()->route('mypage', ['page' => 'buy'])->with('success', '商品を購入しました');
   }

@@ -27,13 +27,31 @@
           <div class="mb-4">
             <h5>支払い方法</h5>
             <div class="form-check mb-2">
-                <select id="payment_method" class="form-select @error('payment_method') is-invalid @enderror" name="payment_method" required onChange="this.form.submit()">
-                  @if(!session('payment_method'))
-                    <option value="" disabled selected>選択してください</option>
-                  @endif
-                  <option value="コンビニ払い" {{ old('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
-                  <option value="カード払い" {{ old('payment_method') == 'カード払い' ? 'selected' : '' }}>カード払い</option>
-                </select>
+              <form action="{{ route('items.selectPayment', $item) }}" method="POST">
+                @csrf
+                <div class="form-check mb-2">
+                  <select id="payment_method" class="form-select @error('payment_method') is-invalid @enderror" name="payment_method" required onChange="this.form.submit()">
+                    <option value="" disabled {{ !session('selected_payment') ? 'selected' : '' }}>
+                      選択してください
+                    </option>
+                    <option value="コンビニ払い" {{ session('selected_payment') == 'コンビニ払い' ? 'selected' : '' }}>
+                      コンビニ払い
+                    </option>
+                    <option value="カード払い" {{ session('selected_payment') == 'カード払い' ? 'selected' : '' }}>
+                      カード払い
+                    </option>
+                  </select>
+                </div>
+              </form>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                @if(session('selected_payment'))
+                  支払い方法 {{ session('selected_payment') }}
+                @else
+                  まだ選択されていません
+                @endif
+              </div>
             </div>
           </div>
 
