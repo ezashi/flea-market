@@ -37,7 +37,7 @@
                   <div class="card h-100">
                     <div class="position-relative">
                       @if($item->image)
-                        <img src="{{ asset('storage/' . $item->image) }}" class="card-img-top" alt="{{ $item->name }}">
+                        <img src="{{ asset('images/items/' . basename($item->image)) }}" class="card-img-top" alt="{{ $item->name }}">
                       @else
                         <div class="card-img-top bg-light text-center py-5">No Image</div>
                       @endif

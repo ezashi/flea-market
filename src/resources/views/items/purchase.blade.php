@@ -10,7 +10,7 @@
             <!-- 商品情報 -->
             <div class="col-md-4">
               @if($item->image)
-                <img src="{{ asset('storage/' . $item->image) }}" class="img-fluid" alt="{{ $item->name }}">
+                <img src="{{ asset('images/items/' . basename($item->image)) }}" class="img-fluid" alt="{{ $item->name }}">
               @else
                 <div class="bg-light text-center py-5">No Image</div>
               @endif

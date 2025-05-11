@@ -28,18 +28,20 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         // データの更新
+        $user->profile_image = $validatedData['profile_image'] ?? $user->profile_image;
         $user->name = $validatedData['name'];
         $user->postal_code = $validatedData['postal_code'];
         $user->address = $validatedData['address'];
-
-        if (isset($validatedData['building'])) {
-            $user->building = $validatedData['building'];
-        }
+        $user->building = $validatedData['building'];
 
         if ($profileRequest->hasFile('profile_image')) {
             $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
             $profileRequest->file('profile_image')->move(public_path('images/items'), $filename);
             $user->profile_image = 'images/items/' . $filename;
+
+            if ($user->profile_image && file_exists(public_path($user->profile_image))) {
+                unlink(public_path($user->profile_image));
+            }
         }
 
         $user->is_profile_completed = true;
