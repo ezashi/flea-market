@@ -105,6 +105,26 @@ class ItemController extends Controller
   }
 
 
+  public function purchase(Item $item)
+  {
+    if (!Auth::check()) {
+      return redirect()->route('login');
+    }
+
+    return view('items.purchase', compact('item'));
+  }
+
+
+  public function changeAddress(Item $item)
+  {
+    if (!Auth::check()) {
+      return redirect()->route('login');
+    }
+
+    return view('items.changeAddress', compact('item'));
+  }
+
+
   public function completePurchase(Request $request, Item $item)
   {
     if (!Auth::check()) {

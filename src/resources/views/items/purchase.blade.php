@@ -10,19 +10,30 @@
             <!-- 商品情報 -->
             <div class="col-md-4">
               @if($item->image)
-                <img src="{{ asset('images/items/' . basename($item->image)) }}" class="img-fluid" alt="{{ $item->name }}">
+                <img src="{{ asset('images/items/' . basename($item->image)) }}" class="img-fluid" alt="{{ $item->name }}" style="max-height: 200px; object-fit: cover;">
               @else
                 <div class="bg-light text-center py-5">No Image</div>
               @endif
             </div>
             <div class="col-md-8">
-              <h4>{{ $item->name }}</h4>
-              <p class="text-muted">出品者: {{ $item->seller->name }}</p>
-              <h5 class="text-danger">¥{{ number_format($item->price) }}</h5>
+              <h4>商品名 {{ $item->name }}</h4>
+              <h5 class="text-danger">¥ {{ number_format($item->price) }}</h5>
             </div>
           </div>
 
           <hr>
+
+          <!-- 支払い方法 -->
+          <div class="mb-4">
+            <h5>支払い方法</h5>
+            <div class="form-check mb-2">
+              <select id="payment_method" class="form-select @error('payment_method') is-invalid @enderror" name="payment_method" required>
+                <option value="">選択してください</option>
+                <option value="コンビニ払い" {{ old('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>コンビニ払い</option>
+                <option value="カード払い" {{ old('payment_method') == 'カード払い' ? 'selected' : '' }}>カード払い</option>
+              </select>
+            </div>
+          </div>
 
           <!-- 配送先情報 -->
           <div class="mb-4">
@@ -32,31 +43,9 @@
             </div>
             <div class="card">
               <div class="card-body">
-                <p class="mb-1">{{ Auth::user()->name }} 様</p>
-                @if(Auth::user()->postal_code && Auth::user()->address)
-                  <p class="mb-1">〒{{ Auth::user()->postal_code }}</p>
-                  <p class="mb-0">{{ Auth::user()->address }}</p>
-                @else
-                  <p class="text-danger">住所が設定されていません。<a href="{{ route('items.changeAddress', $item) }}">住所を設定してください</a></p>
-                @endif
+                <p class="mb-1">〒{{ Auth::user()->postal_code }}</p>
+                <p class="mb-0">{{ Auth::user()->address }}{{ Auth::user()->building }}</p>
               </div>
-            </div>
-          </div>
-
-          <!-- 支払い方法 -->
-          <div class="mb-4">
-            <h5>支払い方法</h5>
-            <div class="form-check mb-2">
-              <input class="form-check-input" type="radio" name="payment_method" id="credit_card" checked>
-              <label class="form-check-label" for="credit_card">
-                クレジットカード
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="payment_method" id="convenience_store">
-              <label class="form-check-label" for="convenience_store">
-                コンビニ払い
-              </label>
             </div>
           </div>
 
