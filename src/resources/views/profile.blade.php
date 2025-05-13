@@ -10,7 +10,18 @@
               @csrf
               <div class="form-group row mb-3">
                 <div class="col-md-6">
-                  <input id="profile_image" type="file" class="form-control-profile_image" name="profile_image" value="{{ old('asset('images/items/' . basename($user->profile_image)) }}" class="img-fluid rounded-circle mb-3" style="max-width: 150px;" alt="{{ $user->name }}">
+                  @if($user->profile_image)
+                    <label for="profile_image" style="cursor: pointer;">
+                      <img src="{{ asset('images/items/' . basename(Auth::user()->profile_image)) }}" class="img-fluid rounded-circle mb-3" style="max-width: 150px;" alt="{{ $user->name }}">
+                    </label>
+                  @else
+                    <label for="profile_image" style="cursor: pointer;">
+                      <div class="bg-light rounded-circle mx-auto mb-3" style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center;">
+                        <span class="h1 text-muted">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                      </div>
+                    </label>
+                  @endif
+                  <input id="profile_image" type="file" class="form-control-profile_image" name="profile_image" class="img-fluid rounded-circle mb-3" style="max-width: 150px;" alt="{{ $user->name }}">
                   @error('profile_image')
                     <div class="error-message">{{ $message }}</div>
                   @enderror

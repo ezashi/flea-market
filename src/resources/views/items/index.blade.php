@@ -23,10 +23,6 @@
               <div class="position-relative">
                 @if($item->image)
                   <img src="{{ asset('images/items/' . basename($item->image)) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
-                @else
-                  <div class="card-img-top bg-light text-center d-flex align-items-center justify-content-center" style="height: 200px;">
-                    <span>商品画像</span>
-                  </div>
                 @endif
                 <!-- 購入時み -->
                 @if($item->sold)

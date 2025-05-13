@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Item;
 use App\Models\Category;
 use App\Models\Like;
@@ -86,8 +87,8 @@ class ItemController extends Controller
 
     if ($request->hasFile('image')) {
       $filename = Str::random(20) . '.' . $request->file('image')->getClientOriginalExtension();
-      $request->file('image')->move(public_path('images/items'), $filename);
-      $data['image'] = 'images/items/' . $filename;
+      $request->file('image')->store('images/items', 'public');
+      $data['image'] = 'storage/images/items/' . $filename;
     }
 
     $item = Item::create($data);

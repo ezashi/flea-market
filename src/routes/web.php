@@ -37,6 +37,7 @@ Route::get('/?page=mylist', [ItemController::class, 'mylist'])->name('mylist');
 
 // 認証が必要なルート
 Route::middleware(['auth'])->group(function () {
+
     // プロフィール関連
     Route::get('/mypage/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/mypage/profile', [ProfileController::class, 'update'])->name('profile.update');
