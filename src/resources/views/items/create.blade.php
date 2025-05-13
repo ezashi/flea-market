@@ -22,7 +22,7 @@
             <h3 class="card-header">商品の詳細</h3>
             <!-- カテゴリ -->
             <div class="mb-3 row">
-              <label class="col-md-4 col-form-label text-md-end">カテゴリ</label>
+              <label class="col-md-4 col-form-label text-md-end">カテゴリー</label>
               <div class="col-md-6">
                 @foreach($categories as $category)
                   <div class="category-button">
@@ -89,7 +89,7 @@
 
             <!-- 価格 -->
             <div class="mb-3 row">
-              <label for="price" class="col-md-4 col-form-label text-md-end">価格</label>
+              <label for="price" class="col-md-4 col-form-label text-md-end">販売価格</label>
               <div class="col-md-6">
                 <div class="input-group">
                   <span class="input-group-text">¥</span>

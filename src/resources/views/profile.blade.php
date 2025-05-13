@@ -9,9 +9,8 @@
             <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
               @csrf
               <div class="form-group row mb-3">
-                <label for="profile_image" class="col-md-4">プロフィール画像</label>
                 <div class="col-md-6">
-                  <input id="profile_image" type="file" class="form-control-profile_image" name="profile_image">
+                  <input id="profile_image" type="file" class="form-control-profile_image" name="profile_image" value="{{ old('asset('images/items/' . basename($user->profile_image)) }}" class="img-fluid rounded-circle mb-3" style="max-width: 150px;" alt="{{ $user->name }}">
                   @error('profile_image')
                     <div class="error-message">{{ $message }}</div>
                   @enderror

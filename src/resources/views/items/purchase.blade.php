@@ -4,7 +4,6 @@
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card">
-        <div class="card-header">商品購入</div>
         <div class="card-body">
           <div class="row mb-4">
             <!-- 商品情報 -->
@@ -16,7 +15,7 @@
               @endif
             </div>
             <div class="col-md-8">
-              <h4>商品名 {{ $item->name }}</h4>
+              <h4>{{ $item->name }}</h4>
               <h5 class="text-danger">¥ {{ number_format($item->price) }}</h5>
             </div>
           </div>
@@ -48,12 +47,12 @@
               <div class="card-body">
                 @if(session('selected_payment'))
                   支払い方法 {{ session('selected_payment') }}
-                @else
-                  まだ選択されていません
                 @endif
               </div>
             </div>
           </div>
+
+          <hr>
 
           <!-- 配送先情報 -->
           <div class="mb-4">
@@ -73,8 +72,8 @@
           <div class="d-grid">
             <form method="POST" action="{{ route('items.completePurchase', $item) }}">
               @csrf
-              <button type="submit" class="btn btn-success btn-lg" {{ (!Auth::user()->postal_code || !Auth::user()->address) ? 'disabled' : '' }}>
-                購入を確定する
+              <button type="submit" class="btn btn-success btn-lg" {{ (!Auth::user()->postal_code || !Auth::user()->address || !Auth::user()->building) ? 'disabled' : '' }}>
+                購入する
               </button>
             </form>
           </div>

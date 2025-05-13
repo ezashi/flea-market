@@ -2,20 +2,8 @@
 @section('content')
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-md-3">
-      <!-- サイドバー -->
-      <div class="card mb-4">
-        <div class="card-header">マイページメニュー</div>
-        <div class="list-group list-group-flush">
-          <a href="{{ route('mypage') }}" class="list-group-item list-group-item-action {{ request('page') === null ? 'active' : '' }}">
-            プロフィール
-          </a>
-        </div>
-      </div>
-    </div>
     <div class="col-md-9">
       <div class="card">
-        <div class="card-header">プロフィール</div>
         <div class="card-body">
           <div class="row">
             <form action="{{ route('profile.show') }}" method="GET" class="col-md-8">
@@ -38,14 +26,19 @@
     </div>
     <div class="card mb-4">
       <div class="list-group list-group-flush">
-        <a href="{{ route('mypage.buy') }}" class="list-group-item list-group-item-action {{ request('page') === 'buy' ? 'active' : '' }}">
-          購入した商品
-        </a>
-        <a href="{{ route('mypage.sell') }}" class="list-group-item list-group-item-action {{ request('page') === 'sell' ? 'active' : '' }}">
-          出品した商品
-        </a>
+        <from action="{{ route('mypage.buy') }}" method="GET" class="col-md-8">
+          <button type="submit" class="btn btn-buy" style="background: none; border: none; cursor: pointer;">
+            購入した商品
+          </button>
+        </from>
+        <from action="{{ route('mypage.sell') }}" method="GET" class="col-md-8">
+          <button type="submit" class="btn btn-sell" style="background: none; border: none; cursor: pointer;">
+            出品した商品
+          </button>
+        </from>
       </div>
     </div>
   </div>
 </div>
 @endsection
+@yield('mypage')

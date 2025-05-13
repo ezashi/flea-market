@@ -93,7 +93,7 @@ class ItemController extends Controller
     $item = Item::create($data);
     $item->categories()->attach($request->categories);
 
-    return redirect()->route('mypage', ['page' => 'sell'])->with('success', '商品を出品しました');
+    return redirect()->route('mypage', ['page' => 'sell']);
   }
 
 
@@ -137,21 +137,29 @@ class ItemController extends Controller
 
   public function changeAddress(Item $item)
     {
-      if (!Auth::check()) {
-        return redirect()->route('login');
-      }
-
         return view('items.changeAddress', ['user' => Auth::user()], compact('item'));
     }
 
 
-  public function AddressUpdate(AddressRequest $addressRequest, Item $item)
+  public function AddressUpdate(Request $request, Item $item)
   {
+    $validated = $request->validate([
+      'postal_code' => ['required', 'string', 'max:8', 'regex:/^\d{3}-\d{4}$/'],
+      'address' => ['required', 'string', 'max:255'],
+      'building' => ['required', 'string', 'max:255'],
+    ],[
+      'postal_code.required' => '郵便番号を入力してください',
+      'postal_code.max' => '郵便番号はハイフンありの8文字で入力してください',
+      'postal_code.regex' => '郵便番号はハイフンありの8文字で入力してください',
+      'address.required' => '住所を入力してください',
+      'building.required' => '建物名を入力してください',
+    ]);
+
     $user = Auth::user();
 
-    $user->postal_code = $addressRequest->postal_code;
-    $user->address = $addressRequest->address;
-    $user->building = $addressRequest->building;
+    $user->postal_code = $request->postal_code;
+    $user->address = $request->address;
+    $user->building = $request->building;
 
     $user->save();
 
@@ -161,19 +169,14 @@ class ItemController extends Controller
 
   public function completePurchase(Request $request, Item $item)
   {
-    if (!Auth::check()) {
-        return redirect()->route('login');
-    }
-
     $item->update([
       'buyer_id' => Auth::id(),
       'sold' => true,
-      'payment_method' => session('selected_payment')
     ]);
 
     session()->forget(['selected_payment', 'current_purchase_item_id']);
 
-    return redirect()->route('mypage', ['page' => 'buy'])->with('success', '商品を購入しました');
+    return redirect()->route('mypage.buy', $item);
   }
 
 
@@ -198,7 +201,7 @@ class ItemController extends Controller
       $action = 'liked';
     }
 
-    return redirect()->back()->with('success', "商品を{$action}しました");
+    return redirect()->back();
   }
 
 
@@ -210,6 +213,6 @@ class ItemController extends Controller
       'content' => $request->content
     ]);
 
-    return redirect()->back()->with('success', 'コメントを投稿しました');
+    return redirect()->back();
   }
 }

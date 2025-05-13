@@ -14,7 +14,7 @@
   <header>
     <div class="navbar">
       <a href="{{ route('index') }}" class="navbar-brand">
-        <img src="{{ asset('image/Free Market App Logo.svg') }}" alt="coachtechフリマ->index"/>
+        <img src="{{ asset('images/Free Market App Logo.svg') }}" alt="coachtechフリマ->index"/>
       </a>
       @auth
         @if (!Route::is('login') && !Route::is('register'))
@@ -33,7 +33,7 @@
           <form method="GET" action="{{ route('mypage') }}" style="display: inline;">
             @csrf
             <button type="submit" class="nav-mb" style="background: none; border: none; cursor: pointer;">
-              マイリスト
+              マイページ
             </button>
           </form>
           <form action="{{ route('items.create') }}" method="GET" class="mb-4">
@@ -57,7 +57,7 @@
           <form method="GET" action="{{ route('mypage') }}" style="display: inline;">
             @csrf
             <button type="submit" class="nav-mb" style="background: none; border: none; cursor: pointer;">
-              マイリスト
+              マイページ
             </button>
           </form>
           <form action="{{ route('items.create') }}" method="GET" class="mb-4">
