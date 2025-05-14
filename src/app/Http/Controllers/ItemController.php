@@ -87,7 +87,7 @@ class ItemController extends Controller
 
     if ($request->hasFile('image')) {
       $filename = Str::random(20) . '.' . $request->file('image')->getClientOriginalExtension();
-      $request->file('image')->store('images/items', 'public');
+      $request->file('image')->storeAs('images/items', $filename, 'public');
       $data['image'] = 'storage/images/items/' . $filename;
     }
 

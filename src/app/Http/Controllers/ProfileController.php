@@ -38,8 +38,8 @@ class ProfileController extends Controller
 
         if ($profileRequest->hasFile('profile_image')) {
             $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
-            $profileRequest->file('profile_image')->store('images/items', 'public');
-            $user->profile_image = 'storage/' . $filename;
+            $profileRequest->file('profile_image')->storeAs('images/items', $filename, 'public');
+            $user->profile_image = 'storage/images/items/' . $filename;
 
             if ($user->profile_image && file_exists(public_path($user->profile_image))) {
                 unlink(public_path($user->profile_image));

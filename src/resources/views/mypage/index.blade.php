@@ -9,7 +9,8 @@
             <form action="{{ route('profile.show') }}" method="GET" class="col-md-8">
               <div class="col-md-4 text-center">
                 @if(Auth::user()->profile_image)
-                  <img src="{{ asset('storage/images/items/' . basename(Auth::user()->profile_image)) }}" class="img-fluid rounded-circle mb-3" style="max-width: 150px;" alt="{{ Auth::user()->profile_image }}">
+                dd("{{ asset(Auth::user()->profile_image) }}")
+                  <img src="{{ asset(Auth::user()->profile_image) }}" class="img-fluid rounded-circle mb-3" style="max-width: 150px;" alt="{{ Auth::user()->profile_image }}">
                 @else
                   <div class="bg-light rounded-circle mx-auto mb-3" style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center;">
                     <span class="h1 text-muted">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
