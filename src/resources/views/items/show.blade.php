@@ -10,7 +10,7 @@
             <div class="col-md-6">
               <div class="position-relative">
                 @if($item->image)
-                  <img src="{{ asset('images/items/' . basename($item->image)) }}" class="img-fluid" alt="{{ $item->name }}" style="height: 200px;">
+                  <img src="{{ asset($item->image) }}" class="img-fluid" alt="{{ $item->name }}" style="height: 200px;">
                 @endif
 
                 @if($item->sold)
@@ -22,7 +22,9 @@
             <!-- 商品情報 -->
             <div class="col-md-6">
               <h2>{{ $item->name }}</h2>
-              <p>{{ $item->brand }}</p>
+              @if($item->brand)
+                <h3>{{ $item->brand }}</h3>
+              @endif
               <h3 class="text-danger">¥{{ number_format($item->price) }}</h3>
 
               <div class="d-flex mb-3">

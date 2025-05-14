@@ -86,8 +86,11 @@ class ItemController extends Controller
     $data['seller_id'] = Auth::id();
 
     if ($request->hasFile('image')) {
+      if ($request->image && file_exists(public_path($request->image))) {
+        unlink(public_path($request->image));
+      }
       $filename = Str::random(20) . '.' . $request->file('image')->getClientOriginalExtension();
-      $request->file('image')->storeAs('images/items', $filename, 'public');
+      $request->file('image')->storeAs('images/items', $filename);
       $data['image'] = 'storage/images/items/' . $filename;
     }
 

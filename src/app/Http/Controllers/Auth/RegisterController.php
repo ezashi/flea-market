@@ -20,6 +20,6 @@ class RegisterController extends Controller
         // 登録直後にログインさせる！
         Auth::login($user);
 
-        return redirect()->route('profile.show'); // 成功後リダイレクト
+        return redirect()->route('show'); // 成功後リダイレクト
     }
 }

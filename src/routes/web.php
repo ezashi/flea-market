@@ -39,8 +39,11 @@ Route::get('/?page=mylist', [ItemController::class, 'mylist'])->name('mylist');
 Route::middleware(['auth'])->group(function () {
 
     // プロフィール関連
-    Route::get('/mypage/profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::post('/mypage/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('show');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('update');
+
+    Route::get('/mypage/profile', [ProfileController::class, 'mypageshow'])->name('profile.show');
+    Route::post('/mypage/profile', [ProfileController::class, 'mypageupdata'])->name('profile.update');
 
     // マイページ
     Route::get('/mypage', function() {

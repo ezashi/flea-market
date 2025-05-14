@@ -14,7 +14,7 @@
   <header>
     <div class="navbar">
       <a href="{{ route('index') }}" class="navbar-brand">
-        <img src="{{ asset('images/Free Market App Logo.svg') }}" alt="coachtechフリマ->index"/>
+        <img src="{{ asset('image/Free Market App Logo.svg') }}" alt="coachtechフリマ->index"/>
       </a>
       @auth
         @if (!Route::is('login') && !Route::is('register'))
