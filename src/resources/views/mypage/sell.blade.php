@@ -4,11 +4,11 @@
   <div class="row justify-content-center">
     <div class="col-md-9">
       <div class="card">
-        <div class="card-header">購入した商品一覧</div>
+        <div class="card-header">出品した商品一覧</div>
         <div class="card-body">
           @if($items->isEmpty())
             <div class="alert alert-info">
-              購入した商品はありません。
+              出品した商品はありません。
             </div>
           @else
             <div class="row">

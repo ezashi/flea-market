@@ -9,7 +9,7 @@
             <!-- 商品情報 -->
             <div class="col-md-4">
               @if($item->image)
-                <img src="{{ asset('images/items/' . basename($item->image)) }}" class="img-fluid" alt="{{ $item->name }}" style="max-height: 200px; object-fit: cover;">
+                <img src="{{ asset($item->image) }}" class="img-fluid" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
               @endif
             </div>
             <div class="col-md-8">

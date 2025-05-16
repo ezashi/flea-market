@@ -12,7 +12,7 @@
                 <div class="col-md-6">
                   @if($user->profile_image)
                     <label for="profile_image" style="cursor: pointer;">
-                      <img src="{{ asset('images/items/' . basename(Auth::user()->profile_image)) }}" class="img-fluid rounded-circle mb-3" style="max-width: 150px;" alt="{{ $user->name }}">
+                      <img src="{{ asset(Auth::user()->profile_image) }}" class="img-fluid rounded-circle mb-3" style="max-width: 150px;" alt="{{ $user->name }}">
                     </label>
                   @else
                     <label for="profile_image" style="cursor: pointer;">

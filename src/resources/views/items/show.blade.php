@@ -23,7 +23,7 @@
             <div class="col-md-6">
               <h2>{{ $item->name }}</h2>
               @if($item->brand)
-                <h3>{{ $item->brand }}</h3>
+                <p>{{ $item->brand }}</p>
               @endif
               <h3 class="text-danger">¥{{ number_format($item->price) }}</h3>
 
