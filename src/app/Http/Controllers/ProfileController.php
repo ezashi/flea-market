@@ -16,7 +16,7 @@ class ProfileController extends Controller
 {
     public function show()
     {
-        return view('profile');
+        return view('profile', ['user' => Auth::user()]);
     }
 
     public function update(ProfileRequest $profileRequest, AddressRequest $addressRequest)
@@ -37,8 +37,9 @@ class ProfileController extends Controller
         $user->building = $validatedData['building'];
 
         if ($profileRequest->hasFile('profile_image')) {
-            if ($user->profile_image && file_exists(public_path($user->profile_image))) {
-                unlink(public_path($user->profile_image));
+            $path = 'storage/images/profile/' . $filename;
+            if (file_exists(public_path($path))) {
+                unlink(public_path($path));
             }
             $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
             $profileRequest->file('profile_image')->storeAs('images/profile', $filename);
