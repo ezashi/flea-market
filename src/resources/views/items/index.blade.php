@@ -44,10 +44,5 @@
       </div>
     @endif
   </div>
-
-  <!-- ページネーション -->
-  <div class="d-flex justify-content-center mt-4">
-    {{ $items->links() }}
-  </div>
 </div>
 @endsection

@@ -35,7 +35,7 @@ class ItemController extends Controller
       $query->where('seller_id', '!=', Auth::id());
     }
 
-    $items = $query->latest()->paginate(10);
+    $items = $query->latest()->get();
 
     return view('items.index', compact('items'));
   }
@@ -47,7 +47,7 @@ class ItemController extends Controller
 
     if (!Auth::check()) {
       // 未認証の場合は空のコレクションをビューに渡す
-      $items = collect()->paginate(10);
+      $items = collect()->get();
       return view('items.index', compact('items'));
     }
 
@@ -63,7 +63,7 @@ class ItemController extends Controller
     // 自分が出品した商品を除外
     $query->where('seller_id', '!=', Auth::id());
 
-    $items = $query->latest()->paginate(10);
+    $items = $query->latest()->get();
 
     return view('items.index', compact('items'));
   }
