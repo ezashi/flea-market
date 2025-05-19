@@ -47,7 +47,7 @@ class ItemController extends Controller
 
     if (!Auth::check()) {
       // 未認証の場合は空のコレクションをビューに渡す
-      $items = collect()->get();
+      $items = collect();
       return view('items.index', compact('items'));
     }
 

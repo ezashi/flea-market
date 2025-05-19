@@ -33,7 +33,7 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/', [ItemController::class, 'index'])->name('index');
 
 // マイリスト（いいねした商品）
-Route::get('/?page=mylist', [ItemController::class, 'mylist'])->name('mylist');
+Route::get('/mylist', [ItemController::class, 'mylist'])->name('mylist');
 
 // 認証が必要なルート
 Route::middleware(['auth'])->group(function () {
