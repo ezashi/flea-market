@@ -37,11 +37,11 @@ class ProfileController extends Controller
         $user->building = $validatedData['building'];
 
         if ($profileRequest->hasFile('profile_image')) {
+            $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
             $path = 'storage/images/profile/' . $filename;
             if (file_exists(public_path($path))) {
                 unlink(public_path($path));
             }
-            $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
             $profileRequest->file('profile_image')->storeAs('images/profile', $filename);
             $user->profile_image = 'storage/images/profile/' . $filename;
         }
