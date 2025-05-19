@@ -68,20 +68,18 @@ class ItemController extends Controller
     return view('items.index', compact('items'));
   }
 
-  public function buy()
+  public function mypage(Request $request)
   {
-    session()->forget(['selected_payment', 'current_purchase_item_id']);
+    $route = $request->route()->getName();
+    if ($route === 'mypage.buy') {
+      $items = Auth::user()->purchasedItems()->latest()->get();
+    } elseif ($route === 'mypage.sell') {
+      $items = Auth::user()->sellingItems()->latest()->get();
+    } else {
+      $items = Auth::user()->purchasedItems()->latest()->get();
+    }
 
-    $items = Auth::user()->purchasedItems()->latest()->get();
-    return view('items.index', compact('items'));
-  }
-
-  public function sell()
-  {
-    session()->forget(['selected_payment', 'current_purchase_item_id']);
-
-    $items = Auth::user()->sellingItems()->latest()->get();
-    return view('items.index', compact('items'));
+    return view('mypage.index', compact('items'));
   }
 
 

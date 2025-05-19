@@ -36,10 +36,19 @@
         </ul>
       </div>
     </div>
+    <biv class="mypage-buy-or-sell">
+      @if(Route::is('mypage.buy'))
+      @elseif(Route::is('mypage.sell'))
+      @endif
+    </div>
     <div class="mypage-buy">
       @if($items->isEmpty())
         <div class="alert alert-info">
-          購入した商品はありません。
+          @if(Route::is('mypage.buy'))
+            購入した商品はありません。
+          @elseif(Route::is('mypage.sell'))
+            出品した商品はありません。
+          @endif
         </div>
       @else
         <div class="row">
@@ -47,34 +56,6 @@
             <div class="col-md-4 mb-4">
               <div class="card h-100">
                 <a href="{{ route('items.show', $item) }}" class="btn btn-primary">
-                  <div class="position-relative">
-                    @if($item->image)
-                      <img src="{{ asset($item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
-                    @else
-                      <div class="card-img-top bg-light text-center py-5">No Image</div>
-                    @endif
-                  </div>
-                  <div class="card-body">
-                    <h5 class="card-title">{{ $item->name }}</h5>
-                  </div>
-                </a>
-              </div>
-            </div>
-          @endforeach
-        </div>
-      @endif
-    </div>
-    <biv class="mypage-sell">
-      @if($items->isEmpty())
-        <div class="alert alert-info">
-          出品した商品はありません。
-        </div>
-      @else
-        <div class="row">
-          @foreach($items as $item)
-            <div class="col-md-4 mb-4">
-              <div class="card h-100">
-                <a href="{{ route('items.show', $item) }}" class="text-decoration-none text-dark">
                   <div class="position-relative">
                     @if($item->image)
                       <img src="{{ asset($item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
