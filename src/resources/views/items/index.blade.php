@@ -5,10 +5,10 @@
     <div class="col-12">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('index') ? 'active' : '' }}" href="{{ route('index') }}">おすすめ</a>
+          <a class="nav-link" href="{{ route('index') }}">おすすめ</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('mylist') ? 'active' : '' }}" href="{{ route('mylist') }}">マイリスト</a>
+          <a class="nav-link" href="{{ route('mylist') }}">マイリスト</a>
         </li>
       </ul>
     </div>
@@ -39,7 +39,11 @@
     @else
       <div class="col-12">
         <div class="alert alert-info">
-          商品がありません。
+          @if(request()->routeIs('mylist'))
+            いいねした商品がありません。
+          @else
+            商品がありません。
+          @endif
         </div>
       </div>
     @endif

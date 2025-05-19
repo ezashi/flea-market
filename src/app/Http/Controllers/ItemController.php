@@ -68,6 +68,22 @@ class ItemController extends Controller
     return view('items.index', compact('items'));
   }
 
+  public function buy()
+  {
+    session()->forget(['selected_payment', 'current_purchase_item_id']);
+
+    $items = Auth::user()->purchasedItems()->latest()->get();
+    return view('items.index', compact('items'));
+  }
+
+  public function sell()
+  {
+    session()->forget(['selected_payment', 'current_purchase_item_id']);
+
+    $items = Auth::user()->sellingItems()->latest()->get();
+    return view('items.index', compact('items'));
+  }
+
 
   // 商品出品のフォームを表示
   public function create()

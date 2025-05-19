@@ -51,16 +51,10 @@ Route::middleware(['auth'])->group(function () {
     })->name('mypage');
 
     // マイページ（購入した商品一覧）
-    Route::get('/mypage/buy', function() {
-        $items = auth()->user()->purchasedItems()->latest()->get();
-        return view('mypage.buy', compact('items'));
-    })->name('mypage.buy');
+    Route::get('/mypage/buy', [ItemController::class, 'buy'])->name('mypage.buy');
 
     // マイページ（出品した商品一覧）
-    Route::get('/mypage/sell', function() {
-        $items = auth()->user()->sellingItems()->latest()->get();
-        return view('mypage.sell', compact('items'));
-    })->name('mypage.sell');
+    Route::get('/mypage/sell', [ItemController::class, 'sell'])->name('mypage.sell');
 
     // 商品出品
     Route::get('/sell', [ItemController::class, 'create'])->name('items.create');

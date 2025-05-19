@@ -26,17 +26,71 @@
     </div>
     <div class="card mb-4">
       <div class="list-group list-group-flush">
-        <form action="{{ route('mypage.buy') }}" method="GET" class="col-md-8">
-          <button type="submit" class="btn btn-buy" style="background: none; border: none; cursor: pointer;">
-            購入した商品
-          </button>
-        </form>
-        <form action="{{ route('mypage.sell') }}" method="GET" class="col-md-8">
-          <button type="submit" class="btn btn-sell" style="background: none; border: none; cursor: pointer;">
-            出品した商品
-          </button>
-        </form>
+        <ul class="list-group">
+          <li class="list-buy">
+            <a class="list-buy-link" href="{{ route('mypage.buy') }}">購入した商品</a>
+          </li>
+          <li class="list-sell">
+            <a class="list-sell-link" href="{{ route('mypage.sell') }}">出品した商品</a>
+          </li>
+        </ul>
       </div>
+    </div>
+    <div class="mypage-buy">
+      @if($items->isEmpty())
+        <div class="alert alert-info">
+          購入した商品はありません。
+        </div>
+      @else
+        <div class="row">
+          @foreach($items as $item)
+            <div class="col-md-4 mb-4">
+              <div class="card h-100">
+                <a href="{{ route('items.show', $item) }}" class="btn btn-primary">
+                  <div class="position-relative">
+                    @if($item->image)
+                      <img src="{{ asset($item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
+                    @else
+                      <div class="card-img-top bg-light text-center py-5">No Image</div>
+                    @endif
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">{{ $item->name }}</h5>
+                  </div>
+                </a>
+              </div>
+            </div>
+          @endforeach
+        </div>
+      @endif
+    </div>
+    <biv class="mypage-sell">
+      @if($items->isEmpty())
+        <div class="alert alert-info">
+          出品した商品はありません。
+        </div>
+      @else
+        <div class="row">
+          @foreach($items as $item)
+            <div class="col-md-4 mb-4">
+              <div class="card h-100">
+                <a href="{{ route('items.show', $item) }}" class="text-decoration-none text-dark">
+                  <div class="position-relative">
+                    @if($item->image)
+                      <img src="{{ asset($item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
+                    @else
+                      <div class="card-img-top bg-light text-center py-5">No Image</div>
+                    @endif
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">{{ $item->name }}</h5>
+                  </div>
+                </a>
+              </div>
+            </div>
+          @endforeach
+        </div>
+      @endif
     </div>
   </div>
 </div>

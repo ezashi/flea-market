@@ -15,7 +15,7 @@
               @foreach($items as $item)
                 <div class="col-md-4 mb-4">
                   <div class="card h-100">
-                    <a href="{{ route('items.show', $item) }}" class="btn btn-primary">
+                    <a href="{{ route('items.show', $item) }}" class="text-decoration-none text-dark">
                       <div class="position-relative">
                         @if($item->image)
                           <img src="{{ asset($item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
