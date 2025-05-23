@@ -18,13 +18,6 @@ class CreateConditionsTable extends Migration
             $table->string('name');
             $table->timestamps();
         });
-
-        Schema::create('condition_item', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('condition_id')->constrained()->onDelete('cascade');
-            $table->foreignId('item_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
-        });
     }
 
     /**
@@ -34,7 +27,6 @@ class CreateConditionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('condition_item');
         Schema::dropIfExists('conditions');
     }
 }

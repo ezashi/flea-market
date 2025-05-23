@@ -11,6 +11,7 @@ class Item extends Model
 
     protected $fillable = [
         'image',
+        'conditions',
         'name',
         'brand',
         'description',
@@ -42,12 +43,6 @@ class Item extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
-    }
-
-    // 商品の状態のリレーション
-    public function condition()
-    {
-        return $this->belongsTo(Condition::class);
     }
 
     // いいねのリレーション

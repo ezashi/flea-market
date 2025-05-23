@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 use App\Models\Item;
 use App\Models\Category;
+use App\Models\Condition;
 
 class ItemSeeder extends Seeder
 {
@@ -51,7 +52,7 @@ class ItemSeeder extends Seeder
             '状態が悪い',
         ];
         foreach ($conditions as $conditionName) {
-            Category::create(['name' => $conditionName]);
+            Condition::create(['name' => $conditionName]);
         }
 
         $items = [
@@ -60,7 +61,7 @@ class ItemSeeder extends Seeder
                 'brand' => 'COACHTECH',
                 'price' => 15000,
                 'description' => 'スタイリッシュなデザインのメンズ腕時計',
-                'conditions' => [1], // 良好
+                'conditions' => '良好',
                 'image' => 'storage/images/items/watch.jpg',
                 'categories' => [1], // ファッション
             ],
@@ -69,7 +70,7 @@ class ItemSeeder extends Seeder
                 'brand' => 'COACHTECH',
                 'price' => 5000,
                 'description' => '高速で信頼性の高いハードディスク',
-                'conditions' => [2], // 目立った傷や汚れなし
+                'conditions' => '目立った傷や汚れなし',
                 'image' => 'storage/images/items/hdd.jpg',
                 'categories' => [2], // 家電
             ],
@@ -78,7 +79,7 @@ class ItemSeeder extends Seeder
                 'brand' => 'COACHTECH',
                 'price' => 300,
                 'description' => '新鮮な玉ねぎ3束のセット',
-                'conditions' => [3], // やや傷や汚れあり
+                'conditions' => 'やや傷や汚れあり',
                 'image' => 'storage/images/items/onions.jpg',
                 'categories' => [10], // キッチン
             ],
@@ -87,7 +88,7 @@ class ItemSeeder extends Seeder
                 'brand' => 'COACHTECH',
                 'price' => 4000,
                 'description' => 'クラシックなデザインの革靴',
-                'conditions' => [4], // 状態が悪い
+                'conditions' => '状態が悪い',
                 'image' => 'storage/images/items/shoes.jpg',
                 'categories' => [1], // ファッション
             ],
@@ -96,7 +97,7 @@ class ItemSeeder extends Seeder
                 'brand' => 'COACHTECH',
                 'price' => 45000,
                 'description' => '高性能なノートパソコン',
-                'conditions' => [1], // 良好
+                'conditions' => '良好',
                 'image' => 'storage/images/items/laptop.jpg',
                 'categories' => [2], // 家電
             ],
@@ -105,7 +106,7 @@ class ItemSeeder extends Seeder
                 'brand' => 'COACHTECH',
                 'price' => 8000,
                 'description' => '高音質のレコーディング用マイク',
-                'conditions' => [2], // 目立った傷や汚れなし
+                'conditions' => '目立った傷や汚れなし',
                 'image' => 'storage/images/items/mic.jpg',
                 'categories' => [2], // 家電
             ],
@@ -114,7 +115,7 @@ class ItemSeeder extends Seeder
                 'brand' => 'COACHTECH',
                 'price' => 3500,
                 'description' => 'おしゃれなショルダーバッグ',
-                'conditions' => [3], // やや傷や汚れあり
+                'conditions' => 'やや傷や汚れあり',
                 'image' => 'storage/images/items/bag.jpg',
                 'categories' => [1], // ファッション
             ],
@@ -123,7 +124,7 @@ class ItemSeeder extends Seeder
                 'brand' => 'COACHTECH',
                 'price' => 500,
                 'description' => '使いやすいタンブラー',
-                'conditions' => [4], // 状態が悪い
+                'conditions' => '状態が悪い',
                 'image' => 'storage/images/items/tumbler.jpg',
                 'categories' => [10], // キッチン
             ],
@@ -132,7 +133,7 @@ class ItemSeeder extends Seeder
                 'brand' => 'COACHTECH',
                 'price' => 4000,
                 'description' => '手動のコーヒーミル',
-                'conditions' => [1], // 良好
+                'conditions' => '良好',
                 'image' => 'storage/images/items/coffee_mill.jpg',
                 'categories' => [10], // キッチン
             ],
@@ -141,7 +142,7 @@ class ItemSeeder extends Seeder
                 'brand' => 'COACHTECH',
                 'price' => 2500,
                 'description' => '便利なメイクアップセット',
-                'conditions' => [2], // 目立った傷や汚れなし
+                'conditions' => '目立った傷や汚れなし',
                 'image' => 'storage/images/items/makeup_set.jpg',
                 'categories' => [6], // コスメ
             ],
