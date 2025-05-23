@@ -41,13 +41,6 @@
                 </div>
               </form>
             </div>
-            <div class="card">
-              <div class="card-body">
-                @if(session('selected_payment'))
-                  支払い方法 {{ session('selected_payment') }}
-                @endif
-              </div>
-            </div>
           </div>
 
           <hr>
@@ -66,6 +59,16 @@
             </div>
           </div>
 
+          <div class="card">
+            <div class="price">
+              商品代金 ¥{{ number_format($item->price) }}
+            </div>
+            <div class="card-body">
+              @if(session('selected_payment'))
+                支払い方法 {{ session('selected_payment') }}
+              @endif
+            </div>
+          </div>
           <!-- 購入ボタン -->
           <div class="d-grid">
             <form method="POST" action="{{ route('items.completePurchase', $item) }}">

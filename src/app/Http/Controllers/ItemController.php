@@ -108,7 +108,7 @@ class ItemController extends Controller
     $item = Item::create($data);
     $item->categories()->attach($request->categories);
 
-    return redirect()->route('mypage', ['page' => 'sell']);
+    return redirect()->route('mypage.sell');
   }
 
 
