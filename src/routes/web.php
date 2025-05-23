@@ -32,11 +32,11 @@ Route::post('/register', [RegisterController::class, 'register']);
 // トップページ（商品一覧）
 Route::get('/', [ItemController::class, 'index'])->name('index');
 
-// マイリスト（いいねした商品）
-Route::get('/mylist', [ItemController::class, 'mylist'])->name('mylist');
-
 // 認証が必要なルート
 Route::middleware(['auth'])->group(function () {
+
+    // マイリスト（いいねした商品）
+    Route::get('/mylist', [ItemController::class, 'mylist'])->name('mylist');
 
     // プロフィール関連
     Route::get('/profile', [ProfileController::class, 'show'])->name('show');

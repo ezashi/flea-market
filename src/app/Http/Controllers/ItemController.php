@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Category;
+use App\Models\Condition;
 use App\Models\Like;
 use App\Models\Comment;
 use App\Http\Requests\AddressRequest;
@@ -45,12 +46,6 @@ class ItemController extends Controller
   {
     session()->forget(['selected_payment', 'current_purchase_item_id']);
 
-    if (!Auth::check()) {
-      // 未認証の場合は空のコレクションをビューに渡す
-      $items = collect();
-      return view('items.index', compact('items'));
-    }
-
     // ログインユーザーがいいねした商品のIDを取得
     $likedItems = Auth::user()->likes()->pluck('item_id');
     $query = Item::whereIn('id', $likedItems);
@@ -70,12 +65,6 @@ class ItemController extends Controller
 
   public function mypage(Request $request)
   {
-    if (!Auth::check()) {
-      // 未認証の場合は空のコレクションをビューに渡す
-      $items = collect();
-      return view('items.index', compact('items'));
-    }
-
     $route = $request->route()->getName();
     if ($route === 'mypage.buy') {
       $items = Auth::user()->purchasedItems()->latest()->get();
@@ -114,7 +103,6 @@ class ItemController extends Controller
 
     $item = Item::create($data);
     $item->categories()->attach($request->categories);
-    $item->conditions()->attach($request->conditions);
 
     return redirect()->route('mypage.sell');
   }
@@ -193,10 +181,6 @@ class ItemController extends Controller
 
   public function toggleLike(Item $item)
   {
-    if (!Auth::check()) {
-      return redirect()->route('login');
-    }
-
     $existing = Like::where('user_id', Auth::id())
     ->where('item_id', $item->id)
     ->first();

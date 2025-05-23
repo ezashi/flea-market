@@ -67,7 +67,7 @@
                   <div class="card mb-2">
                     <div class="card-header d-flex justify-content-between">
                       <span>
-                        <img src="{{ asset(Auth::user()->profile_image) }}" alt="{{ $comment->user->name }}" class="rounded-circle" style="width: 40px; height: 40px;"> {{ $comment->user->name }}
+                        <img src="{{ asset($comment->user->profile_image) }}" alt="{{ $comment->user->name }}" class="rounded-circle" style="width: 40px; height: 40px;"> {{ $comment->user->name }}
                       </span>
                     </div>
                     <div class="card-body">
