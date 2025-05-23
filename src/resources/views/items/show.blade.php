@@ -52,10 +52,8 @@
               </div>
 
               <div class="mb-3">
-                <h5>商品の情報</h5>
-                @foreach($item->categories as $category)
-                  <span class="badge bg-secondary me-1">カテゴリー {{ $category->name }}</span>
-                @endforeach
+                <h4>商品の情報</h4>
+                <p>カテゴリー {{ $item->categories->pluck('name')->implode(' ') }}</p>
                 <p>商品の状態 {{ $item->condition }}</p>
               </div>
 
@@ -69,7 +67,7 @@
                   <div class="card mb-2">
                     <div class="card-header d-flex justify-content-between">
                       <span>
-                        <img src="{{ asset('images/items/' . basename($comment->user->profile_image)) }}" alt="{{ $comment->user->name }}" class="rounded-circle" style="width: 40px; height: 40px;"> {{ $comment->user->name }}
+                        <img src="{{ asset(Auth::user()->profile_image) }}" alt="{{ $comment->user->name }}" class="rounded-circle" style="width: 40px; height: 40px;"> {{ $comment->user->name }}
                       </span>
                     </div>
                     <div class="card-body">

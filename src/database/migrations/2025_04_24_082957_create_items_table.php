@@ -18,7 +18,7 @@ class CreateItemsTable extends Migration
             $table->string('image')->nullable();
             $table->string('condition');
             $table->string('name');
-            $table->string('brand')->nullable();
+            $table->string('brand');
             $table->text('description');
             $table->integer('price');
             $table->foreignId('seller_id')->constrained('users');

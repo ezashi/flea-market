@@ -46,10 +46,9 @@
                   @if(!session('condition'))
                     <option value="" disabled selected>選択してください</option>
                   @endif
-                  <option value="良好" {{ old('condition') == '良好' ? 'selected' : '' }}>良好</option>
-                  <option value="目立った傷や汚れなし" {{ old('condition') == '目立った傷や汚れなし' ? 'selected' : '' }}>目立った傷や汚れなし</option>
-                  <option value="やや傷や汚れあり" {{ old('condition') == 'やや傷や汚れあり' ? 'selected' : '' }}>やや傷や汚れあり</option>
-                  <option value="状態が悪い" {{ old('condition') == '状態が悪い' ? 'selected' : '' }}>状態が悪い</option>
+                    <option value="{{ $conditions->id }}" {{ in_array($condition->id, old('conditions')) == $conditions ? 'selected' : '' }}>
+                      {{ $conditions }}
+                    </option>
                 </select>
                 @error('condition')
                   <div class="error-message">{{ $message }}</div>
