@@ -46,9 +46,11 @@
                   @if(!session('condition'))
                     <option value="" disabled selected>選択してください</option>
                   @endif
-                    <option value="{{ $conditions->id }}" {{ in_array($condition->id, old('conditions')) == $conditions ? 'selected' : '' }}>
-                      {{ $conditions }}
+                  @foreach($conditions as $condition)
+                    <option value="{{ $condition->name }}" {{ old('condition') == $condition->name ? 'selected' : '' }}>
+                      {{ $condition->name }}
                     </option>
+                  @endforeach
                 </select>
                 @error('condition')
                   <div class="error-message">{{ $message }}</div>

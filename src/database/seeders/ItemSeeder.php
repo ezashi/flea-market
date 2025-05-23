@@ -150,14 +150,11 @@ class ItemSeeder extends Seeder
         foreach ($items as $itemData) {
             $categoryIds = $itemData['categories'];
             unset($itemData['categories']);
-            $conditionIds = $itemData['conditions'];
-            unset($itemData['conditions']);
 
             $itemData['seller_id'] = $seller->id;
             $item = Item::create($itemData);
 
             $item->categories()->attach($categoryIds);
-            $item->conditions()->attach($conditionIds);
         }
     }
 

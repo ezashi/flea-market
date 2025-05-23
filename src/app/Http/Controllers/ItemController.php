@@ -70,6 +70,12 @@ class ItemController extends Controller
 
   public function mypage(Request $request)
   {
+    if (!Auth::check()) {
+      // 未認証の場合は空のコレクションをビューに渡す
+      $items = collect();
+      return view('items.index', compact('items'));
+    }
+
     $route = $request->route()->getName();
     if ($route === 'mypage.buy') {
       $items = Auth::user()->purchasedItems()->latest()->get();
@@ -89,7 +95,8 @@ class ItemController extends Controller
     session()->forget(['selected_payment', 'current_purchase_item_id']);
 
     $categories = Category::all();
-    return view('items.create', compact('categories'));
+    $conditions = Condition::all();
+    return view('items.create', compact('categories', 'conditions'));
   }
 
 
@@ -107,6 +114,7 @@ class ItemController extends Controller
 
     $item = Item::create($data);
     $item->categories()->attach($request->categories);
+    $item->conditions()->attach($request->conditions);
 
     return redirect()->route('mypage.sell');
   }
