@@ -25,6 +25,7 @@ class ItemController extends Controller
     session()->forget(['selected_payment', 'current_purchase_item_id']);
 
     $query = Item::query();
+    $search = $request->input('search', '');
 
     // 検索機能の実装
     if ($request->has('search')) {
@@ -49,6 +50,7 @@ class ItemController extends Controller
     // ログインユーザーがいいねした商品のIDを取得
     $likedItems = Auth::user()->likes()->pluck('item_id');
     $query = Item::whereIn('id', $likedItems);
+    $search = $request->input('search', '');
 
     // 検索機能の実装
     if ($request->has('search')) {
