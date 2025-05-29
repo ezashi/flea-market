@@ -150,7 +150,7 @@ class ItemController extends Controller
 
   public function changeAddress(Item $item)
     {
-        return view('items.changeAddress', ['user' => Auth::user()], compact('item'));
+        return view('items.changeaddress', ['user' => Auth::user()], compact('item'));
     }
 
 
