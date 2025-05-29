@@ -63,7 +63,6 @@ erDiagram
 | プロフィール編集(マイページ) | `/mypage/profile` | GET/POST | 必要 |
 | 購入履歴 | `/mypage/buy` | GET | 必要 |
 | 出品履歴 | `/mypage/sell` | GET | 必要 |
-
 | プロフィール登録・編集 | `/profile` | GET/POST | 必要 |
 | 支払い方法選択 | `/purchase/{item}/payment` | POST | 必要 |
 | 購入確定 | `/purchase/{item}` | POST | 必要 |
