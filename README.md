@@ -12,7 +12,7 @@
 **Laravel環境構築**
 1. PHPコンテナに入る：`docker-compose exec php bash`
 2. `composer install`
-3. 「.env.example」ファイルから「.env」を作成し、環境環境変数を変更
+3. 「.env.example」ファイルから「.env」を作成し、環境環境変数を変更：`cp .env.example .env`
 4. `.env`に以下の環境変数を追加
 ```
 DB_CONNECTION=mysql
