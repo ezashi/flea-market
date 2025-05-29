@@ -19,7 +19,7 @@
       @auth
         @if (!Route::is('login') && !Route::is('register'))
           <!-- 検索フォーム -->
-          <form action="{{ request()->is('mylist') ? route('mylist') : route('items.index') }}" method="GET" class="mb-4">
+          <form action="{{ request()->is('mylist') ? route('mylist') : route('index') }}" method="GET" class="mb-4">
             <input type="text" class="form-control" name="search" placeholder=" 何をお探しですか？" value="{{ $search ?? '' }}">
             <button class="btn btn-outline-secondary" type="submit" style="background: none; border: none; cursor: pointer;">検索</button>
           </form>
