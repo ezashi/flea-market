@@ -38,87 +38,13 @@ DB_PASSWORD=laravel_pass
 ## ER図
 ```mermaid
 erDiagram
-    users ||--o{ items : "sells"
-    users ||--o{ items : "buys"
-    users ||--o{ likes : "creates"
-    users ||--o{ comments : "writes"
-
-    items ||--o{ likes : "receives"
-    items ||--o{ comments : "receives"
-    items ||--o{ category_item : "belongs to"
-
-    categories ||--o{ category_item : "has"
-
-    users {
-        bigint id PK
-        string name
-        string email UK
-        timestamp email_verified_at
-        string password
-        string profile_image
-        boolean is_profile_completed
-        string postal_code
-        string address
-        string building
-        string remember_token
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    items {
-        bigint id PK
-        string image
-        string condition
-        string name
-        string brand
-        text description
-        integer price
-        bigint seller_id FK
-        bigint buyer_id FK
-        boolean sold
-        string payment_method
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    categories {
-        bigint id PK
-        string name
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    conditions {
-        bigint id PK
-        string name
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    likes {
-        bigint id PK
-        bigint user_id FK
-        bigint item_id FK
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    comments {
-        bigint id PK
-        bigint user_id FK
-        bigint item_id FK
-        text content
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    category_item {
-        bigint id PK
-        bigint category_id FK
-        bigint item_id FK
-        timestamp created_at
-        timestamp updated_at
-    }
+    users ||--o{ items : ""
+    users ||--o{ items : ""
+    users ||--o{ likes : ""
+    users ||--o{ comments : ""
+    items ||--o{ likes : ""
+    items ||--o{ comments : ""
+    items }o--o{ categories : ""
 ```
 
 ## URL
@@ -143,3 +69,37 @@ erDiagram
 | 購入確定 | `/purchase/{item}` | POST | 必要 |
 | いいね機能 | `/items/{item}/like` | POST | 必要 |
 | コメント投稿 | `/items/{item}/comment` | POST | 必要 |
+
+
+## 機能一覧
+
+### 認証機能
+- **会員登録**: ユーザー名、メールアドレス、パスワードで新規登録
+- **ログイン/ログアウト**: メールアドレスとパスワードによる認証
+- **プロフィール設定**: 初回登録後にプロフィール画像、住所情報を設定
+
+### 商品機能
+- **商品一覧表示**: 全商品の一覧表示（自分の出品を除く）
+- **商品検索**: 商品名での検索機能
+- **商品詳細表示**: 商品の詳細情報、コメント、いいね数を表示
+- **商品出品**: 画像、商品名、説明、カテゴリー、状態、価格を設定して出品
+
+### 購入機能
+- **商品購入**: 支払い方法選択、配送先確認を経て購入処理
+- **支払い方法選択**: コンビニ払い/カード払いから選択
+- **配送先住所変更**: 購入時に配送先を変更可能
+
+### ユーザー機能
+- **マイページ**: ユーザー情報、購入/出品履歴の表示
+- **プロフィール編集**: プロフィール画像、名前、住所情報の更新
+- **購入履歴**: 購入した商品の一覧表示
+- **出品履歴**: 出品した商品の一覧表示
+
+### コミュニケーション機能
+- **いいね機能**: 商品に対するいいねの追加/削除
+- **マイリスト**: いいねした商品の一覧表示
+- **コメント機能**: 商品に対するコメント投稿
+
+### その他の機能
+- **Sold表示**: 購入済み商品にSoldマークを表示
+- **画像アップロード**: プロフィール画像、商品画像のアップロード
