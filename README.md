@@ -51,22 +51,22 @@ erDiagram
 | 機能 | URL | HTTPメソッド | 認証 |
 |------|-----|-------------|------|
 | 商品一覧 | `/` | GET | 不要 |
-| マイリスト | `/mylist` | GET | 必要 |
+| マイリスト | `/?tab=mylist` | GET | 必要 |
 | 会員登録 | `/register` | GET/POST | 不要 |
 | ログイン | `/login` | GET/POST | 不要 |
 | ログアウト | `/logout` | POST | 必要 |
-| 商品詳細 | `/item/{item}` | GET | 不要 |
-| 商品購入 | `/purchase/{item}` | GET | 必要 |
-| 住所変更 | `/purchase/address/{item}` | GET/POST | 必要 |
+| 商品詳細 | `/item/:item_id` | GET | 不要 |
+| いいね機能 | `/items/:item_id/like` | POST | 必要 |
+| コメント投稿 | `/items/:item_id/comment` | POST | 必要 |
 | 商品出品 | `/sell` | GET/POST | 必要 |
+| 商品購入 | `/purchase/:item_id` | GET | 必要 |
+| 住所変更 | `/purchase/address/:item_id` | GET/POST | 必要 |
+| 購入確定 | `/purchase/:item_id` | POST | 必要 |
+| プロフィール登録・編集 | `/profile` | GET/POST | 必要 |
 | マイページ | `/mypage` | GET | 必要 |
 | プロフィール編集(マイページ) | `/mypage/profile` | GET/POST | 必要 |
-| 購入履歴 | `/mypage/buy` | GET | 必要 |
-| 出品履歴 | `/mypage/sell` | GET | 必要 |
-| プロフィール登録・編集 | `/profile` | GET/POST | 必要 |
-| 購入確定 | `/purchase/{item}` | POST | 必要 |
-| いいね機能 | `/items/{item}/like` | POST | 必要 |
-| コメント投稿 | `/items/{item}/comment` | POST | 必要 |
+| 購入履歴 | `/mypage?tab=buy` | GET | 必要 |
+| 出品履歴 | `/mypage?tab=sell` | GET | 必要 |
 
 
 ## 機能一覧
