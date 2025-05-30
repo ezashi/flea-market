@@ -20,59 +20,49 @@
 
           <hr>
 
-          <!-- 支払い方法 -->
-          <div class="mb-4">
-            <h5>支払い方法</h5>
-            <div class="form-check mb-2">
-              <form action="{{ route('items.selectPayment', $item) }}" method="POST">
-                @csrf
+          <form method="POST" action="{{ route('items.completePurchase', $item) }}">
+            @csrf
+            <!-- 支払い方法 -->
+            <div class="mb-4">
+              <h5>支払い方法</h5>
+              <div class="form-check mb-2">
                 <div class="form-check mb-2">
-                  <select id="payment_method" class="form-select @error('payment_method') is-invalid @enderror" name="payment_method" required onChange="this.form.submit()">
-                    <option value="" disabled {{ !session('selected_payment') ? 'selected' : '' }}>
-                      選択してください
-                    </option>
-                    <option value="コンビニ払い" {{ session('selected_payment') == 'コンビニ払い' ? 'selected' : '' }}>
-                      コンビニ払い
-                    </option>
-                    <option value="カード払い" {{ session('selected_payment') == 'カード払い' ? 'selected' : '' }}>
-                      カード払い
-                    </option>
-                  </select>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <hr>
-
-          <!-- 配送先情報 -->
-          <div class="mb-4">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h5>配送先</h5>
-              <a href="{{ route('items.changeAddress', $item) }}" class="btn btn-sm btn-outline-primary">変更する</a>
-            </div>
-            <div class="card">
-              <div class="card-body">
-                <p class="mb-1">〒{{ Auth::user()->postal_code }}</p>
-                <p class="mb-0">{{ Auth::user()->address }}{{ Auth::user()->building }}</p>
+                    <select id="payment_method" class="form-select" name="payment_method">
+                      <option value="" disabled>
+                        選択してください
+                      </option>
+                      <option value="コンビニ払い">
+                        コンビニ払い
+                      </option>
+                      <option value="カード払い">
+                        カード払い
+                      </option>
+                    </select>
+                    @error('payment_method')
+                      <div class="error-message">{{ $message }}</div>
+                    @enderror
+                  </div>
               </div>
             </div>
-          </div>
 
-          <div class="card">
-            <div class="price">
-              商品代金 ¥{{ number_format($item->price) }}
+            <hr>
+
+            <!-- 配送先情報 -->
+            <div class="mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5>配送先</h5>
+                <a href="{{ route('items.changeAddress', $item) }}" class="btn btn-sm btn-outline-primary">変更する</a>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <p class="mb-1">〒{{ Auth::user()->postal_code }}</p>
+                  <p class="mb-0">{{ Auth::user()->address }}{{ Auth::user()->building }}</p>
+                </div>
+              </div>
             </div>
-            <div class="card-body">
-              @if(session('selected_payment'))
-                支払い方法 {{ session('selected_payment') }}
-              @endif
-            </div>
-          </div>
-          <!-- 購入ボタン -->
-          <div class="d-grid">
-            <form method="POST" action="{{ route('items.completePurchase', $item) }}">
-              @csrf
+
+            <!-- 購入ボタン -->
+            <div class="d-grid">
               <button type="submit" class="btn btn-success btn-lg" {{ (!Auth::user()->postal_code || !Auth::user()->address || !Auth::user()->building) ? 'disabled' : '' }}>
                 購入する
               </button>

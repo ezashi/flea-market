@@ -11,7 +11,6 @@ use App\Models\Comment;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\ExhibitionRequest;
-// use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PurchaseRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -136,18 +135,6 @@ class ItemController extends Controller
   }
 
 
-  public function selectPayment(Request $request, Item $item)
-  {
-    $validated = $request->validate([
-        'payment_method' => 'required|string',
-    ]);
-
-    session(['selected_payment' => $validated['payment_method']]);
-
-    return redirect()->route('items.purchase', $item);
-  }
-
-
   public function changeAddress(Item $item)
     {
         return view('items.changeaddress', ['user' => Auth::user()], compact('item'));
@@ -168,14 +155,12 @@ class ItemController extends Controller
   }
 
 
-  public function completePurchase(Request $request, Item $item)
+  public function completePurchase(PurchaseRequest $request, Item $item)
   {
     $item->update([
       'buyer_id' => Auth::id(),
       'sold' => true,
     ]);
-
-    session()->forget(['selected_payment', 'current_purchase_item_id']);
 
     return redirect()->route('mypage.buy', $item);
   }
@@ -202,12 +187,12 @@ class ItemController extends Controller
   }
 
 
-  public function storeComment(Request $request, Item $item)
+  public function storeComment(CommentRequest $comment_request, Item $item)
   {
     Comment::create([
       'user_id' => Auth::id(),
       'item_id' => $item->id,
-      'content' => $request->content
+      'content' => $comment_request->content
     ]);
 
     return redirect()->back();

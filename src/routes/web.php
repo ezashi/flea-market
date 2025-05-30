@@ -58,7 +58,6 @@ Route::middleware(['auth'])->group(function () {
 
     // 商品購入
     Route::get('/purchase/{item}', [ItemController::class, 'purchase'])->name('items.purchase');
-    Route::post('/purchase/{item}/payment', [ItemController::class, 'selectPayment'])->name('items.selectPayment');
     Route::get('/purchase/address/{item}', [ItemController::class, 'changeAddress'])->name('items.changeAddress');
     Route::post('/purchase/address/{item}', [ItemController::class, 'AddressUpdate'])->name('items.AddressUpdate');
     Route::post('/purchase/{item}', [ItemController::class, 'completePurchase'])->name('items.completePurchase');
