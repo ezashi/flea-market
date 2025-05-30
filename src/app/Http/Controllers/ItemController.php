@@ -25,10 +25,16 @@ class ItemController extends Controller
 
     $query = Item::query();
     $search = $request->input('search', '');
+    $tab = $request->input('tab', 'recommend');
 
     // 検索機能の実装
-    if ($request->has('search')) {
-      $query->where('name', 'like', '%' . $request->search . '%');
+    if ('search') {
+      $query->where('name', 'like', '%' . $search . '%');
+    }
+
+    if ($tab === 'mylist' && Auth::check()){
+      $likedItems = Auth::user()->likes()->pluck('item_id');
+      $query->whereIn('id', $likedItems);
     }
 
     // 自分が出品した商品を除外
@@ -38,44 +44,43 @@ class ItemController extends Controller
 
     $items = $query->latest()->get();
 
-    return view('items.index', compact('items', 'search'));
+    return view('items.index', compact('items', 'search', 'tab'));
   }
 
 
-  public function mylist(Request $request)
-  {
-    session()->forget(['selected_payment', 'current_purchase_item_id']);
+  // public function mylist(Request $request)
+  // {
+  //   session()->forget(['selected_payment', 'current_purchase_item_id']);
 
-    // ログインユーザーがいいねした商品のIDを取得
-    $likedItems = Auth::user()->likes()->pluck('item_id');
-    $query = Item::whereIn('id', $likedItems);
-    $search = $request->input('search', '');
+  //   // ログインユーザーがいいねした商品のIDを取得
+  //   $likedItems = Auth::user()->likes()->pluck('item_id');
+  //   $query = Item::whereIn('id', $likedItems);
+  //   $search = $request->input('search', '');
 
-    // 検索機能の実装
-    if ($request->has('search')) {
-      $query->where('name', 'like', '%' . $request->search . '%');
-    }
+  //   // 検索機能の実装
+  //   if ($request->has('search')) {
+  //     $query->where('name', 'like', '%' . $request->search . '%');
+  //   }
 
-    // 自分が出品した商品を除外
-    $query->where('seller_id', '!=', Auth::id());
+  //   // 自分が出品した商品を除外
+  //   $query->where('seller_id', '!=', Auth::id());
 
-    $items = $query->latest()->get();
+  //   $items = $query->latest()->get();
 
-    return view('items.index', compact('items', 'search'));
-  }
+  //   return view('items.index', compact('items', 'search'));
+  // }
 
   public function mypage(Request $request)
   {
-    $route = $request->route()->getName();
-    if ($route === 'mypage.buy') {
-      $items = Auth::user()->purchasedItems()->latest()->get();
-    } elseif ($route === 'mypage.sell') {
+    $tab = $request->input('tab', 'buy');
+
+    if ($tab === 'sell') {
       $items = Auth::user()->sellingItems()->latest()->get();
     } else {
       $items = Auth::user()->purchasedItems()->latest()->get();
     }
 
-    return view('mypage.index', compact('items'));
+    return view('mypage.index', compact('items', 'tab'));
   }
 
 
@@ -105,16 +110,16 @@ class ItemController extends Controller
     $item = Item::create($data);
     $item->categories()->attach($request->categories);
 
-    return redirect()->route('mypage.sell');
+    return redirect()->route('mypage', ['tab' => 'sell']);
   }
 
 
   //商品詳細
-  public function show(Item $item)
+  public function show($item_id)
   {
     session()->forget(['selected_payment', 'current_purchase_item_id']);
 
-    $item->load(['categories', 'comments.user']);
+    $item = Item::with(['categories', 'comments.user'])->findOrFail($item_id);
     $isLiked = false;
 
     if (Auth::check()) {
@@ -125,24 +130,27 @@ class ItemController extends Controller
   }
 
 
-  public function purchase(Item $item)
+  public function purchase($item_id)
   {
     if (!Auth::check()) {
       return redirect()->route('login');
     }
 
+    $item = Item::findOrFail($item_id);
     return view('items.purchase', compact('item'));
   }
 
 
-  public function changeAddress(Item $item)
+  public function changeAddress($item_id)
     {
-        return view('items.changeaddress', ['user' => Auth::user()], compact('item'));
+      $item = Item::findOrFail($item_id);
+      return view('items.changeaddress', ['user' => Auth::user()], compact('item'));
     }
 
 
-  public function AddressUpdate(AddressRequest $addressrequest, Item $item)
+  public function AddressUpdate(AddressRequest $addressrequest, $item_id)
   {
+    $item = Item::findOrFail($item_id);
     $user = Auth::user();
 
     $user->postal_code = $addressrequest->postal_code;
@@ -151,23 +159,28 @@ class ItemController extends Controller
 
     $user->save();
 
-    return redirect()->route('items.purchase', $item);
+    return redirect()->route('items.purchase', $item_id);
   }
 
 
-  public function completePurchase(PurchaseRequest $request, Item $item)
+  public function completePurchase(PurchaseRequest $request, $item_id)
   {
+    $item = Item::findOrFail($item_id);
+
     $item->update([
       'buyer_id' => Auth::id(),
       'sold' => true,
+      'payment_method' => $request->payment_method,
     ]);
 
-    return redirect()->route('mypage.buy', $item);
+    return redirect()->route('mypage', ['tab' => 'buy']);
   }
 
 
-  public function toggleLike(Item $item)
+  public function toggleLike($item_id)
   {
+    $item = Item::findOrFail($item_id);
+
     $existing = Like::where('user_id', Auth::id())
     ->where('item_id', $item->id)
     ->first();
@@ -187,8 +200,10 @@ class ItemController extends Controller
   }
 
 
-  public function storeComment(CommentRequest $comment_request, Item $item)
+  public function storeComment(CommentRequest $comment_request, $item_id)
   {
+    $item = Item::findOrFail($item_id);
+
     Comment::create([
       'user_id' => Auth::id(),
       'item_id' => $item->id,

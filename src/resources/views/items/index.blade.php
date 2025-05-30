@@ -8,7 +8,7 @@
           <a class="nav-link" href="{{ route('index') }}">おすすめ</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('mylist', ['search' => $search]) }}">マイリスト</a>
+          <a class="nav-link" href="{{ route('index', ['tab' => 'mylist', 'search' => $search]) }}">マイリスト</a>
         </li>
       </ul>
     </div>
@@ -18,7 +18,7 @@
     @if(count($items) > 0)
       @foreach($items as $item)
         <div class="col-md-4 mb-4">
-          <a href="{{ route('items.show', $item) }}" class="text-decoration-none text-dark">
+          <a href="{{ route('items.show', $item->id) }}" class="text-decoration-none text-dark">
             <div class="card h-100">
               <div class="position-relative">
                 @if($item->image)
@@ -26,7 +26,7 @@
                 @endif
                 <!-- 購入時み -->
                 @if($item->sold)
-                  <div class="position-absolute top-0 end-0 bg-danger text-white px-2 py-1">Sold</div>
+                  <div class="sold">Sold</div>
                 @endif
               </div>
               <div class="card-body">
@@ -39,7 +39,7 @@
     @else
       <div class="col-12">
         <div class="alert alert-info">
-          @if(request()->routeIs('mylist'))
+          @if(request('tab') === 'mylist')
             いいねした商品がありません。
           @else
             商品がありません。

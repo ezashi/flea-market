@@ -20,28 +20,28 @@
 
           <hr>
 
-          <form method="POST" action="{{ route('items.completePurchase', $item) }}">
+          <form method="POST" action="{{ route('items.completePurchase', $item->id) }}">
             @csrf
             <!-- 支払い方法 -->
             <div class="mb-4">
               <h5>支払い方法</h5>
               <div class="form-check mb-2">
                 <div class="form-check mb-2">
-                    <select id="payment_method" class="form-select" name="payment_method">
-                      <option value="" disabled>
-                        選択してください
-                      </option>
-                      <option value="コンビニ払い">
-                        コンビニ払い
-                      </option>
-                      <option value="カード払い">
-                        カード払い
-                      </option>
-                    </select>
-                    @error('payment_method')
-                      <div class="error-message">{{ $message }}</div>
-                    @enderror
-                  </div>
+                  <select id="payment_method" class="form-select" name="payment_method">
+                    <option value="" disabled selected>
+                      選択してください
+                    </option>
+                    <option value="コンビニ払い">
+                      コンビニ払い
+                    </option>
+                    <option value="カード払い">
+                      カード払い
+                    </option>
+                  </select>
+                  @error('payment_method')
+                    <div class="error-message">{{ $message }}</div>
+                  @enderror
+                </div>
               </div>
             </div>
 
@@ -51,7 +51,7 @@
             <div class="mb-4">
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <h5>配送先</h5>
-                <a href="{{ route('items.changeAddress', $item) }}" class="btn btn-sm btn-outline-primary">変更する</a>
+                <a href="{{ route('items.changeAddress', $item->id) }}" class="btn btn-sm btn-outline-primary">変更する</a>
               </div>
               <div class="card">
                 <div class="card-body">
@@ -63,11 +63,11 @@
 
             <!-- 購入ボタン -->
             <div class="d-grid">
-              <button type="submit" class="btn btn-success btn-lg" {{ (!Auth::user()->postal_code || !Auth::user()->address || !Auth::user()->building) ? 'disabled' : '' }}>
+              <button type="submit" class="btn btn-success btn-lg">
                 購入する
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

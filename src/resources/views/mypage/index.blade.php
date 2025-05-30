@@ -28,26 +28,21 @@
       <div class="list-group list-group-flush">
         <ul class="list-group">
           <li class="list-buy">
-            <a class="list-buy-link" href="{{ route('mypage.buy') }}">購入した商品</a>
+            <a class="list-buy-link" href="{{ route('mypage', ['tab' => 'buy']) }}">購入した商品</a>
           </li>
           <li class="list-sell">
-            <a class="list-sell-link" href="{{ route('mypage.sell') }}">出品した商品</a>
+            <a class="list-sell-link" href="{{ route('mypage', ['tab' => 'buy']) }}">出品した商品</a>
           </li>
         </ul>
       </div>
     </div>
-    <biv class="mypage-buy-or-sell">
-      @if(Route::is('mypage.buy'))
-      @elseif(Route::is('mypage.sell'))
-      @endif
-    </div>
     <div class="mypage-buy">
       @if($items->isEmpty())
         <div class="alert alert-info">
-          @if(Route::is('mypage.buy'))
-            購入した商品はありません。
-          @elseif(Route::is('mypage.sell'))
+          @if(request('tab') === 'sell')
             出品した商品はありません。
+          @else
+            購入した商品はありません。
           @endif
         </div>
       @else
@@ -55,7 +50,7 @@
           @foreach($items as $item)
             <div class="col-md-4 mb-4">
               <div class="card h-100">
-                <a href="{{ route('items.show', $item) }}" class="btn btn-primary">
+                <a href="{{ route('items.show', $item->id) }}" class="btn btn-primary">
                   <div class="position-relative">
                     @if($item->image)
                       <img src="{{ asset($item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
