@@ -8,7 +8,7 @@
           <a class="nav-link" href="{{ route('index') }}">おすすめ</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('mylist') }}">マイリスト</a>
+          <a class="nav-link" href="{{ route('mylist', ['search' => $search]) }}">マイリスト</a>
         </li>
       </ul>
     </div>
