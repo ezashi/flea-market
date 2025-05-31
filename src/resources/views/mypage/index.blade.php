@@ -31,7 +31,7 @@
             <a class="list-buy-link" href="{{ route('mypage', ['tab' => 'buy']) }}">購入した商品</a>
           </li>
           <li class="list-sell">
-            <a class="list-sell-link" href="{{ route('mypage', ['tab' => 'buy']) }}">出品した商品</a>
+            <a class="list-sell-link" href="{{ route('mypage', ['tab' => 'sell']) }}">出品した商品</a>
           </li>
         </ul>
       </div>

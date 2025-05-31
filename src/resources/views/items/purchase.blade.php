@@ -57,8 +57,12 @@
                 <div class="card-body">
                   <p class="mb-1">〒{{ Auth::user()->postal_code }}</p>
                   <p class="mb-0">{{ Auth::user()->address }}{{ Auth::user()->building }}</p>
+                  <input type="hidden" name="delivery_address" value="{{ Auth::user()->postal_code }} {{ Auth::user()->address }}{{ Auth::user()->building }}">
                 </div>
               </div>
+              @error('delivery_address')
+                <div class="error-message">{{ $message }}</div>
+              @enderror
             </div>
 
             <!-- 購入ボタン -->

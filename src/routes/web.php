@@ -35,9 +35,6 @@ Route::get('/', [ItemController::class, 'index'])->name('index');
 // 認証が必要なルート
 Route::middleware(['auth'])->group(function () {
 
-    // マイリスト（いいねした商品）
-    // Route::get('/mylist', [ItemController::class, 'mylist'])->name('mylist');
-
     // プロフィール関連
     Route::get('/profile', [ProfileController::class, 'show'])->name('show');
     Route::post('/profile', [ProfileController::class, 'update'])->name('update');

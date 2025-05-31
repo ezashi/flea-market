@@ -48,28 +48,6 @@ class ItemController extends Controller
   }
 
 
-  // public function mylist(Request $request)
-  // {
-  //   session()->forget(['selected_payment', 'current_purchase_item_id']);
-
-  //   // ログインユーザーがいいねした商品のIDを取得
-  //   $likedItems = Auth::user()->likes()->pluck('item_id');
-  //   $query = Item::whereIn('id', $likedItems);
-  //   $search = $request->input('search', '');
-
-  //   // 検索機能の実装
-  //   if ($request->has('search')) {
-  //     $query->where('name', 'like', '%' . $request->search . '%');
-  //   }
-
-  //   // 自分が出品した商品を除外
-  //   $query->where('seller_id', '!=', Auth::id());
-
-  //   $items = $query->latest()->get();
-
-  //   return view('items.index', compact('items', 'search'));
-  // }
-
   public function mypage(Request $request)
   {
     $tab = $request->input('tab', 'buy');
