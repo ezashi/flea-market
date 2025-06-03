@@ -86,6 +86,6 @@ class ProfileController extends Controller
         $user->is_profile_completed = true;
         $user->save();
 
-        return redirect()->route('index');
+        return redirect()->route('profile.show');
     }
 }
