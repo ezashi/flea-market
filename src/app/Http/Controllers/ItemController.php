@@ -32,9 +32,14 @@ class ItemController extends Controller
       $query->where('name', 'like', '%' . $search . '%');
     }
 
-    if ($tab === 'mylist' && Auth::check()){
+    if ($tab === 'mylist'){
+      if(Auth::check()){
       $likedItems = Auth::user()->likes()->pluck('item_id');
       $query->whereIn('id', $likedItems);
+      }else{
+        $items = collect();
+        return view('items.index', compact('items', 'search', 'tab'));
+      }
     }
 
     // 自分が出品した商品を除外
