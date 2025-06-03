@@ -96,6 +96,6 @@ erDiagram
 - **出品履歴**: 出品した商品の一覧表示
 
 #### ユーザーログイン情報
-- ユーザー名: Tester
-- メールアドレス: tester@example.com
+- ユーザー名: Test_seller
+- メールアドレス: seller@example.com
 - パスワード: 12345678
