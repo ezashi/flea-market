@@ -22,7 +22,7 @@
             <div class="card h-100">
               <div class="position-relative">
                 @if($item->image)
-                  <img src="{{ asset($item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
+                  <img src="{{ asset($item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="width: 200px; height: 200px; object-fit: cover;">
                 @endif
                 <!-- 購入時み -->
                 @if($item->sold)

@@ -126,14 +126,14 @@ class ItemController extends Controller
     }
 
 
-  public function AddressUpdate(AddressRequest $addressrequest, $item_id)
+  public function AddressUpdate(AddressRequest $request, $item_id)
   {
     $item = Item::findOrFail($item_id);
     $user = Auth::user();
 
-    $user->postal_code = $addressrequest->postal_code;
-    $user->address = $addressrequest->address;
-    $user->building = $addressrequest->building;
+    $user->postal_code = $request->postal_code;
+    $user->address = $request->address;
+    $user->building = $request->building;
 
     $user->save();
 
@@ -178,14 +178,14 @@ class ItemController extends Controller
   }
 
 
-  public function storeComment(CommentRequest $comment_request, $item_id)
+  public function storeComment(CommentRequest $request, $item_id)
   {
     $item = Item::findOrFail($item_id);
 
     Comment::create([
       'user_id' => Auth::id(),
       'item_id' => $item->id,
-      'content' => $comment_request->content
+      'content' => $request->content
     ]);
 
     return redirect()->back();

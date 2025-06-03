@@ -9,12 +9,13 @@
             <form action="{{ route('profile.show') }}" method="GET" class="col-md-8">
               <div class="col-md-4 text-center">
                 @if(Auth::user()->profile_image)
-                  <img src="{{ asset(Auth::user()->profile_image) }}" class="img-fluid rounded-circle mb-3" style="max-width: 150px;" alt="{{ Auth::user()->profile_image }}">
+                  <img src="{{ asset(Auth::user()->profile_image) }}" class="img-fluid rounded-circle mb-3" style="max-width: 100px;" alt="{{ Auth::user()->profile_image }}">
                 @else
-                  <div class="bg-light rounded-circle mx-auto mb-3" style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center;">
+                  <div class="bg-light rounded-circle mx-auto mb-3" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
                     <span class="h1 text-muted">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
                   </div>
                 @endif
+                {{ Auth::user()->name }}
               </div>
               <div class="mt-3">
                 <button type="submit" class="btn btn-primary">プロフィールを編集</button>
