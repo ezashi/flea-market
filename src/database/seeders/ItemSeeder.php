@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
+use App\Models\User;
 use App\Models\Item;
 use App\Models\Category;
 use App\Models\Condition;
@@ -17,6 +18,8 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
+        $seller = User::where('email', 'seller@example.com')->first();
+
         $categories = [
             'ファッション',
             '家電',
