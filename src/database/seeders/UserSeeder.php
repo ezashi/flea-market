@@ -21,5 +21,12 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'email_verified_at' => now(),
         ]);
+
+        $buyer = User::create([
+            'name' => 'Test_buyer',
+            'email' => 'buyer@example.com',
+            'password' => Hash::make('12345678'),
+            'email_verified_at' => now(),
+        ]);
     }
 }
