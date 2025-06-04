@@ -42,7 +42,7 @@ class ProfileController extends Controller
             if (file_exists(public_path($path))) {
                 unlink(public_path($path));
             }
-            $profileRequest->file('profile_image')->storeAs('images/profile', $filename);
+            $profileRequest->file('profile_image')->storeAs('public/images/profile', $filename);
             $user->profile_image = 'storage/images/profile/' . $filename;
         }
 
@@ -79,7 +79,7 @@ class ProfileController extends Controller
                 unlink(public_path($user->profile_image));
             }
             $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
-            $profileRequest->file('profile_image')->storeAs('images/profile', $filename);
+            $profileRequest->file('profile_image')->storeAs('public/images/profile', $filename);
             $user->profile_image = 'storage/images/profile/' . $filename;
         }
 
