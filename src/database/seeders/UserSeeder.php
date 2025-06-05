@@ -19,14 +19,18 @@ class UserSeeder extends Seeder
             'name' => 'Test_seller',
             'email' => 'seller@example.com',
             'password' => Hash::make('12345678'),
-            'email_verified_at' => now(),
+            'postal_code' => '123-4567',
+            'address' => '東京都千代田区',
+            'building' => '千代田1-0',
         ]);
 
         $buyer = User::create([
             'name' => 'Test_buyer',
             'email' => 'buyer@example.com',
             'password' => Hash::make('12345678'),
-            'email_verified_at' => now(),
+            'postal_code' => '100-8111',
+            'address' => '東京都千代田区',
+            'building' => '千代田1-1',
         ]);
     }
 }
