@@ -1,50 +1,40 @@
 @extends('layouts.app')
 @section('content')
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('index') }}">おすすめ</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('index', ['tab' => 'mylist', 'search' => $search]) }}">マイリスト</a>
-        </li>
-      </ul>
-    </div>
+<div>
+  <div>
+    <ul>
+      <li>
+        <a href="{{ route('index') }}">おすすめ</a>
+      </li>
+      <li>
+        <a href="{{ route('index', ['tab' => 'mylist', 'search' => $search]) }}">マイリスト</a>
+      </li>
+    </ul>
   </div>
 
-  <div class="row mt-4">
+  <div>
     @if(count($items) > 0)
       @foreach($items as $item)
-        <div class="col-md-4 mb-4">
-          <a href="{{ route('items.show', $item->id) }}" class="text-decoration-none text-dark">
-            <div class="card h-100">
-              <div class="position-relative">
-                @if($item->image)
-                  <img src="{{ asset($item->image) }}" class="card-img-top" alt="{{ $item->name }}" style="width: 200px; height: 200px; object-fit: cover;">
-                @endif
-                <!-- 購入時み -->
-                @if($item->sold)
-                  <div class="sold">Sold</div>
-                @endif
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{ $item->name }}</h5>
-              </div>
-            </div>
+        <div>
+          <a href="{{ route('items.show', $item->id) }}">
+            @if($item->image)
+              <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="width: 200px; height: 200px; object-fit: cover;">
+            @endif
+            <!-- 購入時み -->
+            @if($item->sold)
+              <div>Sold</div>
+            @endif
+            <h5>{{ $item->name }}</h5>
           </a>
         </div>
       @endforeach
     @else
-      <div class="col-12">
-        <div class="alert alert-info">
-          @if(request('tab') === 'mylist')
-            いいねした商品がありません。
-          @else
-            商品がありません。
-          @endif
-        </div>
+      <div>
+        @if(request('tab') === 'mylist')
+          いいねした商品がありません。
+        @else
+          商品がありません。
+        @endif
       </div>
     @endif
   </div>

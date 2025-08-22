@@ -17,7 +17,7 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        // 登録直後にログインさせる！
+        // 登録直後にログインさせる
         Auth::login($user);
 
         return redirect()->route('show'); // 成功後リダイレクト
