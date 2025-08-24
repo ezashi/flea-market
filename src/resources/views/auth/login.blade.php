@@ -20,7 +20,7 @@
         @enderror
       </div>
       <div>
-        <button type="submit">ログイン</button>
+        <button type="submit">ログインする</button>
       </div>
     </form>
     <div>

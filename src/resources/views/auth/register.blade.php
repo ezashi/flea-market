@@ -31,7 +31,7 @@
         <input id="password-confirm" type="password" name="password_confirmation">
       </div>
       <div>
-        <button type="submit">登録</button>
+        <button type="submit">登録する</button>
       </div>
     </form>
     <div>

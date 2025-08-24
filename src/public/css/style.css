@@ -1,0 +1,864 @@
+/* =============================================
+   共通スタイル
+   ============================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+    line-height: 1.6;
+}
+
+/* =============================================
+   ヘッダー
+   ============================================= */
+header {
+    background-color: #000000;
+    padding: 0;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    height: 56px;
+    /* 縦幅を調整 */
+}
+
+header>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+header a img {
+    height: 28px;
+    /* ロゴサイズを調整 */
+    width: auto;
+}
+
+/* 検索フォーム */
+header form[action*="index"] {
+    flex-grow: 1;
+    max-width: 600px;
+    margin: 0 20px;
+}
+
+header form[action*="index"] input[type="text"] {
+    width: 100%;
+    padding: 6px 16px;
+    /* パディング調整 */
+    border: none;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    font-size: 14px;
+}
+
+header form[action*="index"] button {
+    display: none;
+}
+
+/* ヘッダーボタン */
+header form[action*="logout"] button,
+header form[action*="mypage"] button,
+header form[action*="create"] button,
+header form[action*="login"] button {
+    background-color: transparent;
+    color: #ffffff;
+    border: none;
+    padding: 6px 16px;
+    /* パディング調整 */
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+header form[action*="logout"] button:hover,
+header form[action*="mypage"] button:hover,
+header form[action*="create"] button:hover,
+header form[action*="login"] button:hover {
+    opacity: 0.7;
+}
+
+header form[action*="create"] button {
+    background-color: #ff4444;
+    border-radius: 4px;
+    color: #ffffff;
+    padding: 6px 20px;
+    margin-left: 10px;
+}
+
+/* =============================================
+   メインコンテンツ
+   ============================================= */
+main {
+    padding-top: 56px;
+    /* ヘッダー高さに合わせて調整 */
+    min-height: calc(100vh - 56px);
+    background-color: #ffffff;
+}
+
+/* =============================================
+   認証画面（ログイン・会員登録）- 中央揃え
+   ============================================= */
+main>div:has(> div:contains("ログイン")),
+main>div:has(> div:contains("会員登録")) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 56px);
+    padding: 40px;
+    text-align: center;
+    /* 中央揃え */
+}
+
+/* 認証フォームタイトル */
+main>div>div:first-child:contains("ログイン"),
+main>div>div:first-child:contains("会員登録") {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* 認証フォームコンテナ */
+main>div>div:has(form[action*="login"]),
+main>div>div:has(form[action*="register"]) {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+    /* 中央揃え */
+}
+
+/* 認証フォーム内の要素 */
+form[action*="login"]>div,
+form[action*="register"]>div {
+    margin-bottom: 24px;
+    text-align: center;
+    /* 中央揃え */
+}
+
+form[action*="login"] label,
+form[action*="register"] label {
+    display: block;
+    font-size: 14px;
+    color: #333333;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-align: center;
+    /* 中央揃え */
+}
+
+form[action*="login"] input,
+form[action*="register"] input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #ffffff;
+    transition: border-color 0.3s;
+}
+
+/* ログイン・登録ボタン */
+form[action*="login"] button[type="submit"],
+form[action*="register"] button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background-color: #ff4444;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 8px;
+}
+
+/* リンク（青色） */
+main>div>div>div:has(a[href*="login"]),
+main>div>div>div:has(a[href*="register"]) {
+    text-align: center;
+    margin-top: 24px;
+}
+
+main>div>div>div a[href*="login"],
+main>div>div>div a[href*="register"] {
+    color: #4a90e2;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+main>div>div>div a[href*="login"]:hover,
+main>div>div>div a[href*="register"]:hover {
+    text-decoration: underline;
+}
+
+/* =============================================
+   プロフィール設定画面
+   ============================================= */
+main>div:has(> div:contains("プロフィール設定")) {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    background-color: #ffffff;
+}
+
+/* プロフィール設定タイトル */
+main>div>div:contains("プロフィール設定") {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* プロフィール画像アップロード - 左揃え */
+form[action*="profile.update"]>div:has(label[for="profile_image"]) {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    justify-content: flex-start;
+    /* 左揃え */
+}
+
+form[action*="profile.update"] label[for="profile_image"] {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+form[action*="profile.update"] label[for="profile_image"] img,
+form[action*="profile.update"] label[for="profile_image"] span {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    color: #999999;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+/* 画像選択ボタン - 画像の右側 */
+form[action*="profile.update"] label[for="profile_image"]::after {
+    content: "画像を選択する";
+    display: inline-block;
+    margin-left: 20px;
+    padding: 8px 20px;
+    background-color: #ffffff;
+    color: #ff4444;
+    border: 1px solid #ff4444;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+form[action*="profile.update"] label[for="profile_image"]:hover::after {
+    background-color: #ff4444;
+    color: #ffffff;
+}
+
+/* プロフィール設定のフォーム要素 - 幅を狭く */
+form[action*="profile.update"]>div:not(:has(label[for="profile_image"])) {
+    max-width: 200px;
+    /* 幅を1/3に */
+    margin: 0 auto 24px;
+    /* 中央揃え */
+}
+
+form[action*="profile.update"] input[type="text"]:not(#profile_image) {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+form[action*="profile.update"] button[type="submit"] {
+    width: 200px;
+    /* 幅を狭く */
+    padding: 14px;
+    background-color: #ff4444;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 30px auto 0;
+    /* 中央揃え */
+}
+
+/* =============================================
+   商品一覧画面
+   ============================================= */
+/* タブナビゲーション */
+main>div>div:has(ul) {
+    background-color: #ffffff;
+    padding: 20px 40px 0;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+main>div>div>ul {
+    display: flex;
+    list-style: none;
+    border-bottom: 1px solid #dddddd;
+}
+
+main>div>div>ul li {
+    margin-right: 40px;
+}
+
+main>div>div>ul li a {
+    display: inline-block;
+    padding: 12px 0;
+    color: #999999;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    position: relative;
+}
+
+/* 商品グリッド */
+main>div>div:has(div > a[href*="items.show"]) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* 商品カード */
+main>div>div>div:has(a[href*="items.show"]) {
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+main>div>div>div:has(a[href*="items.show"]):hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+main>div>div>div a[href*="items.show"] {
+    text-decoration: none;
+    color: #333333;
+    display: block;
+}
+
+main>div>div>div a[href*="items.show"] img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+/* 商品名 - 左揃え */
+main>div>div>div a[href*="items.show"] h5 {
+    padding: 12px;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+    text-align: left;
+    /* 左揃え */
+}
+
+/* =============================================
+   商品出品画面 - 全て中央揃え
+   ============================================= */
+main>div:has(h2:contains("商品の出品")) {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: #ffffff;
+    text-align: center;
+    /* 中央揃え */
+}
+
+main>div:has(h2:contains("商品の出品")) h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #333333;
+    text-align: center;
+}
+
+main>div:has(h2:contains("商品の出品")) h3 {
+    font-size: 16px;
+    color: #666666;
+    margin: 30px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eeeeee;
+    text-align: center;
+}
+
+/* 商品出品フォーム要素 */
+form[action*="items.store"]>div {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+form[action*="items.store"] label {
+    display: block;
+    font-size: 14px;
+    color: #333333;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-align: center;
+}
+
+form[action*="items.store"] input[type="text"],
+form[action*="items.store"] input[type="file"],
+form[action*="items.store"] input[type="number"],
+form[action*="items.store"] textarea,
+form[action*="items.store"] select {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 0 auto;
+    display: block;
+}
+
+/* カテゴリー選択 - 中央揃え */
+form[action*="items.store"]>div:has(input[type="checkbox"]) {
+    text-align: center;
+}
+
+form[action*="items.store"] input[type="checkbox"] {
+    display: none;
+}
+
+form[action*="items.store"] input[type="checkbox"]+label {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 4px;
+    background-color: #ffffff;
+    border: 1px solid #ff4444;
+    border-radius: 20px;
+    color: #ff4444;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+form[action*="items.store"] input[type="checkbox"]:checked+label {
+    background-color: #ff4444;
+    color: #ffffff;
+}
+
+form[action*="items.store"] button[type="submit"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 14px;
+    background-color: #ff4444;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 30px auto 0;
+    display: block;
+}
+
+/* =============================================
+   マイページ - プロフィール表示
+   ============================================= */
+main>div:has(form[action*="profile.show"]) {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+/* プロフィールセクション - 横並び左揃え */
+form[action*="profile.show"] {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* 左揃え */
+    margin-bottom: 40px;
+    padding: 40px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+}
+
+form[action*="profile.show"] img,
+form[action*="profile.show"]>div:first-child {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+    background-color: #dddddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* ユーザー名 */
+form[action*="profile.show"]::after {
+    content: attr(data-username);
+    margin-right: 20px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+form[action*="profile.show"] button {
+    margin-left: auto;
+    /* 右寄せ */
+    padding: 8px 24px;
+    background-color: #ffffff;
+    color: #ff4444;
+    border: 1px solid #ff4444;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+/* =============================================
+   商品詳細画面
+   ============================================= */
+main>div:has(img[alt*="商品"]) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #ffffff;
+}
+
+/* 商品画像 - 左側 */
+main>div>img[alt*="商品"] {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 8px;
+    grid-column: 1;
+}
+
+/* 商品情報セクション - 右側 */
+main>div>div:has(h2) {
+    grid-column: 2;
+    padding: 20px 0;
+}
+
+/* 商品説明セクション - 右側 */
+main>div>div:has(h4:contains("商品説明")) {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 40px 0;
+    border-top: 1px solid #eeeeee;
+}
+
+/* コメントセクション - 下部全幅 */
+main>div>div:has(form[action*="comment"]) {
+    grid-column: 1 / -1;
+    padding: 40px 0;
+    border-top: 1px solid #eeeeee;
+}
+
+/* =============================================
+   商品購入画面
+   ============================================= */
+main>div:has(form[action*="completePurchase"]) {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #ffffff;
+}
+
+/* 商品情報レイアウト */
+main>div:has(form[action*="completePurchase"])>img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    float: left;
+    /* 左揃え */
+    margin-right: 20px;
+}
+
+main>div:has(form[action*="completePurchase"])>div:has(h4) {
+    margin-left: 220px;
+    /* 画像の右側 */
+    margin-bottom: 30px;
+}
+
+main>div:has(form[action*="completePurchase"]) h4 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+main>div:has(form[action*="completePurchase"]) h5 {
+    font-size: 18px;
+    color: #ff4444;
+    margin-top: 80px;
+    /* 商品名の下、画像と同じ高さ */
+}
+
+/* 支払い方法・配送先 - 左揃え */
+form[action*="completePurchase"]>div {
+    clear: both;
+    text-align: left;
+    /* 左揃え */
+    margin-bottom: 20px;
+}
+
+form[action*="completePurchase"] h5 {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: #333333;
+    display: inline-block;
+}
+
+/* 配送先の変更リンク - 右側 */
+form[action*="completePurchase"] a[href*="changeAddress"] {
+    color: #4a90e2;
+    text-decoration: none;
+    float: right;
+    font-size: 14px;
+    margin-left: 20px;
+}
+
+form[action*="completePurchase"] select {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* =============================================
+   送付先住所変更画面 - 全て中央揃え
+   ============================================= */
+main>div:has(h2:contains("住所の変更")) {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    background-color: #ffffff;
+    text-align: center;
+    /* 中央揃え */
+}
+
+main>div:has(h2:contains("住所の変更")) h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+form[action*="AddressUpdate"]>div {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+form[action*="AddressUpdate"] label {
+    display: block;
+    font-size: 14px;
+    color: #333333;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-align: center;
+}
+
+form[action*="AddressUpdate"] input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 0 auto;
+    display: block;
+}
+
+form[action*="AddressUpdate"] button[type="submit"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 14px;
+    background-color: #ff4444;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 30px auto 0;
+    display: block;
+}
+
+/* =============================================
+   共通フォームスタイル
+   ============================================= */
+form label {
+    display: block;
+    font-size: 14px;
+    color: #333333;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="number"],
+form textarea,
+form select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #ffffff;
+    transition: border-color 0.3s;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+    outline: none;
+    border-color: #ff4444;
+}
+
+/* エラーメッセージ */
+.error-message {
+    color: #ff4444;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* ファイル入力を非表示 */
+form input[type="file"] {
+    display: none;
+}
+
+/* =============================================
+   ボタンの共通スタイル
+   ============================================= */
+form button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background-color: #ff4444;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button[type="submit"]:hover {
+    background-color: #e63333;
+}
+
+/* =============================================
+   レスポンシブ対応
+   ============================================= */
+@media (max-width: 768px) {
+    header>div {
+        padding: 12px 20px;
+    }
+
+    main>div>div:has(div > a) {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+        padding: 20px;
+    }
+
+    main>div:has(img[alt*="商品"]) {
+        grid-template-columns: 1fr;
+    }
+
+    form[action*="profile.show"] {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    form[action*="profile.update"]>div:has(label[for="profile_image"]) {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    form[action*="profile.update"] label[for="profile_image"]::after {
+        margin-left: 0;
+        margin-top: 12px;
+        display: block;
+    }
+}
+
+/* =============================================
+   アニメーション
+   ============================================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+main>div {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* =============================================
+   プレースホルダーのスタイル
+   ============================================= */
+input::placeholder,
+textarea::placeholder {
+    color: #999999;
+    font-size: 14px;
+}
+
+/* =============================================
+   スクロールバーのカスタマイズ
+   ============================================= */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #999999;
+}

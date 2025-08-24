@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>coachtechフリマ</title>
   <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 
 </head>
 <body>
@@ -19,7 +20,6 @@
           <!-- 検索フォーム -->
           <form action="{{ request()->is('mylist') ? route('mylist') : route('index') }}" method="GET">
             <input type="text" name="search" placeholder=" 何をお探しですか？" value="{{ $search ?? '' }}">
-            <button type="submit">検索</button>
           </form>
 
           <form method="POST" action="{{ route('logout') }}">
@@ -39,7 +39,6 @@
           <!-- 検索フォーム -->
           <form action="{{ route('index') }}" method="GET">
             <input type="text" name="search" placeholder=" 何をお探しですか？" value="{{ request('search') }}">
-            <button type="submit">検索</button>
           </form>
 
           <form method="GET" action="/login">
