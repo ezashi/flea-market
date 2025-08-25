@@ -15,6 +15,8 @@
       <a href="{{ route('index') }}">
         <img src="{{ asset('image/Free Market App Logo.svg') }}" alt="coachtechロゴ"/>
       </a>
+    </div>
+    <div>
       @auth
         @if (!Route::is('login') && !Route::is('register'))
           <!-- 検索フォーム -->

@@ -5,9 +5,9 @@
   <div>
     <form method="POST" action="{{ route('items.store') }}" enctype="multipart/form-data" novalidate>
       @csrf
-      <!-- 商品画像 -->
       <div>
-        <label for="image">商品画像</label>
+        <p>商品画像</p>
+        <label for="image">画像を選択する</label>
         <input id="image" type="file" name="image">
           @error('image')
             <div class="error-message">{{ $message }}</div>
@@ -15,7 +15,6 @@
       </div>
 
       <h3>商品の詳細</h3>
-      <!-- カテゴリ -->
       <div>
         <label>カテゴリー</label>
         @foreach($categories as $category)
@@ -28,8 +27,6 @@
           <div class="error-message">{{ $message }}</div>
         @enderror
       </div>
-
-      <!-- 商品の状態 -->
       <div>
         <label for="condition">商品の状態</label>
         <select id="condition" name="condition" required>
@@ -48,31 +45,19 @@
       </div>
 
       <h3>商品名と説明</h3>
-      <!-- 商品名 -->
       <div>
         <label for="name">商品名</label>
         <input id="name" type="text" name="name" value="{{ old('name') }}" required>
         @error('name')
           <div class="error-message">{{ $message }}</div>
         @enderror
-      </div>
-
-      <!-- ブランド名 -->
-      <div>
         <label for="brand">ブランド名</label>
         <input id="brand" type="text" name="brand" value="{{ old('brand') }}">
-      </div>
-      <!-- 商品説明 -->
-      <div>
         <label for="description">商品の説明</label>
         <textarea id="description" name="description" rows="5" required>{{ old('description') }}</textarea>
         @error('description')
           <div class="error-message">{{ $message }}</div>
         @enderror
-      </div>
-
-      <!-- 価格 -->
-      <div>
         <label for="price">販売価格</label>
         <span>¥</span>
         <input id="price" type="number" name="price" value="{{ old('price') }}" required>
@@ -81,10 +66,7 @@
         @enderror
       </div>
 
-      <!-- 送信ボタン -->
-      <div>
-        <button type="submit">出品する</button>
-      </div>
+      <button type="submit">出品する</button>
     </form>
   </div>
 </div>

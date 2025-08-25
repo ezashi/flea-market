@@ -1,21 +1,15 @@
 @extends('layouts.app')
 @section('content')
 <div>
-  <!-- 商品画像 -->
-  @if($item->image)
+  <div>
     <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="height: 200px;">
-  @endif
-
-  @if($item->sold)
-    <div>Sold</div>
-  @endif
-
-  <!-- 商品情報 -->
+    @if($item->sold)
+      <div>Sold</div>
+    @endif
+  </div>
   <div>
     <h2>{{ $item->name }}</h2>
-    @if($item->brand)
-      <p>{{ $item->brand }}</p>
-    @endif
+    <p>{{ $item->brand }}</p>
     <h3>¥{{ number_format($item->price) }}</h3>
 
     <form action="{{ route('items.like', $item) }}" method="POST">
@@ -31,7 +25,6 @@
     </form>
   </div>
 
-  <!-- 商品説明 -->
   <div>
     <h4>商品説明</h4>
     {!! nl2br(e($item->description)) !!}
@@ -41,20 +34,19 @@
     <p>商品の状態 {{ $item->condition }}</p>
   </div>
 
-  <!-- コメント欄 -->
   <div>
     <h4>コメント ({{ $item->comments->count() }})</h4>
     <form action="{{ route('items.comment', $item) }}" method="POST">
       @csrf
-      @foreach($item->comments as $comment)
-        <span>
-          <img src="{{ asset($comment->user->profile_image) }}" alt="{{ $comment->user->name }}" style="width: 40px; height: 40px;"> {{ $comment->user->name }}
-        </span>
-        {!! nl2br(e($comment->content)) !!}
-      @endforeach
       <div>
-        ここにコメントが入ります
+        @foreach($item->comments as $comment)
+          <span>
+            <img src="{{ asset($comment->user->profile_image) }}" alt="{{ $comment->user->name }}" style="width: 40px; height: 40px;"> {{ $comment->user->name }}
+          </span>
+          {!! nl2br(e($comment->content)) !!}
+        @endforeach
       </div>
+      ここにコメントが入ります
       <p for="content">商品へのコメント</p>
       <textarea name="content" rows="3"></textarea>
       @error('content')
