@@ -41,7 +41,7 @@
       <div>
         @foreach($item->comments as $comment)
           <span>
-            <img src="{{ asset($comment->user->profile_image) }}" alt="{{ $comment->user->name }}" style="width: 40px; height: 40px;"> {{ $comment->user->name }}
+            <img src="{{ asset($comment->user->profile_image) }}" style="width: 40px; height: 40px;" alt="{{ $comment->user->name }}"> {{ $comment->user->name }}
           </span>
           {!! nl2br(e($comment->content)) !!}
         @endforeach

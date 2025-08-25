@@ -6,17 +6,10 @@
     <form method="POST" action="{{ route('update') }}" enctype="multipart/form-data">
       @csrf
       <div>
-        @if($user->profile_image)
-          <label for="profile_image" style="cursor: pointer;">
-            <img src="{{ asset(Auth::user()->profile_image) }}" style="max-width: 150px;" alt="{{ $user->name }}">
-            画像を選択する
-          </label>
-        @else
-          <label for="profile_image" style="cursor: pointer;">
-            <span>{{ strtoupper(substr($user->name, 0, 1)) }}</span>
-            画像を選択する
-          </label>
-        @endif
+        <label for="profile_image" style="cursor: pointer;">
+          <span>{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+          画像を選択する
+        </label>
         <input id="profile_image" type="file" name="profile_image" style="max-width: 150px;" alt="{{ $user->name }}">
         @error('profile_image')
           <div class="error-message">{{ $message }}</div>

@@ -7,7 +7,7 @@
         <img src="{{ asset(Auth::user()->profile_image) }}" style="max-width: 100px;" alt="{{ Auth::user()->profile_image }}">
       @else
         <div style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
-          <span class="h1 text-muted">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+          <span>{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
         </div>
       @endif
       {{ Auth::user()->name }}
@@ -39,7 +39,7 @@
     @else
       @foreach($items as $item)
         @if(request('tab') === 'trade')
-          <a href="{{ route('items.show', $item->id) }}">
+          <a href="{{ route('chat.show', $item->id) }}">
             <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
             <h5>{{ $item->name }}</h5>
           </a>

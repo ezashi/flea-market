@@ -62,4 +62,10 @@ class Item extends Model
     {
         return $this->likes()->where('user_id', $userId)->exists();
     }
+
+    // チャットメッセージのリレーション
+    public function chatMessages()
+    {
+    return $this->hasMany(ChatMessage::class);
+    }
 }

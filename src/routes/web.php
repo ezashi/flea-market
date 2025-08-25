@@ -1,11 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,11 @@ Route::middleware(['auth'])->group(function () {
 
     // コメント機能
     Route::post('/items/{item_id}/comment', [ItemController::class, 'storeComment'])->name('items.comment');
+
+    // チャット機能
+    Route::get('/chat/{item_id}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/{item_id}/send', [ChatController::class, 'send'])->name('chat.send');
+    // Route::post('/chat/{item_id}/send', [ChatController::class, 'send'])->name('chat.send');
 });
 
 // 商品詳細（認証不要）

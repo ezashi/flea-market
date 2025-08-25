@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Item;
-use App\Models\Category;
-use App\Models\Condition;
 use App\Models\Like;
 use App\Models\Comment;
-use App\Http\Requests\AddressRequest;
-use App\Http\Requests\CommentRequest;
-use App\Http\Requests\ExhibitionRequest;
-use App\Http\Requests\PurchaseRequest;
+use App\Models\Category;
+use App\Models\Condition;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CommentRequest;
+use App\Http\Requests\AddressRequest;
+use App\Http\Requests\PurchaseRequest;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use App\Http\Requests\ExhibitionRequest;
 
 class ItemController extends Controller
 {
@@ -88,7 +88,7 @@ class ItemController extends Controller
 
     if ($request->hasFile('image')) {
       $filename = Str::random(20) . '.' . $request->file('image')->getClientOriginalExtension();
-      $request->file('image')->storeAs('images/items', $filename);
+      $request->file('image')->storeAs('images/items', $filename, 'public');
       $data['image'] = 'storage/images/items/' . $filename;
     }
 

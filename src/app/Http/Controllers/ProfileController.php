@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\User;
-use App\Http\Requests\AddressRequest;
-use App\Http\Requests\ProfileRequest;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AddressRequest;
+use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 
 class ProfileController extends Controller
@@ -42,7 +42,7 @@ class ProfileController extends Controller
             if (file_exists(public_path($path))) {
                 unlink(public_path($path));
             }
-            $profileRequest->file('profile_image')->storeAs('public/images/profile', $filename);
+            $profileRequest->file('profile_image')->storeAs('public/images/profile', $filename, 'public');
             $user->profile_image = 'storage/images/profile/' . $filename;
         }
 
@@ -79,7 +79,7 @@ class ProfileController extends Controller
                 unlink(public_path($user->profile_image));
             }
             $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
-            $profileRequest->file('profile_image')->storeAs('public/images/profile', $filename);
+            $profileRequest->file('profile_image')->storeAs('public/images/profile', $filename, 'public');
             $user->profile_image = 'storage/images/profile/' . $filename;
         }
 
