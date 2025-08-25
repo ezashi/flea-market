@@ -60,6 +60,12 @@ class User extends Authenticatable
         return $this->hasMany(Item::class, 'buyer_id');
     }
 
+    // 取引中の商品
+    public function tradingItems()
+    {
+        return $this->hasMany(Item::class, 'trader_id');
+    }
+
     // いいねした商品
     public function likes()
     {

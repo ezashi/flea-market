@@ -55,12 +55,14 @@ class ItemController extends Controller
 
   public function mypage(Request $request)
   {
-    $tab = $request->input('tab', 'buy');
+    $tab = $request->input('tab', 'buy', 'trade');
 
     if ($tab === 'sell') {
       $items = Auth::user()->sellingItems()->latest()->get();
-    } else {
+    } elseif ($tab === 'buy') {
       $items = Auth::user()->purchasedItems()->latest()->get();
+    } else {
+      $items = Auth::user()->tradingItems()->latest()->get();
     }
 
     return view('mypage.index', compact('items', 'tab'));

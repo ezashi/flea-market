@@ -20,6 +20,9 @@
       <li>
         <a href="{{ route('mypage', ['tab' => 'sell']) }}">出品した商品</a>
       </li>
+      <li>
+        <a href="{{ route('mypage', ['tab' => 'trade']) }}">取引中の商品</a>
+      </li>
     </ul>
   </div>
   <div>
@@ -27,8 +30,10 @@
       <div>
       @if(request('tab') === 'sell')
         出品した商品はありません。
-      @else
+      @elseif(request('tab') === 'buy')
         購入した商品はありません。
+      @else
+        取引中の商品はありません。
       @endif
       </div>
     @else

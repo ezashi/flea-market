@@ -23,6 +23,7 @@ class CreateItemsTable extends Migration
             $table->integer('price');
             $table->foreignId('seller_id')->constrained('users');
             $table->foreignId('buyer_id')->nullable()->constrained('users');
+            $table->foreignId('trader_id')->nullable()->constrained('users');
             $table->boolean('sold')->default(false);
             $table->string('payment_method')->nullable();
             $table->timestamps();
