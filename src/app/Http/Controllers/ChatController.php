@@ -83,4 +83,65 @@ class ChatController extends Controller
 
     return response()->json(['success' => true]);
   }
+
+  public function edit(Request $request, $message_id)
+  {
+    $message = ChatMessage::findOrFail($message_id);
+
+    $message->update([
+      'message' => $request->message,
+      'is_edited' => true,
+      'edited_at' => now(),
+    ]);
+
+    return redirect()->route('chat.show', $message->item_id);
+  }
+
+  public function delete($message_id)
+  {
+    $message = ChatMessage::findOrFail($message_id);
+
+    $message->update([
+      'is_deleted' => true,
+      'deleted_at' => now(),
+    ]);
+
+    return redirect()->route('chat.show', $message->item_id);
+  }
+
+  public function unreadCounts($item_id = null)
+  {
+    $currentUserId = Auth::id();
+
+    if ($item_id) {
+      $count = ChatMessage::where('item_id', $item_id)
+        ->where('sender_id', '!=', $currentUserId)
+        ->where('is_read', false)
+        ->where('is_deleted', false)
+        ->count();
+
+      return response()->json(['count' => $count]);
+    }
+
+    // item_idがない場合は、自分が関わる全アイテムの未読件数
+    $tradingItems = Item::where(function($query) use ($currentUserId) {
+      $query->where('seller_id', $currentUserId)
+        ->orWhere('buyer_id', $currentUserId);
+    })
+      ->where('sold', true)
+      ->pluck('id');
+
+    // まとめて未読件数を取得
+    $unreadCountsQuery = ChatMessage::select('item_id', \DB::raw('COUNT(*) as unread_count'))
+      ->whereIn('item_id', $tradingItems)
+      ->where('sender_id', '!=', $currentUserId)
+      ->where('is_read', false)
+      ->where('is_deleted', false)
+      ->groupBy('item_id')
+      ->get();
+
+    $unreadCounts = $unreadCountsQuery->pluck('unread_count', 'item_id')->toArray();
+
+    return $unreadCounts;
+  }
 }

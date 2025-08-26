@@ -63,9 +63,10 @@ class ItemController extends Controller
       $items = Auth::user()->purchasedItems()->latest()->get();
     } else {
       $items = Auth::user()->tradingItems()->latest()->get();
+      $unreadCounts = Auth::user()->getAllUnreadCounts();
     }
 
-    return view('mypage.index', compact('items', 'tab'));
+    return view('mypage.index', compact('items', 'tab', 'unreadCounts'));
   }
 
 

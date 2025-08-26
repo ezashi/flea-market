@@ -65,20 +65,20 @@ class User extends Authenticatable
     {
         $userId = $this->id;
 
-        return Item::where(function($query) use ($userId) {
+        $query = Item::where(function($query) use ($userId) {
             $query->where('seller_id', $userId)->orWhere('buyer_id', $userId);
         })
         ->where('sold', true)
         ->with(['chatMessages' => function($query) {
-            $query->where('is_deleted', false)
-            ->latest();
-        }, 'buyer', 'seller'])
-        ->get()
-        ->sortByDesc(function($item) {
+            $query->where('is_deleted', false)->latest();
+        }, 'buyer', 'seller']);
+
+        return $query->get()->sortByDesc(function($item) {
             $latestMessage = $item->chatMessages->first();
             return $latestMessage ? $latestMessage->created_at : $item->updated_at;
         });
     }
+
 
     //未読メッセージ数を取得
     public function getUnreadMessagesCount($itemId)
@@ -88,6 +88,32 @@ class User extends Authenticatable
             ->where('is_read', false)
             ->where('is_deleted', false)
             ->count();
+    }
+
+    // 自分が関わる取引中のアイテムIDを取得
+    public function getAllUnreadCounts()
+    {
+        $userId = $this->id;
+
+        $itemIds = Item::where(function($q) use ($userId) {
+            $q->where('seller_id', $userId)->orWhere('buyer_id', $userId);
+        })
+        ->where('sold', true)
+        ->pluck('id');
+
+        if ($itemIds->isEmpty()) {
+            return [];
+        }
+
+        $unreadCountsQuery = \App\Models\ChatMessage::select('item_id', \DB::raw('COUNT(*) as unread_count'))
+            ->whereIn('item_id', $itemIds)
+            ->where('sender_id', '!=', $userId)
+            ->where('is_read', false)
+            ->where('is_deleted', false)
+            ->groupBy('item_id')
+            ->get();
+
+        return $unreadCountsQuery->pluck('unread_count', 'item_id')->toArray();
     }
 
     // いいねした商品

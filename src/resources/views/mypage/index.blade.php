@@ -42,6 +42,9 @@
           <a href="{{ route('chat.show', $item->id) }}">
             <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
             <h5>{{ $item->name }}</h5>
+            @if(isset($unreadCounts[$item->id]) && $unreadCounts[$item->id] > 0)
+              <span>{{ $unreadCounts[$item->id] }}</span>
+            @endif
           </a>
         @else
           <a href="{{ route('items.show', $item->id) }}">

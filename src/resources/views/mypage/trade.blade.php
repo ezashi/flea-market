@@ -8,6 +8,7 @@
     @else
       @foreach($tradingItems as $tradingItem)
         <div>
+          {{ $unreadCounts }}
           <a href="{{ route('chat.show', $tradingItem->id) }}">
             <div>
               <img src="{{ asset($tradingItem->image) }}" alt="{{ $tradingItem->name }}">
@@ -48,10 +49,24 @@
           <span>{{ $message->sender->name }}</span>
         </div>
         <div>
-          @if($message->isImage())
-            <img src="{{ $message->getImageUrl() }}" alt="送信された画像" onclick="openImageModal(this.src)">
+          @if($message->isDeleted())
+            <p>このメッセージは削除されました</p>
           @else
-            {!! nl2br(e($message->message)) !!}
+            @if($message->message)
+              <p>{{ $message->message }}</p>
+            @endif
+            @if($message->image_path)
+              <img src="{{ $message->getImageUrl() }}" alt="送信された画像" onclick="openImageModal(this.src)">
+            @endif
+            @if($message->isEdited())
+              <p>編集済み</p>
+            @endif
+          @endif
+        </div>
+        <div>
+          @if($message->sender_id === Auth::id() && !$message->isDeleted())
+            <button onclick="editMessage({{ $message->id }}, '{{ addslashes($message->message) }}')">編集</button>
+            <button onclick="deleteMessage({{ $message->id }})">削除</button>
           @endif
         </div>
       @endforeach
@@ -62,7 +77,7 @@
       @csrf
       <div>
         <textarea name="message" placeholder="取引メッセージを記入してください">
-          {{ old('message') }}
+          {{ $draftMessage }}
         </textarea>
         @error('message')
           <div class="error-message">{{ $message }}</div>
@@ -70,6 +85,9 @@
         <label for="image" style="cursor: pointer;">
           画像を追加
         </label>
+        @error('image')
+          <div class="error-message">{{ $message }}</div>
+        @enderror
         <button type="submit">
           <img src="{{ asset('image/送信ボタン.png') }}" alt="送信ボタン"/>
         </button>
@@ -77,4 +95,41 @@
     </form>
   </div>
 </div>
+<div id="edit-modal">
+  <h3>メッセージを編集</h3>
+  <form id="edit-form" method="POST">
+    @csrf
+    <textarea id="edit-message" name="message"></textarea>
+    <button type="button" onclick="closeEditModal()">キャンセル</button>
+    <button type="submit">更新</button>
+  </form>
+</div>
+
+<script>
+  // メッセージ編集機能
+  function editMessage(messageId, currentMessage) {
+    document.getElementById('edit-message').value = currentMessage;
+    document.getElementById('edit-form').action = `{{ url('/chat/message') }}/${messageId}/edit`;
+    document.getElementById('edit-modal').style.display = 'block';
+  }
+
+  function closeEditModal() {
+    document.getElementById('edit-modal').style.display = 'none';
+  }
+
+  // メッセージ削除機能
+  function deleteMessage(messageId) {
+    if (confirm('このメッセージを削除しますか？')) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = `{{ url('/chat/message') }}/${messageId}/delete`;
+      form.innerHTML = `
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="_method" value="DELETE">
+      `;
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
+</script>
 @endsection

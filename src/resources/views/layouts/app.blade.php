@@ -21,6 +21,7 @@
         @if (!Route::is('login') && !Route::is('register'))
           <!-- 検索フォーム -->
           <form action="{{ request()->is('mylist') ? route('mylist') : route('index') }}" method="GET">
+            @csrf
             <input type="text" name="search" placeholder=" 何をお探しですか？" value="{{ $search ?? '' }}">
           </form>
 
@@ -33,6 +34,7 @@
             <button type="submit">マイページ</button>
           </form>
           <form action="{{ route('items.create') }}" method="GET">
+            @csrf
             <button type="submit">出品</button>
           </form>
         @endif
@@ -40,6 +42,7 @@
         @if (!Route::is('login') && !Route::is('register'))
           <!-- 検索フォーム -->
           <form action="{{ route('index') }}" method="GET">
+            @csrf
             <input type="text" name="search" placeholder=" 何をお探しですか？" value="{{ request('search') }}">
           </form>
 
@@ -52,6 +55,7 @@
             <button type="submit">マイページ</button>
           </form>
           <form action="{{ route('items.create') }}" method="GET">
+            @csrf
             <button type="submit">出品</button>
           </form>
         @endif
