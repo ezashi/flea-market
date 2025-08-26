@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ChatMessage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
@@ -63,7 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/items/{item_id}/comment', [ItemController::class, 'storeComment'])->name('items.comment');
 
     // チャット機能
-    Route::get('/chat/{item_id}', [ChatController::class, 'show'])->name('chat.show');
+    Route::get('/chat/{item_id}', [ChatController::class, 'show'])->name('chat.show')->middleware('chat.message');
     Route::post('/chat/{item_id}/send', [ChatController::class, 'send'])->name('chat.send');
     // Route::post('/chat/{item_id}/send', [ChatController::class, 'send'])->name('chat.send');
 });

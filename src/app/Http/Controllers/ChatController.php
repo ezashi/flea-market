@@ -17,6 +17,7 @@ class ChatController extends Controller
     $currentUserId = Auth::id();
 
     $messages = ChatMessage::where('item_id', $item_id)
+      ->notDeleted()
       ->with('sender')
       ->orderBy('created_at', 'asc')
       ->get();
@@ -32,7 +33,11 @@ class ChatController extends Controller
       $chatPartner = $item->seller; // 購入者の場合は出品者を返す
     }
 
-    return view('mypage.trade', compact('item', 'messages', 'chatPartner'));
+    $tradingItems = Auth::user()->tradingItems();
+
+    $draftMessage = session("draft_message_{$item_id}", '');
+
+    return view('mypage.trade', compact('item', 'messages', 'chatPartner', 'tradingItems', 'draftMessage'));
   }
 
   public function send(ChatMessageRequest $request, $item_id)
@@ -40,26 +45,42 @@ class ChatController extends Controller
     $item = Item::findOrFail($item_id);
     $currentUserId = Auth::id();
 
-    if ($request->hasFile('image')) {
-      $filename = Str::random(20) . '.' . $request->file('image')->getClientOriginalExtension();
-      $request->file('image')->storeAs('images/chat', $filename, 'public');
-      $imagePath = 'storage/images/chat/' . $filename;
+    $messageData = [
+      'item_id' => $item_id,
+      'sender_id' => $currentUserId,
+    ];
 
-      ChatMessage::create([
-        'item_id' => $item_id,
-        'sender_id' => Auth::id(),
-        'image_path' => $imagePath,
-        'message_type' => 'image',
-      ]);
-    } else{
-      ChatMessage::create([
-            'item_id' => $item_id,
-            'sender_id' => Auth::id(),
-            'message' => $request->message,
-            'message_type' => 'text',
-        ]);
+    $hasMessage = !empty($request->message);
+    $hasImage = $request->hasFile('image');
+
+    if ($hasMessage && $hasImage) {
+      $messageData['message_type'] = 'both';
+      $messageData['message'] = $request->message;
+    } elseif ($hasMessage) {
+      $messageData['message_type'] = 'text';
+      $messageData['message'] = $request->message;
+    } else {
+      return back();
     }
 
+    if ($hasImage) {
+      $filename = Str::random(20) . '.' . $request->file('image')->getClientOriginalExtension();
+      $request->file('image')->storeAs('images/chat', $filename, 'public');
+      $messageData['image_path'] = 'storage/images/chat/' . $filename;
+    }
+
+    ChatMessage::create($messageData);
+
+    session()->forget("draft_message_{$item_id}");
+
     return redirect()->route('chat.show', $item_id);
+  }
+
+  public function saveDraft(Request $request, $item_id)
+  {
+    $message = $request->input('message', '');
+    session(["draft_message_{$item_id}" => $message]);
+
+    return response()->json(['success' => true]);
   }
 }

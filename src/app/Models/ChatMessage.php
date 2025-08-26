@@ -47,7 +47,7 @@ class ChatMessage extends Model
      */
     public function isImage()
     {
-        return $this->message_type === 'image';
+        return $this->message_type === 'both' && $this->image_path;
     }
 
     /**

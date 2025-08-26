@@ -2,12 +2,29 @@
 @section('content')
 <div>
   <div>
+    <h3>取引中の商品</h3>
+    @if($tradingItems->isEmpty())
+      <p>取引中の商品はありません</p>
+    @else
+      @foreach($tradingItems as $tradingItem)
+        <div>
+          <a href="{{ route('chat.show', $tradingItem->id) }}">
+            <div>
+              <img src="{{ asset($tradingItem->image) }}" alt="{{ $tradingItem->name }}">
+              <h5>{{ $tradingItem->name }}</h5>
+            </div>
+          </a>
+        </div>
+      @endforeach
+    @endif
+  </div>
+  <div>
     <form action="{{ route('') }}" method="POST">
       @if($chatPartner->profile_image)
         <img src="{{ asset($chatPartner->profile_image) }}" style="max-width: 100px;" alt="{{ $chatPartner->name }}">
       @else
-        <div style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
-          <span">{{ strtoupper(substr($chatPartner->name, 0, 1)) }}</span>
+        <div>
+          <span>{{ strtoupper(substr($chatPartner->name, 0, 1)) }}</span>
         </div>
       @endif
       「 {{ $chatPartner->name }} 」さんとの取引画面

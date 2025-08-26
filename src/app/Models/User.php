@@ -63,7 +63,31 @@ class User extends Authenticatable
     // 取引中の商品
     public function tradingItems()
     {
-        return $this->hasMany(Item::class, 'trader_id');
+        $userId = $this->id;
+
+        return Item::where(function($query) use ($userId) {
+            $query->where('seller_id', $userId)->orWhere('buyer_id', $userId);
+        })
+        ->where('sold', true)
+        ->with(['chatMessages' => function($query) {
+            $query->where('is_deleted', false)
+            ->latest();
+        }, 'buyer', 'seller'])
+        ->get()
+        ->sortByDesc(function($item) {
+            $latestMessage = $item->chatMessages->first();
+            return $latestMessage ? $latestMessage->created_at : $item->updated_at;
+        });
+    }
+
+    //未読メッセージ数を取得
+    public function getUnreadMessagesCount($itemId)
+    {
+        return ChatMessage::where('item_id', $itemId)
+            ->where('sender_id', '!=', $this->id)
+            ->where('is_read', false)
+            ->where('is_deleted', false)
+            ->count();
     }
 
     // いいねした商品

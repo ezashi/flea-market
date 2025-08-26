@@ -6,7 +6,7 @@
       @if(Auth::user()->profile_image)
         <img src="{{ asset(Auth::user()->profile_image) }}" style="max-width: 100px;" alt="{{ Auth::user()->profile_image }}">
       @else
-        <div style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
+        <div>
           <span>{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
         </div>
       @endif

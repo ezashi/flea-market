@@ -19,7 +19,7 @@ class CreateChatMessagesTable extends Migration
             $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
             $table->text('message');
             $table->string('image_path')->nullable();
-            $table->enum('message_type', ['text', 'image'])->default('text');
+            $table->enum('message_type', ['text', 'both'])->default('text');
             $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
