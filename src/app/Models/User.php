@@ -65,18 +65,21 @@ class User extends Authenticatable
     {
         $userId = $this->id;
 
-        $query = Item::where(function($query) use ($userId) {
+        return Item::where(function($query) use ($userId) {
             $query->where('seller_id', $userId)->orWhere('buyer_id', $userId);
         })
         ->where('sold', true)
         ->with(['chatMessages' => function($query) {
-            $query->where('is_deleted', false)->latest();
-        }, 'buyer', 'seller']);
-
-        return $query->get()->sortByDesc(function($item) {
+            $query->where('is_deleted', false)
+            ->latest('created_at')
+            ->limit(1);
+        }, 'buyer', 'seller'])
+        ->get()
+        ->sortByDesc(function($item) {
             $latestMessage = $item->chatMessages->first();
             return $latestMessage ? $latestMessage->created_at : $item->updated_at;
-        });
+        })
+        ->values(); // インデックスを再構築
     }
 
 
@@ -84,10 +87,10 @@ class User extends Authenticatable
     public function getUnreadMessagesCount($itemId)
     {
         return ChatMessage::where('item_id', $itemId)
-            ->where('sender_id', '!=', $this->id)
-            ->where('is_read', false)
-            ->where('is_deleted', false)
-            ->count();
+        ->where('sender_id', '!=', $this->id)
+        ->where('is_read', false)
+        ->where('is_deleted', false)
+        ->count();
     }
 
     // 自分が関わる取引中のアイテムIDを取得
@@ -106,12 +109,12 @@ class User extends Authenticatable
         }
 
         $unreadCountsQuery = \App\Models\ChatMessage::select('item_id', \DB::raw('COUNT(*) as unread_count'))
-            ->whereIn('item_id', $itemIds)
-            ->where('sender_id', '!=', $userId)
-            ->where('is_read', false)
-            ->where('is_deleted', false)
-            ->groupBy('item_id')
-            ->get();
+        ->whereIn('item_id', $itemIds)
+        ->where('sender_id', '!=', $userId)
+        ->where('is_read', false)
+        ->where('is_deleted', false)
+        ->groupBy('item_id')
+        ->get();
 
         return $unreadCountsQuery->pluck('unread_count', 'item_id')->toArray();
     }

@@ -51,6 +51,23 @@ class ChatMessage extends Model
     }
 
     /**
+     * メッセージが削除されているかどうか
+     */
+    public function isDeleted()
+    {
+        return $this->is_deleted;
+    }
+
+    /**
+     * メッセージが編集されているかどうか
+     */
+    public function isEdited()
+    {
+        return $this->is_edited;
+    }
+
+
+    /**
      * 画像URLを取得
      */
     public function getImageUrl()

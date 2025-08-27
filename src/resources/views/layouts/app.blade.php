@@ -13,7 +13,7 @@
   <header>
     <div>
       <a href="{{ route('index') }}">
-        <img src="{{ asset('image/Free Market App Logo.svg') }}" alt="coachtechロゴ"/>
+        <img src="{{ asset('image/Free Market App Logo.svg') }}" alt="coachtech logo"/>
       </a>
     </div>
     <div>

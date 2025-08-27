@@ -17,15 +17,16 @@ class ChatController extends Controller
     $currentUserId = Auth::id();
 
     $messages = ChatMessage::where('item_id', $item_id)
-      ->notDeleted()
-      ->with('sender')
-      ->orderBy('created_at', 'asc')
-      ->get();
+    ->notDeleted()
+    ->with('sender')
+    ->orderBy('created_at', 'asc')
+    ->get();
 
+    // 未読メッセージを既読に更新
     ChatMessage::where('item_id', $item_id)
-      ->where('sender_id', '!=', Auth::id())
-      ->where('is_read', false)
-      ->update(['is_read' => true]);
+    ->where('sender_id', '!=', Auth::id())
+    ->where('is_read', false)
+    ->update(['is_read' => true]);
 
     if ($currentUserId === $item->seller_id) {
       $chatPartner = $item->buyer; // 出品者の場合は購入者を返す
@@ -33,6 +34,7 @@ class ChatController extends Controller
       $chatPartner = $item->seller; // 購入者の場合は出品者を返す
     }
 
+    // 取引中の商品一覧を取得（新着メッセージ順）
     $tradingItems = Auth::user()->tradingItems();
 
     $draftMessage = session("draft_message_{$item_id}", '');
@@ -56,12 +58,10 @@ class ChatController extends Controller
     if ($hasMessage && $hasImage) {
       $messageData['message_type'] = 'both';
       $messageData['message'] = $request->message;
-    } elseif ($hasMessage) {
+    } else {
       $messageData['message_type'] = 'text';
       $messageData['message'] = $request->message;
-    } else {
-      return back();
-    }
+    };
 
     if ($hasImage) {
       $filename = Str::random(20) . '.' . $request->file('image')->getClientOriginalExtension();
@@ -113,34 +113,39 @@ class ChatController extends Controller
   {
     $currentUserId = Auth::id();
 
+    // 共通の未読メッセージ
+    $unreadBaseQuery = function() use ($currentUserId) {
+      return ChatMessage::where('sender_id', '!=', $currentUserId)
+      ->where('is_read', false)
+      ->where('is_deleted', false);
+    };
+    // 取引中アイテムの未読メッセージ
+    $tradingItemsQuery = function() use ($currentUserId) {
+      return Item::where(function($query) use ($currentUserId) {
+        $query->where('seller_id', $currentUserId)
+        ->orWhere('buyer_id', $currentUserId);
+      })
+      ->where('sold', true);
+    };
+
+    // 特定アイテムの未読数を取得
     if ($item_id) {
-      $count = ChatMessage::where('item_id', $item_id)
-        ->where('sender_id', '!=', $currentUserId)
-        ->where('is_read', false)
-        ->where('is_deleted', false)
-        ->count();
+      $count = (clone $unreadBaseQuery)
+      ->where('item_id', $item_id)
+      ->count();
 
       return response()->json(['count' => $count]);
     }
 
-    // item_idがない場合は、自分が関わる全アイテムの未読件数
-    $tradingItems = Item::where(function($query) use ($currentUserId) {
-      $query->where('seller_id', $currentUserId)
-        ->orWhere('buyer_id', $currentUserId);
-    })
-      ->where('sold', true)
-      ->pluck('id');
+    $tradingItemIds = $tradingItemsQuery()->pluck('id');
 
-    // まとめて未読件数を取得
-    $unreadCountsQuery = ChatMessage::select('item_id', \DB::raw('COUNT(*) as unread_count'))
-      ->whereIn('item_id', $tradingItems)
-      ->where('sender_id', '!=', $currentUserId)
-      ->where('is_read', false)
-      ->where('is_deleted', false)
-      ->groupBy('item_id')
-      ->get();
-
-    $unreadCounts = $unreadCountsQuery->pluck('unread_count', 'item_id')->toArray();
+    // 取引中アイテムごとの未読数を取得
+    $unreadCounts = $unreadBaseQuery()
+    ->whereIn('item_id', $tradingItemIds)
+    ->select('item_id', \DB::raw('COUNT(*) as unread_count'))
+    ->groupBy('item_id')
+    ->pluck('unread_count', 'item_id')
+    ->toArray();
 
     return $unreadCounts;
   }
