@@ -68,7 +68,7 @@
               <p>{{ $message->message }}</p>
             @endif
             @if($message->image_path)
-              <img src="{{ $message->getImageUrl() }}" alt="send image" onclick="openImageModal(this.src)" style="max-width: 200px;">
+              <img src="{{ $message->getImageUrl() }}" alt="send image" style="max-width: 200px;">
             @endif
           @endif
         </div>
@@ -235,24 +235,6 @@ function deleteMessage(messageId) {
     form.submit();
 }
 
-// 画像モーダル表示機能
-function openImageModal(imageSrc) {
-  const modal = document.getElementById('image-modal');
-  const modalImage = document.getElementById('modal-image');
-
-  if (modal && modalImage) {
-    modalImage.src = imageSrc;
-    modal.style.display = 'block';
-  }
-}
-
-function closeImageModal() {
-  const modal = document.getElementById('image-modal');
-  if (modal) {
-    modal.style.display = 'none';
-  }
-}
-
 // モーダルの背景クリック処理
 window.addEventListener('click', function(event) {
   const editModal = document.getElementById('edit-modal');
@@ -348,15 +330,5 @@ function updateStarDisplay() {
     });
   });
 }
-
-// フォーム送信時のバリデーション
-document.querySelector('#edit-form')?.addEventListener('submit', function(e) {
-  const messageInput = document.getElementById('edit-message');
-  if (messageInput && messageInput.value.trim() === '') {
-    e.preventDefault();
-    alert('メッセージを入力してください。');
-    messageInput.focus();
-  }
-});
 </script>
 @endsection

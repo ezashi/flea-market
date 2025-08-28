@@ -188,7 +188,7 @@ class ItemController extends Controller
 
     session(['show_evaluation_modal' => true]);
 
-    return redirect()->back();
+    return redirect()->route('chat.show', $item_id);
   }
 
 
