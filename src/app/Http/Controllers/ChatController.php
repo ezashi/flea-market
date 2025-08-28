@@ -62,7 +62,7 @@ class ChatController extends Controller
 
       $canEvaluate = !$hasEvaluated && ($currentUserId === $item->seller_id || $currentUserId === $item->buyer_id);
 
-      if (session('show_evaluation_modal')) {
+      if (session('show_evaluation_modal') && $canEvaluate) {
         $showEvaluationModal = true;
         session()->forget('show_evaluation_modal');
       }

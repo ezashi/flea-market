@@ -118,7 +118,7 @@
   </form>
 </div>
 
-@if($showEvaluationModal || $canEvaluate)
+@if($canEvaluate)
   <div id="evaluation-modal">
     <h3>取引が完了しました。</h3>
     <form method="POST" action="{{ route('evaluation.store', $item->id) }}">
@@ -178,7 +178,6 @@
     form.action = `/chat/message/${messageId}/delete`;
     form.innerHTML = `
       <input type="hidden" name="_token" value="{{ csrf_token() }}">
-      <input type="hidden" name="_method" value="DELETE">
     `;
     document.body.appendChild(form);
     form.submit();
