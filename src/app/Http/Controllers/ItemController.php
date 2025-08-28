@@ -57,17 +57,22 @@ class ItemController extends Controller
   {
     $tab = $request->input('tab', 'buy');
     $user = Auth::user();
+    $unreadCounts = [];
 
     if ($tab === 'sell') {
       $items = Auth::user()->sellingItems()->latest()->get();
     } elseif ($tab === 'buy') {
       $items = Auth::user()->purchasedItems()->latest()->get();
     } else {
-      $items = Auth::user()->tradingItems()->latest()->get();
+      $items = Auth::user()->tradingItems();
       $unreadCounts = Auth::user()->getAllUnreadCounts();
     }
 
-    return view('mypage.index', compact('items', 'tab', 'user', 'unreadCounts'));
+    if ($tab === 'trade'){
+      return view('mypage.index', compact('items', 'tab', 'user', 'unreadCounts'));
+    } else {
+      return view('mypage.index', compact('items', 'tab', 'user'));
+    }
   }
 
 
