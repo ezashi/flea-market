@@ -18,7 +18,8 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
-        $seller = User::where('email', 'seller@example.com')->first();
+        $seller1 = User::where('email', 'seller1@example.com')->first();
+        $seller2 = User::where('email', 'seller2@example.com')->first();
 
         $categories = [
             'ファッション',
@@ -59,6 +60,7 @@ class ItemSeeder extends Seeder
                 'condition' => '良好',
                 'image' => 'storage/images/items/watch.jpg',
                 'categories' => [1], // ファッション
+                'seller_id' => $seller1->id,
             ],
             [
                 'name' => 'HDD',
@@ -68,6 +70,7 @@ class ItemSeeder extends Seeder
                 'condition' => '目立った傷や汚れなし',
                 'image' => 'storage/images/items/hdd.jpg',
                 'categories' => [2], // 家電
+                'seller_id' => $seller1->id,
             ],
             [
                 'name' => '玉ねぎ3束',
@@ -77,6 +80,7 @@ class ItemSeeder extends Seeder
                 'condition' => 'やや傷や汚れあり',
                 'image' => 'storage/images/items/onions.jpg',
                 'categories' => [10], // キッチン
+                'seller_id' => $seller1->id,
             ],
             [
                 'name' => '革靴',
@@ -86,6 +90,7 @@ class ItemSeeder extends Seeder
                 'condition' => '状態が悪い',
                 'image' => 'storage/images/items/shoes.jpg',
                 'categories' => [1], // ファッション
+                'seller_id' => $seller1->id,
             ],
             [
                 'name' => 'ノートPC',
@@ -95,6 +100,7 @@ class ItemSeeder extends Seeder
                 'condition' => '良好',
                 'image' => 'storage/images/items/laptop.jpg',
                 'categories' => [2], // 家電
+                'seller_id' => $seller1->id,
             ],
             [
                 'name' => 'マイク',
@@ -104,6 +110,7 @@ class ItemSeeder extends Seeder
                 'condition' => '目立った傷や汚れなし',
                 'image' => 'storage/images/items/mic.jpg',
                 'categories' => [2], // 家電
+                'seller_id' => $seller2->id,
             ],
             [
                 'name' => 'ショルダーバッグ',
@@ -113,6 +120,7 @@ class ItemSeeder extends Seeder
                 'condition' => 'やや傷や汚れあり',
                 'image' => 'storage/images/items/bag.jpg',
                 'categories' => [1], // ファッション
+                'seller_id' => $seller2->id,
             ],
             [
                 'name' => 'タンブラー',
@@ -122,6 +130,7 @@ class ItemSeeder extends Seeder
                 'condition' => '状態が悪い',
                 'image' => 'storage/images/items/tumbler.jpg',
                 'categories' => [10], // キッチン
+                'seller_id' => $seller2->id,
             ],
             [
                 'name' => 'コーヒーミル',
@@ -131,6 +140,7 @@ class ItemSeeder extends Seeder
                 'condition' => '良好',
                 'image' => 'storage/images/items/coffee_mill.jpg',
                 'categories' => [10], // キッチン
+                'seller_id' => $seller2->id,
             ],
             [
                 'name' => 'メイクセット',
@@ -140,6 +150,7 @@ class ItemSeeder extends Seeder
                 'condition' => '目立った傷や汚れなし',
                 'image' => 'storage/images/items/makeup_set.jpg',
                 'categories' => [6], // コスメ
+                'seller_id' => $seller2->id,
             ],
         ];
 
@@ -147,7 +158,6 @@ class ItemSeeder extends Seeder
             $categoryIds = $itemData['categories'];
             unset($itemData['categories']);
 
-            $itemData['seller_id'] = $seller->id;
             $item = Item::create($itemData);
 
             $item->categories()->attach($categoryIds);

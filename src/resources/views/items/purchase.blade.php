@@ -39,6 +39,7 @@
         <a href="{{ route('items.changeAddress', $item->id) }}">変更する</a>
         <p>〒{{ Auth::user()->postal_code }}</p>
         <p>{{ Auth::user()->address }}{{ Auth::user()->building }}</p>
+        <input type="hidden" name="delivery_address" value="{{ Auth::user()->postal_code }} {{ Auth::user()->address }}{{ Auth::user()->building }}">
         @error('delivery_address')
           <div class="error-message">{{ $message }}</div>
         @enderror
