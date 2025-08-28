@@ -24,6 +24,7 @@ class CreateItemsTable extends Migration
             $table->foreignId('seller_id')->constrained('users');
             $table->foreignId('buyer_id')->nullable()->constrained('users');
             $table->foreignId('trader_id')->nullable()->constrained('users');
+            $table->boolean('is_transaction_completed')->default(false)->after('sold');
             $table->boolean('sold')->default(false);
             $table->string('payment_method')->nullable();
             $table->timestamps();

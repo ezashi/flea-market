@@ -179,12 +179,12 @@ class ItemController extends Controller
     }
 
     // 既に完了済みの場合はリダイレクト
-    if ($item->sold) {
+    if ($item->is_transaction_completed) {
       return redirect()->back();
     }
 
     // 取引完了フラグを立てる
-    $item->update(['sold' => true]);
+    $item->update(['is_transaction_completed' => true]);
 
     return redirect()->back();
   }

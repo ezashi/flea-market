@@ -43,22 +43,28 @@ class ChatController extends Controller
     // 評価関連の情報を取得
     $canEvaluate = false;
     $showEvaluationModal = false;
+    $hasEvaluated = false;
+    $partnerHasEvaluated = false;
 
-    if ($item->sold) {
-      $existingEvaluation = Evaluation::where('item_id', $item_id)
+    if ($item->is_transaction_completed) {
+      // 自分の評価状況をチェック
+      $myEvaluation = Evaluation::where('item_id', $item_id)
       ->where('evaluator_id', $currentUserId)
       ->first();
 
-      $canEvaluate = !$existingEvaluation;
+      // 相手の評価状況をチェック
+      $partnerEvaluation = Evaluation::where('item_id', $item_id)
+      ->where('evaluated_id', $currentUserId)
+      ->first();
 
-      // 出品者または購入者で、まだ評価していない場合はモーダルを表示
-      if (($currentUserId === $item->seller_id || $currentUserId === $item->buyer_id) && $canEvaluate) {
-        $showEvaluationModal = true;
-      }
+      $hasEvaluated = $myEvaluation !== null;
+      $partnerHasEvaluated = $partnerEvaluation !== null;
+
+      $canEvaluate = !$hasEvaluated && ($currentUserId === $item->seller_id || $currentUserId === $item->buyer_id);
     }
 
     return view('mypage.trade', compact(
-      'item', 'messages', 'chatPartner', 'tradingItems', 'draftMessage', 'canEvaluate', 'showEvaluationModal'
+      'item', 'messages', 'chatPartner', 'tradingItems', 'draftMessage', 'canEvaluate', 'showEvaluationModal', 'hasEvaluated', 'partnerHasEvaluated'
     ));
   }
 
@@ -108,6 +114,11 @@ class ChatController extends Controller
   {
     $message = ChatMessage::findOrFail($message_id);
 
+    // 権限チェック
+    if ($message->sender_id !== Auth::id()) {
+      return redirect()->back();
+    }
+
     $message->update([
       'message' => $request->message,
       'is_edited' => true,
@@ -120,6 +131,11 @@ class ChatController extends Controller
   public function delete($message_id)
   {
     $message = ChatMessage::findOrFail($message_id);
+
+    // 権限チェック
+    if ($message->sender_id !== Auth::id()) {
+      return redirect()->back();
+    }
 
     $message->update([
       'is_deleted' => true,
