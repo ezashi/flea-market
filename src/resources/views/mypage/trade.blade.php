@@ -74,8 +74,8 @@
         </div>
         <div>
           @if($message->sender_id === Auth::id() && !$message->isDeleted())
-            <button onclick="openEditModal({{ $message->id }}, '{{ addslashes($message->message) }}')">編集</button>
-            <button onclick="deleteMessage({{ $message->id }})">削除</button>
+            <button type="button" onclick="openEditModal({{ $message->id }}, '{{ addslashes($message->message) }}')">編集</button>
+            <button type="button" onclick="deleteMessage({{ $message->id }})">削除</button>
           @endif
         </div>
       @endforeach
@@ -107,7 +107,6 @@
   </div>
 </div>
 
-
 <div id="edit-modal" style="display: none;">
   <h3>メッセージを編集</h3>
   <form id="edit-form" method="POST">
@@ -118,7 +117,7 @@
   </form>
 </div>
 
-@if($showEvaluationModal)
+@if($showEvaluationModal && $canEvaluate)
   <div id="evaluation-modal" style="display: block;">
     <h3>取引が完了しました</h3>
     <form method="POST" action="{{ route('evaluation.store', $item->id) }}">
@@ -204,14 +203,25 @@ window.addEventListener('beforeunload', function() {
 
 // メッセージ編集モーダル機能
 function openEditModal(messageId, currentMessage) {
-  document.getElementById('edit-message').value = currentMessage;
-  document.getElementById('edit-form').action = `/chat/message/${messageId}/edit`;
-  document.getElementById('edit-modal').style.display = 'block';
+  const modal = document.getElementById('edit-modal');
+  const messageInput = document.getElementById('edit-message');
+  const form = document.getElementById('edit-form');
+
+  if (modal && messageInput && form) {
+    messageInput.value = currentMessage;
+    form.action = `/chat/message/${messageId}/edit`;
+    modal.style.display = 'block';
+  }
 }
 
 function closeEditModal() {
-  document.getElementById('edit-modal').style.display = 'none';
-  document.getElementById('edit-message').value = '';
+  const modal = document.getElementById('edit-modal');
+  const messageInput = document.getElementById('edit-message');
+
+  if (modal && messageInput) {
+    modal.style.display = 'none';
+    messageInput.value = '';
+  }
 }
 
 // メッセージ削除機能
