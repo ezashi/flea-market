@@ -25,17 +25,20 @@
   </div>
 
   <div>
-    <form action="{{ route('') }}" method="POST">
-      @if($chatPartner->profile_image)
-        <img src="{{ asset($chatPartner->profile_image) }}" style="max-width: 100px;" alt="{{ $chatPartner->name }}">
-      @else
-        <div>
-          <span>{{ strtoupper(substr($chatPartner->name, 0, 1)) }}</span>
-        </div>
-      @endif
-      <h2>「 {{ $chatPartner->name }} 」さんとの取引画面</h2>
-      <button type="submit">取引を完了する</button>
-    </form>
+    @if($chatPartner->profile_image)
+      <img src="{{ asset($chatPartner->profile_image) }}" style="max-width: 100px;" alt="{{ $chatPartner->name }}">
+    @else
+      <div>
+        <span>{{ strtoupper(substr($chatPartner->name, 0, 1)) }}</span>
+      </div>
+    @endif
+    <h2>「 {{ $chatPartner->name }} 」さんとの取引画面</h2>
+    @if(Auth::id() === $item->buyer_id && !$item->sold)
+      <form action="{{ route('items.completeTransaction', $item->id) }}" method="POST">
+        @csrf
+        <button type="submit">取引を完了する</button>
+      </form>
+    @endif
   </div>
 
   <div>

@@ -67,9 +67,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat/{item_id}', [ChatController::class, 'show'])->name('chat.show')->middleware('chat.message');
     Route::post('/chat/{item_id}/send', [ChatController::class, 'send'])->name('chat.send');
     Route::post('/chat/{item_id}/draft', [ChatController::class, 'saveDraft'])->name('chat.saveDraft');
-    // Route::get('/chat/{item_id}/unread-count', [ChatController::class, 'unreadCounts'])->name('chat.unreadCounts');
     Route::post('/chat/message/{message_id}/edit', [ChatController::class, 'edit'])->name('chat.edit');
     Route::delete('/chat/message/{message_id}/delete', [ChatController::class, 'delete'])->name('chat.delete');
+
+    // 評価機能
 });
 
 // 商品詳細（認証不要）

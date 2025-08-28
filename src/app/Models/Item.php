@@ -68,4 +68,10 @@ class Item extends Model
     {
     return $this->hasMany(ChatMessage::class);
     }
+
+    // 評価のリレーション
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class);
+    }
 }

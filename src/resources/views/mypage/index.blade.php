@@ -11,6 +11,18 @@
         </div>
       @endif
       {{ Auth::user()->name }}
+      <div>
+        @if($user->getEvaluationCount() > 0)
+          <p>評価: {{ $user->getAverageRating() }}/5 ({{ $user->getEvaluationCount() }}件)</p>
+          @for($i = 1; $i <= 5; $i++)
+            @if($i <= $user->getAverageRating())
+              <span>★</span>
+            @else
+              <span>☆</span>
+            @endif
+          @endfor
+        @endif
+      </div>
       <button type="submit">プロフィールを編集</button>
     </form>
   </div>

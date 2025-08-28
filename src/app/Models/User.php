@@ -130,4 +130,36 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+    // 受けた評価
+    public function receivedEvaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'evaluated_id');
+    }
+
+    // 送った評価
+    public function sentEvaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'evaluator_id');
+    }
+
+    // 平均評価を取得
+    public function getAverageRating()
+    {
+        $evaluations = $this->receivedEvaluations();
+        $count = $evaluations->count();
+
+        if ($count === 0) {
+            return null;
+        }
+
+        $average = $evaluations->avg('rating');
+        return round($average);
+    }
+
+    // 評価数を取得
+    public function getEvaluationCount()
+    {
+        return $this->receivedEvaluations()->count();
+    }
 }

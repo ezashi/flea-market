@@ -163,6 +163,27 @@ class ItemController extends Controller
   }
 
 
+  public function completeTransaction($item_id)
+  {
+    $item = Item::findOrFail($item_id);
+
+    // 購入者のみが取引完了できる
+    if (Auth::id() !== $item->buyer_id) {
+      return redirect()->back();
+    }
+
+    // 既に完了済みの場合はリダイレクト
+    if ($item->sold) {
+      return redirect()->back();
+    }
+
+    // 取引完了フラグを立てる
+    $item->update(['sold' => true]);
+
+    return redirect()->back();
+  }
+
+
   public function toggleLike($item_id)
   {
     $item = Item::findOrFail($item_id);

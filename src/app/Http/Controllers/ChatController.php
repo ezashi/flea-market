@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Evaluation;
 use Illuminate\Support\Str;
 use App\Models\ChatMessage;
 use Illuminate\Http\Request;
@@ -39,7 +40,26 @@ class ChatController extends Controller
 
     $draftMessage = session("draft_message_{$item_id}", '');
 
-    return view('mypage.trade', compact('item', 'messages', 'chatPartner', 'tradingItems', 'draftMessage'));
+    // 評価関連の情報を取得
+    $canEvaluate = false;
+    $showEvaluationModal = false;
+
+    if ($item->sold) {
+      $existingEvaluation = Evaluation::where('item_id', $item_id)
+      ->where('evaluator_id', $currentUserId)
+      ->first();
+
+      $canEvaluate = !$existingEvaluation;
+
+      // 出品者で、まだ評価していない場合はモーダルを表示
+      if ($currentUserId === $item->seller_id && $canEvaluate) {
+        $showEvaluationModal = true;
+      }
+    }
+
+    return view('mypage.trade', compact(
+      'item', 'messages', 'chatPartner', 'tradingItems', 'draftMessage', 'canEvaluate', 'showEvaluationModal'
+    ));
   }
 
   public function send(ChatMessageRequest $request, $item_id)
