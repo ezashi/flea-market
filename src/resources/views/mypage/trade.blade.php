@@ -266,6 +266,12 @@ document.addEventListener('keydown', function(e) {
 
 // 星評価のインタラクション
 document.addEventListener('DOMContentLoaded', function() {
+  // 評価モーダルの表示チェック
+  const evaluationModal = document.getElementById('evaluation-modal');
+  if (evaluationModal) {
+    evaluationModal.style.display = 'block';
+  }
+
   const starOptions = document.querySelectorAll('.star-option');
 
   starOptions.forEach(option => {

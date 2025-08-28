@@ -54,7 +54,7 @@ class EvaluationController extends Controller
       }
     }
 
-    return redirect()->back();
+    return route('index');
   }
 
   public function canEvaluate($item_id)
