@@ -118,6 +118,27 @@
   </form>
 </div>
 
+<div id="evaluation-modal">
+  @if($showEvaluationModal)
+    <h3>取引が完了しました。</h3>
+    <form method="POST" action="{{ route('evaluation.store', $item->id) }}">
+      @csrf
+      <p>今回の取引相手はどうでしたか？</p>
+      <input type="radio" name="rating" value="1" id="rating1" required>
+      <label for="rating1">★☆☆☆☆</label>
+      <input type="radio" name="rating" value="2" id="rating2" required>
+      <label for="rating2">★★☆☆☆</label>
+      <input type="radio" name="rating" value="3" id="rating3" required>
+      <label for="rating3">★★★☆☆</label>
+      <input type="radio" name="rating" value="4" id="rating4" required>
+      <label for="rating4">★★★★☆</label>
+      <input type="radio" name="rating" value="5" id="rating5" required>
+      <label for="rating5">★★★★★</label>
+      <button type="submit">送信する</button>
+    </form>
+  @endif
+</div>
+
 
 <script>
   // 下書き保存機能

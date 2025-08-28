@@ -35,6 +35,14 @@ class ChatMessage extends Model
     }
 
     /**
+     * 削除されていないメッセージのみを取得
+     */
+    public function scopeNotDeleted($query)
+    {
+        return $query->where('is_deleted', false);
+    }
+
+    /**
      * テキストメッセージかどうか
      */
     public function isText()

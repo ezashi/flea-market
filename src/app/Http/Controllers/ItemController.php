@@ -66,7 +66,7 @@ class ItemController extends Controller
       $unreadCounts = Auth::user()->getAllUnreadCounts();
     }
 
-    return view('mypage.index', compact('items', 'tab', 'unreadCounts'));
+    return view('mypage.index', compact('items', 'tab', 'user', 'unreadCounts'));
   }
 
 

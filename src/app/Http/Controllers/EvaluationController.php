@@ -15,24 +15,24 @@ class EvaluationController extends Controller
     $item = Item::findOrFail($item_id);
     $currentUserId = Auth::id();
 
-    // 取引完了済みかチェック
     if (!$item->sold) {
       return redirect()->route('index');
     }
 
-    // 評価対象を決定
+    if ($currentUserId !== $item->seller_id && $currentUserId !== $item->buyer_id) {
+      return redirect()->route('index');
+    }
+
     $evaluatedId = ($currentUserId === $item->buyer_id) ? $item->seller_id : $item->buyer_id;
 
     // 既に評価済みかチェック
     $existingEvaluation = Evaluation::where('item_id', $item_id)
     ->where('evaluator_id', $currentUserId)
     ->first();
-
     if ($existingEvaluation) {
       return redirect()->route('index');
     }
 
-    // 評価を保存
     Evaluation::create([
       'item_id' => $item_id,
       'evaluator_id' => $currentUserId,
@@ -50,7 +50,7 @@ class EvaluationController extends Controller
 
     // 取引完了済みでない場合は評価不可
     if (!$item->sold) {
-        return false;
+      return false;
     }
 
     // 既に評価済みの場合は評価不可

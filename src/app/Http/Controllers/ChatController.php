@@ -51,8 +51,8 @@ class ChatController extends Controller
 
       $canEvaluate = !$existingEvaluation;
 
-      // 出品者で、まだ評価していない場合はモーダルを表示
-      if ($currentUserId === $item->seller_id && $canEvaluate) {
+      // 出品者または購入者で、まだ評価していない場合はモーダルを表示
+      if (($currentUserId === $item->seller_id || $currentUserId === $item->buyer_id) && $canEvaluate) {
         $showEvaluationModal = true;
       }
     }

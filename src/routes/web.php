@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/chat/message/{message_id}/delete', [ChatController::class, 'delete'])->name('chat.delete');
 
     // 評価機能
+    Route::post('/evaluation/{item_id}', [EvaluationController::class, 'store'])->name('evaluation.store');
 });
 
 // 商品詳細（認証不要）
