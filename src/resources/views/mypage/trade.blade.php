@@ -68,7 +68,7 @@
               <p>{{ $message->message }}</p>
             @endif
             @if($message->image_path)
-              <img src="{{ $message->getImageUrl() }}" alt="send image" onclick="openImageModal(this.src)">
+              <img src="{{ $message->getImageUrl() }}" alt="send image" onclick="openImageModal(this.src)" style="max-width: 200px;">
             @endif
           @endif
         </div>
@@ -86,9 +86,7 @@
     <form method="POST" action="{{ route('chat.send', $item->id) }}" enctype="multipart/form-data">
       @csrf
       <div>
-        <textarea name="message" id="message-input" placeholder="取引メッセージを記入してください" onkeyup="saveDraft()">
-          {{ $draftMessage }}
-        </textarea>
+        <textarea name="message" id="message-input" placeholder="取引メッセージを記入してください" onkeyup="saveDraft()">{{ $draftMessage }}</textarea>
         @error('message')
           <div class="error-message">{{ $message }}</div>
         @enderror
@@ -211,6 +209,7 @@ function openEditModal(messageId, currentMessage) {
     messageInput.value = currentMessage;
     form.action = `/chat/message/${messageId}/edit`;
     modal.style.display = 'block';
+    messageInput.focus();
   }
 }
 
@@ -238,32 +237,33 @@ function deleteMessage(messageId) {
 
 // 画像モーダル表示機能
 function openImageModal(imageSrc) {
-  const modal = document.createElement('div');
-  modal.className = 'modal';
-  modal.style.display = 'block';
-  modal.innerHTML = `
-    <div style="text-align: center; max-width: 90%; margin-top: 2%;">
-      <img src="${imageSrc}" style="max-width: 100%; max-height: 70vh; object-fit: contain;">
-    </div>
-  `;
+  const modal = document.getElementById('image-modal');
+  const modalImage = document.getElementById('modal-image');
 
-  // 背景クリックで閉じる
-  modal.onclick = function(e) {
-    if (e.target === modal) {
-      modal.remove();
-    }
-  };
+  if (modal && modalImage) {
+    modalImage.src = imageSrc;
+    modal.style.display = 'block';
+  }
+}
 
-  document.body.appendChild(modal);
+function closeImageModal() {
+  const modal = document.getElementById('image-modal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
 }
 
 // モーダルの背景クリック処理
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('modal')) {
-    // 評価モーダルは背景クリックで閉じない
-    if (e.target.id !== 'evaluation-modal') {
-      e.target.style.display = 'none';
-    }
+window.addEventListener('click', function(event) {
+  const editModal = document.getElementById('edit-modal');
+  const imageModal = document.getElementById('image-modal');
+  const evaluationModal = document.getElementById('evaluation-modal');
+
+  if (event.target === editModal) {
+    closeEditModal();
+  }
+  if (event.target === imageModal) {
+    closeImageModal();
   }
 });
 
@@ -271,35 +271,51 @@ document.addEventListener('click', function(e) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     const editModal = document.getElementById('edit-modal');
+    const imageModal = document.getElementById('image-modal');
+
     if (editModal && editModal.style.display === 'block') {
       closeEditModal();
+    }
+    if (imageModal && imageModal.style.display === 'block') {
+      closeImageModal();
     }
   }
 });
 
-// 星評価のホバー効果
-document.querySelectorAll('.star-option').forEach(option => {
-  const rating = parseInt(option.dataset.rating);
+// 星評価のインタラクション
+document.addEventListener('DOMContentLoaded', function() {
+  const starOptions = document.querySelectorAll('.star-option');
 
-  option.addEventListener('mouseenter', function() {
-    highlightStars(rating);
+  starOptions.forEach(option => {
+    const rating = parseInt(option.dataset.rating);
+
+    // クリック時の処理
+    option.addEventListener('click', function() {
+      const input = this.querySelector('input[type="radio"]');
+      if (input) {
+        input.checked = true;
+        updateStarDisplay();
+      }
+    });
+
+    // ホバー時の処理
+    option.addEventListener('mouseenter', function() {
+      highlightStars(rating);
+    });
+
+    option.addEventListener('mouseleave', function() {
+      updateStarDisplay();
+    });
   });
 
-  option.addEventListener('click', function() {
-    const input = this.querySelector('input[type="radio"]');
-    input.checked = true;
-    highlightStars(rating);
-  });
-});
-
-document.querySelector('.star-rating')?.addEventListener('mouseleave', function() {
-  const checkedInput = document.querySelector('input[name="rating"]:checked');
-  const checkedRating = checkedInput ? parseInt(checkedInput.value) : 0;
-  highlightStars(checkedRating);
+  // 初期表示の更新
+  updateStarDisplay();
 });
 
 function highlightStars(rating) {
-  document.querySelectorAll('.star-option').forEach((option, index) => {
+  const starOptions = document.querySelectorAll('.star-option');
+
+  starOptions.forEach((option, index) => {
     const stars = option.querySelectorAll('.star-display');
     const optionRating = parseInt(option.dataset.rating);
 
@@ -313,11 +329,33 @@ function highlightStars(rating) {
   });
 }
 
-// ページ読み込み時に選択された評価をハイライト
-document.addEventListener('DOMContentLoaded', function() {
+function updateStarDisplay() {
   const checkedInput = document.querySelector('input[name="rating"]:checked');
-  if (checkedInput) {
-    highlightStars(parseInt(checkedInput.value));
+  const checkedRating = checkedInput ? parseInt(checkedInput.value) : 0;
+
+  const starOptions = document.querySelectorAll('.star-option');
+
+  starOptions.forEach(option => {
+    const stars = option.querySelectorAll('.star-display');
+    const optionRating = parseInt(option.dataset.rating);
+
+    stars.forEach((star, starIndex) => {
+      if (optionRating === checkedRating) {
+        star.style.color = starIndex < checkedRating ? '#ffd700' : '#ddd';
+      } else {
+        star.style.color = '#ddd';
+      }
+    });
+  });
+}
+
+// フォーム送信時のバリデーション
+document.querySelector('#edit-form')?.addEventListener('submit', function(e) {
+  const messageInput = document.getElementById('edit-message');
+  if (messageInput && messageInput.value.trim() === '') {
+    e.preventDefault();
+    alert('メッセージを入力してください。');
+    messageInput.focus();
   }
 });
 </script>

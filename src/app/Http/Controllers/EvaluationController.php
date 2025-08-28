@@ -41,6 +41,19 @@ class EvaluationController extends Controller
       'rating' => $request->rating,
     ]);
 
+    // 相手が購入者で、まだ評価していない場合は相手にも評価モーダルを表示
+    if ($currentUserId === $item->seller_id) {
+      // 出品者が評価した場合、購入者の評価状況をチェック
+      $buyerEvaluation = Evaluation::where('item_id', $item_id)
+      ->where('evaluator_id', $item->buyer_id)
+      ->first();
+
+      if (!$buyerEvaluation) {
+        // 購入者がまだ評価していない場合、次回アクセス時に評価モーダルを表示
+        session(['buyer_should_evaluate_' . $item_id => true]);
+      }
+    }
+
     return redirect()->back();
   }
 
@@ -94,5 +107,18 @@ class EvaluationController extends Controller
       'seller_evaluated' => $sellerEvaluation,
       'both_evaluated' => $buyerEvaluation && $sellerEvaluation
     ];
+  }
+
+  /**
+   * 評価一覧を取得（マイページ用）
+   */
+  public function getUserEvaluations($userId)
+  {
+    $evaluations = Evaluation::where('evaluated_id', $userId)
+    ->with(['evaluator', 'item'])
+    ->orderBy('created_at', 'desc')
+    ->get();
+
+    return $evaluations;
   }
 }

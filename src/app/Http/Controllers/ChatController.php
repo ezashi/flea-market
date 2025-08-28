@@ -61,17 +61,19 @@ class ChatController extends Controller
 
       $canEvaluate = !$hasEvaluated && ($currentUserId === $item->seller_id || $currentUserId === $item->buyer_id);
 
-      if (session('show_evaluation_modal') && $canEvaluate) {
-        $showEvaluationModal = true;
-        session()->forget('show_evaluation_modal');
-      } elseif ($currentUserId === $item->seller_id && $canEvaluate) {
-        // 出品者の場合、購入者が評価したかチェック
-        $buyerEvaluation = Evaluation::where('item_id', $item_id)
-        ->where('evaluator_id', $item->buyer_id)
-        ->first();
-
-        if ($buyerEvaluation && !$hasEvaluated) {
+      if ($canEvaluate) {
+        if (session('show_evaluation_modal')) {
           $showEvaluationModal = true;
+          session()->forget('show_evaluation_modal');
+        }
+        elseif ($currentUserId === $item->seller_id) {
+          $buyerEvaluation = Evaluation::where('item_id', $item_id)
+          ->where('evaluator_id', $item->buyer_id)
+          ->first();
+
+          if ($buyerEvaluation && !$hasEvaluated) {
+            $showEvaluationModal = true;
+          }
         }
       }
     }
