@@ -12,9 +12,9 @@ use App\Http\Requests\ChatMessageRequest;
 
 class ChatController extends Controller
 {
-  public function show($item_id)
+  public function show($item_id, Request $request)
   {
-    $item = Item::findOrFail($item_id);
+    $item = $request->get('item') ?? Item::findOrFail($item_id);
     $currentUserId = Auth::id();
 
     $messages = ChatMessage::where('item_id', $item_id)

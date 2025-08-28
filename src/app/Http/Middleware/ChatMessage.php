@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\Item;
 
 class ChatMessage
 {
@@ -16,12 +17,33 @@ class ChatMessage
      */
     public function handle(Request $request, Closure $next)
     {
-        $item = $request->route('item');
+        $itemId = $request->route('item_id');
+
+        if (!$itemId) {
+            abort(404);
+        }
+
+        $item = Item::find($itemId);
+
+        if (!$item) {
+            abort(404);
+        }
+
         $user = $request->user();
+
+        if (!$user) {
+            abort(401);
+        }
+
+        if (!$item->sold) {
+            abort(403);
+        }
 
         if ($user->id !== $item->seller_id && $user->id !== $item->buyer_id) {
             abort(403);
         }
+
+        $request->merge(['item' => $item]);
 
         return $next($request);
     }

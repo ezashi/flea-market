@@ -65,6 +65,10 @@ class ChatMessage extends Model
     {
         return $this->is_deleted;
     }
+    public function is_deleted()
+    {
+        return $this->isDeleted();
+    }
 
     /**
      * メッセージが編集されているかどうか

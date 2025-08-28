@@ -2,7 +2,7 @@
 @section('content')
 <div>
   <div>
-    <h3>取引中の商品</h3>
+    <h3>その他の取引中の商品</h3>
     @if($tradingItems->isEmpty())
       <p>取引中の商品はありません</p>
     @else
