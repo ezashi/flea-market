@@ -74,7 +74,7 @@
         </div>
         <div>
           @if($message->sender_id === Auth::id() && !$message->isDeleted())
-            <button onclick="editMessage({{ $message->id }}, '{{ addslashes($message->message) }}')">編集</button>
+            <button onclick="openEditModal({{ $message->id }}, '{{ addslashes($message->message) }}')">編集</button>
             <button onclick="deleteMessage({{ $message->id }})">削除</button>
           @endif
         </div>
@@ -118,22 +118,64 @@
   </form>
 </div>
 
-@if($canEvaluate)
-  <div id="evaluation-modal">
-    <h3>取引が完了しました。</h3>
+@if($showEvaluationModal)
+  <div id="evaluation-modal" style="display: block;">
+    <h3>取引が完了しました</h3>
     <form method="POST" action="{{ route('evaluation.store', $item->id) }}">
       @csrf
       <p>今回の取引相手はどうでしたか？</p>
-      <input type="radio" name="rating" value="1" id="rating1" required>
-      <label for="rating1">★☆☆☆☆</label>
-      <input type="radio" name="rating" value="2" id="rating2" required>
-      <label for="rating2">★★☆☆☆</label>
-      <input type="radio" name="rating" value="3" id="rating3" required>
-      <label for="rating3">★★★☆☆</label>
-      <input type="radio" name="rating" value="4" id="rating4" required>
-      <label for="rating4">★★★★☆</label>
-      <input type="radio" name="rating" value="5" id="rating5" required>
-      <label for="rating5">★★★★★</label>
+      <div>
+        <div data-rating="1">
+          <input type="radio" name="rating" value="1" id="rating1" required>
+          <label for="rating1">
+            <span>★</span>
+            <span>☆</span>
+            <span>☆</span>
+            <span>☆</span>
+            <span>☆</span>
+          </label>
+        </div>
+        <div data-rating="2">
+          <input type="radio" name="rating" value="2" id="rating2" required>
+          <label for="rating2">
+            <span>★</span>
+            <span>★</span>
+            <span>☆</span>
+            <span>☆</span>
+            <span>☆</span>
+          </label>
+        </div>
+        <div data-rating="3">
+          <input type="radio" name="rating" value="3" id="rating3" required>
+          <label for="rating3">
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>☆</span>
+            <span>☆</span>
+          </label>
+        </div>
+        <div data-rating="4">
+          <input type="radio" name="rating" value="4" id="rating4" required>
+          <label for="rating4">
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>☆</span>
+          </label>
+        </div>
+        <div data-rating="5">
+          <input type="radio" name="rating" value="5" id="rating5" required>
+          <label for="rating5">
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+          </label>
+        </div>
+      </div>
       <button type="submit">送信する</button>
     </form>
   </div>
@@ -141,38 +183,39 @@
 
 
 <script>
-  // 下書き保存機能
-  function saveDraft() {
-    const message = document.getElementById('message-input').value;
-    const itemId = {{ $item->id }};
+// 下書き保存機能
+function saveDraft() {
+  const message = document.getElementById('message-input').value;
+  const itemId = {{ $item->id }};
 
-    fetch(`/chat/${itemId}/draft`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}'
-      },
-      body: JSON.stringify({ message: message })
-    });
-  }
-
-  window.addEventListener('beforeunload', function() {
-    saveDraft();
+  fetch(`/chat/${itemId}/draft`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}'
+    },
+    body: JSON.stringify({ message: message })
   });
+}
 
-  // メッセージ編集機能
-  function editMessage(messageId, currentMessage) {
-    document.getElementById('edit-message').value = currentMessage;
-    document.getElementById('edit-form').action = `/chat/message/${messageId}/edit`;
-    document.getElementById('edit-modal').style.display = 'block';
-  }
+window.addEventListener('beforeunload', function() {
+  saveDraft();
+});
 
-  function closeEditModal() {
-    document.getElementById('edit-modal').style.display = 'none';
-  }
+// メッセージ編集モーダル機能
+function openEditModal(messageId, currentMessage) {
+  document.getElementById('edit-message').value = currentMessage;
+  document.getElementById('edit-form').action = `/chat/message/${messageId}/edit`;
+  document.getElementById('edit-modal').style.display = 'block';
+}
 
-  // メッセージ削除機能
-  function deleteMessage(messageId) {
+function closeEditModal() {
+  document.getElementById('edit-modal').style.display = 'none';
+  document.getElementById('edit-message').value = '';
+}
+
+// メッセージ削除機能
+function deleteMessage(messageId) {
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = `/chat/message/${messageId}/delete`;
@@ -181,66 +224,91 @@
     `;
     document.body.appendChild(form);
     form.submit();
-  }
+}
 
-  // 画像モーダル表示機能
-  function openImageModal(imageSrc) {
-    const modal = document.createElement('div');
-    modal.className = 'modal';
-    modal.style.display = 'block';
-    modal.innerHTML = `
-      <div style="text-align: left; max-width: 80%;">
-        <img src="${imageSrc}" style="max-width: 100%; max-height: 80vh;">
-      </div>
-    `;
-    modal.onclick = function() {
+// 画像モーダル表示機能
+function openImageModal(imageSrc) {
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.display = 'block';
+  modal.innerHTML = `
+    <div style="text-align: center; max-width: 90%; margin-top: 2%;">
+      <img src="${imageSrc}" style="max-width: 100%; max-height: 70vh; object-fit: contain;">
+    </div>
+  `;
+
+  // 背景クリックで閉じる
+  modal.onclick = function(e) {
+    if (e.target === modal) {
       modal.remove();
-    };
-    document.body.appendChild(modal);
-  }
+    }
+  };
 
-  // 評価モーダルの背景クリック防止
-  const evaluationModal = document.getElementById('evaluation-modal');
-  if (evaluationModal) {
-    evaluationModal.onclick = function(e) {
-      if (e.target === this) {
-        // 背景クリックでは閉じない
-        return false;
-      }
-    };
-  }
+  document.body.appendChild(modal);
+}
 
-  // 編集モーダルの背景クリックで閉じる
-  const editModal = document.getElementById('edit-modal');
-  if (editModal) {
-    editModal.onclick = function(e) {
-      if (e.target === this) {
-        closeEditModal();
-      }
-    };
+// モーダルの背景クリック処理
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('modal')) {
+    // 評価モーダルは背景クリックで閉じない
+    if (e.target.id !== 'evaluation-modal') {
+      e.target.style.display = 'none';
+    }
   }
+});
 
-  // 星評価のホバー効果
-  document.querySelectorAll('.star-option').forEach(option => {
-    option.addEventListener('mouseenter', function() {
-      const rating = this.querySelector('input').value;
-      highlightStars(rating);
-    });
+// ESCキーでモーダルを閉じる
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const editModal = document.getElementById('edit-modal');
+    if (editModal && editModal.style.display === 'block') {
+      closeEditModal();
+    }
+  }
+});
+
+// 星評価のホバー効果
+document.querySelectorAll('.star-option').forEach(option => {
+  const rating = parseInt(option.dataset.rating);
+
+  option.addEventListener('mouseenter', function() {
+    highlightStars(rating);
   });
 
-  document.querySelector('.star-rating')?.addEventListener('mouseleave', function() {
-    const checkedRating = document.querySelector('input[name="rating"]:checked')?.value || 0;
-    highlightStars(checkedRating);
+  option.addEventListener('click', function() {
+    const input = this.querySelector('input[type="radio"]');
+    input.checked = true;
+    highlightStars(rating);
   });
+});
 
-  function highlightStars(rating) {
-    document.querySelectorAll('.star-display').forEach((star, index) => {
-      if (index < rating) {
-        star.style.color = '#ffd700';
+document.querySelector('.star-rating')?.addEventListener('mouseleave', function() {
+  const checkedInput = document.querySelector('input[name="rating"]:checked');
+  const checkedRating = checkedInput ? parseInt(checkedInput.value) : 0;
+  highlightStars(checkedRating);
+});
+
+function highlightStars(rating) {
+  document.querySelectorAll('.star-option').forEach((option, index) => {
+    const stars = option.querySelectorAll('.star-display');
+    const optionRating = parseInt(option.dataset.rating);
+
+    stars.forEach((star, starIndex) => {
+      if (optionRating === rating) {
+        star.style.color = starIndex < rating ? '#ffd700' : '#ddd';
       } else {
         star.style.color = '#ddd';
       }
     });
+  });
+}
+
+// ページ読み込み時に選択された評価をハイライト
+document.addEventListener('DOMContentLoaded', function() {
+  const checkedInput = document.querySelector('input[name="rating"]:checked');
+  if (checkedInput) {
+    highlightStars(parseInt(checkedInput.value));
   }
+});
 </script>
 @endsection
