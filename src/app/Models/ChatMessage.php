@@ -16,6 +16,18 @@ class ChatMessage extends Model
         'image_path',
         'message_type',
         'is_read',
+        'is_edited',
+        'is_deleted',
+        'edited_at',
+        'deleted_at',
+    ];
+
+    protected $casts = [
+        'is_read' => 'boolean',
+        'is_edited' => 'boolean',
+        'is_deleted' => 'boolean',
+        'edited_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -65,10 +77,6 @@ class ChatMessage extends Model
     {
         return $this->is_deleted;
     }
-    public function is_deleted()
-    {
-        return $this->isDeleted();
-    }
 
     /**
      * メッセージが編集されているかどうか
@@ -77,7 +85,6 @@ class ChatMessage extends Model
     {
         return $this->is_edited;
     }
-
 
     /**
      * 画像URLを取得

@@ -61,7 +61,7 @@
         @endif
         </div>
         <div>
-          @if($message->is_deleted())
+          @if($message->isDeleted())
             <p>このメッセージは削除されました</p>
           @else
             @if($message->message)

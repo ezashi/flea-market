@@ -18,7 +18,6 @@ class ChatController extends Controller
     $currentUserId = Auth::id();
 
     $messages = ChatMessage::where('item_id', $item_id)
-    ->notDeleted()
     ->with('sender')
     ->orderBy('created_at', 'asc')
     ->get();
