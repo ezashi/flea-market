@@ -4,7 +4,7 @@
   <div>
     <form action="{{ route('profile.show') }}" method="GET">
       @if(Auth::user()->profile_image)
-        <img src="{{ asset(Auth::user()->profile_image) }}" style="max-width: 100px;" alt="{{ Auth::user()->profile_image }}">
+        <img src="{{ asset(Auth::user()->profile_image) }}" style="width: 50px; height: 50px;" alt="{{ Auth::user()->profile_image }}">
       @else
         <div>
           <span>{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
@@ -52,7 +52,7 @@
       @foreach($items as $item)
         @if(request('tab') === 'trade')
           <a href="{{ route('chat.show', $item->id) }}">
-            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
+            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="width: 200px; height: 200px; object-fit: cover;">
             <h5>{{ $item->name }}</h5>
             @if(isset($unreadCounts) && isset($unreadCounts[$item->id]) && $unreadCounts[$item->id] > 0)
               <span>{{ $unreadCounts[$item->id] }}</span>
@@ -60,7 +60,7 @@
           </a>
         @else
           <a href="{{ route('items.show', $item->id) }}">
-            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
+            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="width: 200px; height: 200px; object-fit: cover;">
             <h5>{{ $item->name }}</h5>
           </a>
         @endif

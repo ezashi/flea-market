@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
@@ -69,6 +70,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/chat/{item_id}/draft', [ChatController::class, 'saveDraft'])->name('chat.saveDraft');
     Route::post('/chat/message/{message_id}/edit', [ChatController::class, 'edit'])->name('chat.edit');
     Route::delete('/chat/message/{message_id}/delete', [ChatController::class, 'delete'])->name('chat.delete');
+
+    // 取引完了
+    Route::post('/items/{item_id}/complete', [ItemController::class, 'completeTransaction'])->name('items.completeTransaction');
 
     // 評価機能
     Route::post('/evaluation/{item_id}', [EvaluationController::class, 'store'])->name('evaluation.store');

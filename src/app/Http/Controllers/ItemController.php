@@ -186,6 +186,8 @@ class ItemController extends Controller
     // 取引完了フラグを立てる
     $item->update(['is_transaction_completed' => true]);
 
+    session(['show_evaluation_modal' => true]);
+
     return redirect()->back();
   }
 

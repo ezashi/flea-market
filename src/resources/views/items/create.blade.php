@@ -8,7 +8,7 @@
       <div>
         <p>商品画像</p>
         <label for="image">画像を選択する</label>
-        <input id="image" type="file" name="image">
+        <input id="image" type="file" name="image" style="width: 150px; height: 150px; object-fit: cover;">
           @error('image')
             <div class="error-message">{{ $message }}</div>
           @enderror

@@ -4,7 +4,7 @@
   <div>
     <div>
       @if($item->image)
-        <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
+        <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="width: 200px; height: 200px; object-fit: cover;">
       @endif
     </div>
     <h4>{{ $item->name }}</h4>

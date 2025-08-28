@@ -10,13 +10,13 @@
         <div>
           <a href="{{ route('chat.show', $tradingItem->id) }}">
             <div>
+              <img src="{{ asset($tradingItem->image) }}" style="width: 200px; height: 200px; object-fit: cover;" alt="{{ $tradingItem->name }}">
+              <h5>{{ $tradingItem->name }}</h5>
               <div>
                 @if(isset($unreadCounts[$tradingItem->id]) && $unreadCounts[$tradingItem->id] > 0)
                   {{ $unreadCounts[$tradingItem->id] > 99 ? '99+' : $unreadCounts[$tradingItem->id] }}
                 @endif
               </div>
-              <img src="{{ asset($tradingItem->image) }}" alt="{{ $tradingItem->name }}">
-              <h5>{{ $tradingItem->name }}</h5>
             </div>
           </a>
         </div>
@@ -26,14 +26,14 @@
 
   <div>
     @if($chatPartner->profile_image)
-      <img src="{{ asset($chatPartner->profile_image) }}" style="max-width: 100px;" alt="{{ $chatPartner->name }}">
+      <img src="{{ asset($chatPartner->profile_image) }}" style="width: 200px; height: 200px; object-fit: cover;" alt="{{ $chatPartner->name }}">
     @else
       <div>
         <span>{{ strtoupper(substr($chatPartner->name, 0, 1)) }}</span>
       </div>
     @endif
     <h2>「 {{ $chatPartner->name }} 」さんとの取引画面</h2>
-    @if(Auth::id() === $item->buyer_id && !$item->sold)
+    @if(Auth::id() === $item->buyer_id && !$item->is_transaction_completed)
       <form action="{{ route('items.completeTransaction', $item->id) }}" method="POST">
         @csrf
         <button type="submit">取引を完了する</button>
@@ -42,7 +42,7 @@
   </div>
 
   <div>
-    <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="height: 200px;">
+    <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="width: 200px; height: 200px; object-fit: cover;">
     <h5>{{ $item->name }}</h5>
     <h3>¥{{ number_format($item->price) }}</h3>
   </div>
@@ -53,7 +53,7 @@
         <div>
         @if($message->sender_id !== Auth::id())
           @if($message->sender->profile_image)
-            <img src="{{ asset($message->sender->profile_image) }}" alt="{{ $message->sender->name }}">
+            <img src="{{ asset($message->sender->profile_image) }}" style="width: 40px; height: 40px;" alt="{{ $message->sender->name }}">
           @else
             {{ strtoupper(substr($message->sender->name, 0, 1)) }}
           @endif
@@ -83,7 +83,7 @@
   </div>
 
   <div>
-    <form method="POST" action="{{ route('chat.send', $item->id) }}">
+    <form method="POST" action="{{ route('chat.send', $item->id) }}" enctype="multipart/form-data">
       @csrf
       <div>
         <textarea name="message" id="message-input" placeholder="取引メッセージを記入してください" onkeyup="saveDraft()">
@@ -100,7 +100,7 @@
           <div class="error-message">{{ $message }}</div>
         @enderror
         <button type="submit">
-          <img src="{{ asset('image/送信ボタン.png') }}" alt="send button"/>
+          <img src="{{ asset('image/送信ボタン.png') }}" style="width: 20px; height: 20px; object-fit: cover;" alt="send button"/>
         </button>
       </div>
     </form>
@@ -108,7 +108,7 @@
 </div>
 
 
-<div id="edit-modal">
+<div id="edit-modal" style="display: none;">
   <h3>メッセージを編集</h3>
   <form id="edit-form" method="POST">
     @csrf
@@ -118,8 +118,8 @@
   </form>
 </div>
 
-<div id="evaluation-modal">
-  @if($showEvaluationModal)
+@if($showEvaluationModal || $canEvaluate)
+  <div id="evaluation-modal">
     <h3>取引が完了しました。</h3>
     <form method="POST" action="{{ route('evaluation.store', $item->id) }}">
       @csrf
@@ -136,29 +136,34 @@
       <label for="rating5">★★★★★</label>
       <button type="submit">送信する</button>
     </form>
-  @endif
-</div>
+  </div>
+@endif
 
 
 <script>
   // 下書き保存機能
-  window.addEventListener('beforeunload', function() {
+  function saveDraft() {
     const message = document.getElementById('message-input').value;
     const itemId = {{ $item->id }};
 
-    const url = `/chat/${itemId}/draft`;
-    const data = JSON.stringify({ message: message });
+    fetch(`/chat/${itemId}/draft`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}'
+      },
+      body: JSON.stringify({ message: message })
+    });
+  }
 
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
-
-    const blob = new Blob([data], { type: 'application/json' });
-    navigator.sendBeacon(url, blob);
+  window.addEventListener('beforeunload', function() {
+    saveDraft();
   });
 
   // メッセージ編集機能
   function editMessage(messageId, currentMessage) {
     document.getElementById('edit-message').value = currentMessage;
-    document.getElementById('edit-form').action = `{{ url('/chat/message') }}/${messageId}/edit`;
+    document.getElementById('edit-form').action = `/chat/message/${messageId}/edit`;
     document.getElementById('edit-modal').style.display = 'block';
   }
 
@@ -168,17 +173,75 @@
 
   // メッセージ削除機能
   function deleteMessage(messageId) {
-    if (confirm('このメッセージを削除しますか？')) {
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = `{{ url('/chat/message') }}/${messageId}/delete`;
-      form.innerHTML = `
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <input type="hidden" name="_method" value="DELETE">
-      `;
-      document.body.appendChild(form);
-      form.submit();
-    }
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/chat/message/${messageId}/delete`;
+    form.innerHTML = `
+      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="_method" value="DELETE">
+    `;
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+  // 画像モーダル表示機能
+  function openImageModal(imageSrc) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'block';
+    modal.innerHTML = `
+      <div style="text-align: left; max-width: 80%;">
+        <img src="${imageSrc}" style="max-width: 100%; max-height: 80vh;">
+      </div>
+    `;
+    modal.onclick = function() {
+      modal.remove();
+    };
+    document.body.appendChild(modal);
+  }
+
+  // 評価モーダルの背景クリック防止
+  const evaluationModal = document.getElementById('evaluation-modal');
+  if (evaluationModal) {
+    evaluationModal.onclick = function(e) {
+      if (e.target === this) {
+        // 背景クリックでは閉じない
+        return false;
+      }
+    };
+  }
+
+  // 編集モーダルの背景クリックで閉じる
+  const editModal = document.getElementById('edit-modal');
+  if (editModal) {
+    editModal.onclick = function(e) {
+      if (e.target === this) {
+        closeEditModal();
+      }
+    };
+  }
+
+  // 星評価のホバー効果
+  document.querySelectorAll('.star-option').forEach(option => {
+    option.addEventListener('mouseenter', function() {
+      const rating = this.querySelector('input').value;
+      highlightStars(rating);
+    });
+  });
+
+  document.querySelector('.star-rating')?.addEventListener('mouseleave', function() {
+    const checkedRating = document.querySelector('input[name="rating"]:checked')?.value || 0;
+    highlightStars(checkedRating);
+  });
+
+  function highlightStars(rating) {
+    document.querySelectorAll('.star-display').forEach((star, index) => {
+      if (index < rating) {
+        star.style.color = '#ffd700';
+      } else {
+        star.style.color = '#ddd';
+      }
+    });
   }
 </script>
 @endsection

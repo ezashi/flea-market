@@ -2,7 +2,7 @@
 @section('content')
 <div>
   <div>
-    <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="height: 200px;">
+    <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" style="width: 200px; height: 200px; object-fit: cover;">
     @if($item->sold)
       <div>Sold</div>
     @endif

@@ -7,17 +7,17 @@
       @csrf
       <div>
         @if($user->profile_image)
-          <label for="profile_image" style="cursor: pointer;">
-            <img src="{{ asset(Auth::user()->profile_image) }}" style="max-width: 150px;" alt="{{ $user->name }}">
+          <label for="profile_image">
+            <img src="{{ asset(Auth::user()->profile_image) }}" style="width: 100px; height: 100px; object-fit: cover;" alt="{{ $user->name }}">
             画像を選択する
           </label>
         @else
-          <label for="profile_image" style="cursor: pointer;">
+          <label for="profile_image">
             <span>{{ strtoupper(substr($user->name, 0, 1)) }}</span>
             画像を選択する
           </label>
         @endif
-        <input id="profile_image" type="file" name="profile_image" style="max-width: 150px;" alt="{{ $user->name }}">
+        <input id="profile_image" type="file" name="profile_image" style="width: 100px; height: 100px; object-fit: cover;" alt="{{ $user->name }}">
         @error('profile_image')
           <div class="error-message">{{ $message }}</div>
         @enderror
