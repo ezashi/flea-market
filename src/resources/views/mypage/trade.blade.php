@@ -92,7 +92,7 @@
         @error('message')
           <div class="error-message">{{ $message }}</div>
         @enderror
-        <input type="file" name="image" id="image-input" accept="image/*">
+        <input type="file" name="image" id="image-input">
         <label for="image-input">
           画像を追加
         </label>
