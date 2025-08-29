@@ -393,7 +393,7 @@
         <div class="comment-item">
           <div class="comment-avatar">
             @if($comment->user->profile_image)
-              <img src="{{ asset('$comment->user->profile_image) }}" alt="{{ $comment->user->name }}">
+              <img src="{{ asset($comment->user->profile_image) }}" alt="{{ $comment->user->name }}">
             @else
               {{ strtoupper(substr($comment->user->name, 0, 1)) }}
             @endif

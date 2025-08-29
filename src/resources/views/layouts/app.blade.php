@@ -21,12 +21,11 @@
       @auth
         @if (!Route::is('login') && !Route::is('register'))
           <!-- 検索フォーム -->
-          <form action="{{ request()->is('mylist') ? route('mylist') : route('index') }}" method="GET">
-            @csrf
+          <form action="{{ request()->is('mylist') ? route('mylist') : route('index') }}" method="GET" id="search-form">
             <input class="search-input" type="text" name="search" placeholder=" 何をお探しですか？" value="{{ $search ?? '' }}">
           </form>
 
-          <form method="POST" action="{{ route('logout') }}">
+          <form method="POST" action="{{ route('logout') }}" id="logout-form">
             @csrf
             <button type="submit">ログアウト</button>
           </form>
@@ -36,12 +35,11 @@
       @else
         @if (!Route::is('login') && !Route::is('register'))
           <!-- 検索フォーム -->
-          <form action="{{ route('index') }}" method="GET">
-            @csrf
+          <form action="{{ route('index') }}" method="GET" id="search-form">
             <input class="search-input" type="text" name="search" placeholder=" 何をお探しですか？" value="{{ request('search') }}">
           </form>
 
-          <form method="GET" action="/login">
+          <form method="GET" action="/login" id="login-form">
             @csrf
             <button type="submit">ログイン</button>
           </form>

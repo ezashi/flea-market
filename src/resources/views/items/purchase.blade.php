@@ -5,6 +5,7 @@
     background-color: #f5f5f5;
     min-height: 100vh;
   }
+
   .purchase-container {
     max-width: 800px;
     margin: 40px auto;
@@ -123,6 +124,9 @@
     padding: 30px;
     border-radius: 8px;
     margin-top: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .summary-row {
@@ -161,30 +165,36 @@
   .purchase-button:hover {
     background-color: #e55555;
   }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+  }
 </style>
 
 <div class="purchase-page">
-  <div class="purchase-container">
-    <div class="product-summary">
-      <div class="product-image-small">
-        @if($item->image)
-          <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
-        @else
-          商品画像
-        @endif
+  <form method="POST" action="{{ route('items.completePurchase', $item->id) }}" id="purchase-form" novalidate>
+    @csrf
+
+    <div class="purchase-container">
+      <div class="product-summary">
+        <div class="product-image-small">
+          @if($item->image)
+            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
+          @else
+            商品画像
+          @endif
+        </div>
+        <div class="product-name-small">{{ $item->name }}</div>
+        <div class="product-price-small">¥{{ number_format($item->price) }}</div>
       </div>
-      <div class="product-name-small">{{ $item->name }}</div>
-      <div class="product-price-small">¥{{ number_format($item->price) }}</div>
-    </div>
 
-    <div class="purchase-form-section">
-      <form method="POST" action="{{ route('items.completePurchase', $item->id) }}">
-        @csrf
-
+      <div class="purchase-form-section">
         <div class="payment-section">
           <div class="section-label">支払い方法</div>
           <select id="payment_method" name="payment_method" class="payment-select" required>
-            <option value="" disabled selected>選択してください</option>
+            <option value="">選択してください</option>
             <option value="コンビニ払い" {{ old('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>
               コンビニ払い
             </option>
@@ -203,49 +213,44 @@
             <a href="{{ route('items.changeAddress', $item->id) }}" class="change-address-link">変更する</a>
           </div>
           <div class="address-info">
-            <div class="address-line">〒{{ Auth::user()->postal_code }}</div>
-            <div class="address-line">{{ Auth::user()->address }}{{ Auth::user()->building }}</div>
+            <div class="address-line">〒{{ Auth::user()->postal_code ?? '未設定' }}</div>
+            <div class="address-line">{{ Auth::user()->address ?? '未設定' }}{{ Auth::user()->building ?? '' }}</div>
           </div>
           <input type="hidden" name="delivery_address" value="{{ Auth::user()->postal_code }} {{ Auth::user()->address }}{{ Auth::user()->building }}">
           @error('delivery_address')
             <div class="error-message">{{ $message }}</div>
           @enderror
         </div>
-      </form>
+      </div>
     </div>
-  </div>
 
-  <div class="purchase-summary">
-    <div class="summary-row">
-      <div class="summary-label">商品代金</div>
-      <div class="summary-value">¥{{ number_format($item->price) }}</div>
-    </div>
-    <div class="summary-row">
-      <div class="summary-label">支払い方法</div>
-      <div class="summary-value" id="selected-payment">コンビニ払い</div>
-    </div>
-  </div>
+    <div class="purchase-summary">
+      <div class="summary-row">
+        <div class="summary-label">商品代金</div>
+        <div class="summary-value">¥{{ number_format($item->price) }}</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">支払い方法</div>
+        <div class="summary-value" id="selected-payment">選択してください</div>
+      </div>
 
-  <div style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
-    <button type="submit" class="purchase-button" form="purchase-form">購入する</button>
-  </div>
+      <button type="submit" class="purchase-button">購入する</button>
+    </div>
+  </form>
 </div>
 
 <script>
-document.getElementById('payment_method').addEventListener('change', function() {
-  const selectedPayment = document.getElementById('selected-payment');
-  selectedPayment.textContent = this.value || 'コンビニ払い';
-});
-
-// Add form id to the form
-document.querySelector('form').id = 'purchase-form';
-
-// Set initial payment method display
 document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('purchase-form');
   const paymentSelect = document.getElementById('payment_method');
   const selectedPayment = document.getElementById('selected-payment');
 
-  // If there's a selected value, update the display
+  // 支払い方法変更時の表示更新
+  paymentSelect.addEventListener('change', function() {
+    selectedPayment.textContent = this.value || 'コンビニ払い';
+  });
+
+  // 初期値設定
   if (paymentSelect.value) {
     selectedPayment.textContent = paymentSelect.value;
   }

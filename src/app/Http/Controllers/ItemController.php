@@ -157,15 +157,36 @@ class ItemController extends Controller
 
   public function completePurchase(PurchaseRequest $request, $item_id)
   {
-    $item = Item::findOrFail($item_id);
+    try {
+      $item = Item::findOrFail($item_id);
 
-    $item->update([
-      'buyer_id' => Auth::id(),
-      'sold' => true,
-      'payment_method' => $request->payment_method,
-    ]);
+      // 既に売却済みの場合はエラー
+      if ($item->sold) {
+        return redirect()->route('index');
+      }
 
-    return redirect()->route('mypage', ['tab' => 'buy']);
+      // 自分の商品は購入できない
+      if ($item->seller_id === Auth::id()) {
+        return redirect()->route('index');
+      }
+
+      // 購入処理
+      $item->update([
+        'buyer_id' => Auth::id(),
+        'sold' => true,
+        'payment_method' => $request->payment_method,
+      ]);
+
+      return redirect()->route('mypage', ['tab' => 'buy']);
+
+    } catch (\Exception $e) {
+      \Log::error('Purchase failed', [
+        'item_id' => $item_id,
+        'user_id' => Auth::id(),
+        'error' => $e->getMessage()
+      ]);
+      return redirect()->back()->withInput();
+    }
   }
 
 

@@ -30,19 +30,21 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         // データの更新
-        $user->profile_image = $validatedData['profile_image'] ?? $user->profile_image;
         $user->name = $validatedData['name'];
         $user->postal_code = $validatedData['postal_code'];
         $user->address = $validatedData['address'];
         $user->building = $validatedData['building'];
 
+        // プロフィール画像の処理
         if ($profileRequest->hasFile('profile_image')) {
-            $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
-            $path = 'storage/images/profile/' . $filename;
-            if (file_exists(public_path($path))) {
-                unlink(public_path($path));
+            // 既存の画像があれば削除
+            if ($user->profile_image && file_exists(public_path($user->profile_image))) {
+                unlink(public_path($user->profile_image));
             }
-            $profileRequest->file('profile_image')->storeAs('public/images/profile', $filename, 'public');
+
+            // 新しい画像を保存
+            $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
+            $profileRequest->file('profile_image')->storeAs('images/profile', $filename, 'public');
             $user->profile_image = 'storage/images/profile/' . $filename;
         }
 
@@ -68,24 +70,27 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         // データの更新
-        $user->profile_image = $validatedData['profile_image'] ?? $user->profile_image;
         $user->name = $validatedData['name'];
         $user->postal_code = $validatedData['postal_code'];
         $user->address = $validatedData['address'];
         $user->building = $validatedData['building'];
 
+        // プロフィール画像の処理
         if ($profileRequest->hasFile('profile_image')) {
-            if (file_exists(public_path($path))) {
-                unlink(public_path($path));
+            // 既存の画像があれば削除
+            if ($user->profile_image && file_exists(public_path($user->profile_image))) {
+                unlink(public_path($user->profile_image));
             }
+
+            // 新しい画像を保存
             $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
-            $profileRequest->file('profile_image')->storeAs('public/images/profile', $filename, 'public');
+            $profileRequest->file('profile_image')->storeAs('images/profile', $filename, 'public');
             $user->profile_image = 'storage/images/profile/' . $filename;
         }
 
         $user->is_profile_completed = true;
         $user->save();
 
-        return redirect()->route('profile.show');
+        return redirect()->route('mypage');
     }
 }

@@ -138,6 +138,22 @@
     font-weight: bold;
   }
 
+  .message-notification {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff6b6b;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+
   .items-container {
     padding: 40px 20px;
     max-width: 1200px;
@@ -184,22 +200,6 @@
     object-fit: cover;
   }
 
-  .message-notification {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #ff6b6b;
-    color: white;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-  }
-
   .item-details {
     padding: 15px;
   }
@@ -224,12 +224,13 @@
     <div class="user-info-group">
       <div class="user-avatar">
         @if(Auth::user()->profile_image)
-          <img src="{{ asset('Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }}">
+          <img src="{{ asset(Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }}">
         @else
           {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
         @endif
       </div>
       <div class="user-details">
+        <h2>{{ Auth::user()->name }}</h2>
         @if($user->getEvaluationCount() > 0)
           <div class="user-rating">
             <div class="rating-stars">
@@ -264,7 +265,7 @@
         <a href="{{ route('mypage', ['tab' => 'trade']) }}" class="navigation-link {{ request('tab') === 'trade' ? 'current' : '' }}">
           取引中の商品
           @if(isset($unreadCounts) && array_sum($unreadCounts) > 0)
-            <span class="unread-count">2</span>
+            <span class="unread-count">{{ array_sum($unreadCounts) }}</span>
           @endif
         </a>
       </li>

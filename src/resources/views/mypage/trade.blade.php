@@ -465,7 +465,7 @@
       <div class="chat-user-info">
         <div class="chat-user-avatar">
           @if($chatPartner->profile_image)
-            <img src="{{ asset('$chatPartner->profile_image) }}" alt="{{ $chatPartner->name }}">
+            <img src="{{ asset($chatPartner->profile_image) }}" alt="{{ $chatPartner->name }}">
           @else
             {{ strtoupper(substr($chatPartner->name, 0, 1)) }}
           @endif
@@ -501,7 +501,7 @@
             @if($message->sender_id !== Auth::id())
               <div class="message-avatar">
                 @if($message->sender->profile_image)
-                  <img src="{{ asset('$message->sender->profile_image) }}" alt="{{ $message->sender->name }}">
+                  <img src="{{ asset($message->sender->profile_image) }}" alt="{{ $message->sender->name }}">
                 @else
                   {{ strtoupper(substr($message->sender->name, 0, 1)) }}
                 @endif
@@ -542,7 +542,7 @@
             @if($message->sender_id === Auth::id())
               <div class="message-avatar">
                 @if(Auth::user()->profile_image)
-                  <img src="{{ asset('Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }}">
+                  <img src="{{ asset(Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }}">
                 @else
                   {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                 @endif
