@@ -373,7 +373,7 @@
         <div class="info-value">
           <div class="category-badges">
             <p class="category-badge">
-              カテゴリー {{ $item->categories->pluck('name')->implode(' ') }}
+              {{ $item->categories->pluck('name')->implode(' ') }}
             </p>
           </div>
         </div>
@@ -412,17 +412,15 @@
       @endif
     </div>
 
-    @auth
-      <form action="{{ route('items.comment', $item) }}" method="POST" class="comment-form">
-        @csrf
-        <label for="content" class="comment-form-label">商品へのコメント</label>
-        <textarea name="content" id="content" class="comment-textarea" required></textarea>
-        @error('content')
-          <div class="error-message">{{ $message }}</div>
-        @enderror
-        <button type="submit" class="comment-submit-button">コメントを送信する</button>
-      </form>
-    @endauth
+    <form action="{{ route('items.comment', $item) }}" method="POST" class="comment-form">
+      @csrf
+      <label for="content" class="comment-form-label">商品へのコメント</label>
+      <textarea name="content" id="content" class="comment-textarea" required></textarea>
+      @error('content')
+        <div class="error-message">{{ $message }}</div>
+      @enderror
+      <button type="submit" class="comment-submit-button">コメントを送信する</button>
+    </form>
   </div>
 </div>
 @endsection
