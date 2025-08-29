@@ -61,25 +61,16 @@ class ChatController extends Controller
 
       $canEvaluate = !$hasEvaluated && ($currentUserId === $item->seller_id || $currentUserId === $item->buyer_id);
 
-      if ($canEvaluate) {
-        if (session('show_evaluation_modal')) {
-          $showEvaluationModal = true;
-          session()->forget('show_evaluation_modal');
-        }
-        elseif ($currentUserId === $item->seller_id) {
-          $buyerEvaluation = Evaluation::where('item_id', $item_id)
-          ->where('evaluator_id', $item->buyer_id)
-          ->first();
-
-          if ($buyerEvaluation && !$hasEvaluated) {
-            $showEvaluationModal = true;
-          }
-        }
+      // セッションから取引完了直後かどうかをチェック
+      if (session('show_evaluation_modal')) {
+        $showEvaluationModal = true;
+        session()->forget('show_evaluation_modal');
       }
     }
 
     return view('mypage.trade', compact(
-      'item', 'messages', 'chatPartner', 'tradingItems', 'draftMessage', 'canEvaluate', 'showEvaluationModal', 'hasEvaluated', 'partnerHasEvaluated'
+      'item', 'messages', 'chatPartner', 'tradingItems', 'draftMessage',
+      'canEvaluate', 'showEvaluationModal', 'hasEvaluated', 'partnerHasEvaluated'
     ));
   }
 
