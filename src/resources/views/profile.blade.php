@@ -127,11 +127,7 @@
       @csrf
       <div class="profile-image-section">
         <div class="profile-avatar">
-          @if(isset($user->profile_image) && $user->profile_image)
-            <img src="{{ asset('storage/' . $user->profile_image) }}" alt="{{ $user->name }}">
-          @else
-            {{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}
-          @endif
+          {{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}
         </div>
         <label for="profile_image" class="image-select-button">
           画像を選択する
