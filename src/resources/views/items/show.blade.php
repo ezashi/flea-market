@@ -372,9 +372,9 @@
         <div class="info-label">カテゴリー</div>
         <div class="info-value">
           <div class="category-badges">
-            <p class="category-badge">
-              {{ $item->categories->pluck('name')->implode(' ') }}
-            </p>
+            <span class="category-badge">
+              {{ $item->categories->pluck('name')->implode(', ') }}
+            </span>
           </div>
         </div>
       </div>
@@ -393,7 +393,7 @@
         <div class="comment-item">
           <div class="comment-avatar">
             @if($comment->user->profile_image)
-              <img src="{{ asset('storage/' . $comment->user->profile_image) }}" alt="{{ $comment->user->name }}">
+              <img src="{{ asset('$comment->user->profile_image) }}" alt="{{ $comment->user->name }}">
             @else
               {{ strtoupper(substr($comment->user->name, 0, 1)) }}
             @endif

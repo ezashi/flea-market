@@ -127,7 +127,7 @@
       <div class="mypage-profile-image-section">
         <div class="mypage-profile-avatar">
           @if($user->profile_image)
-            <img src="{{ asset('storage/' . $user->profile_image) }}" alt="{{ $user->name }}">
+            <img src="{{ asset('$user->profile_image) }}" alt="{{ $user->name }}">
           @else
             {{ strtoupper(substr($user->name, 0, 1)) }}
           @endif

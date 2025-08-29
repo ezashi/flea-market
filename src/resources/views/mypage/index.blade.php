@@ -224,7 +224,7 @@
     <div class="user-info-group">
       <div class="user-avatar">
         @if(Auth::user()->profile_image)
-          <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }}">
+          <img src="{{ asset('Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }}">
         @else
           {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
         @endif

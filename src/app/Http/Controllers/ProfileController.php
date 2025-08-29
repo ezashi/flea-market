@@ -75,8 +75,8 @@ class ProfileController extends Controller
         $user->building = $validatedData['building'];
 
         if ($profileRequest->hasFile('profile_image')) {
-            if ($user->profile_image && file_exists(public_path($user->profile_image))) {
-                unlink(public_path($user->profile_image));
+            if (file_exists(public_path($path))) {
+                unlink(public_path($path));
             }
             $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
             $profileRequest->file('profile_image')->storeAs('public/images/profile', $filename, 'public');
