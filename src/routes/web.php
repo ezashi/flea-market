@@ -64,6 +64,9 @@ Route::middleware(['auth'])->group(function () {
     // コメント機能
     Route::post('/items/{item_id}/comment', [ItemController::class, 'storeComment'])->name('items.comment');
 
+    // 取引完了
+    Route::post('/items/{item_id}/complete', [ItemController::class, 'completeTransaction'])->name('items.completeTransaction');
+
     // チャット機能
     Route::get('/chat/{item_id}', [ChatController::class, 'show'])->name('chat.show')->middleware('chat.message');
     Route::post('/chat/{item_id}/send', [ChatController::class, 'send'])->name('chat.send');
@@ -71,9 +74,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/chat/message/{message_id}/update', [ChatController::class, 'update'])->name('chat.update');
 
     Route::post('/chat/message/{message_id}/delete', [ChatController::class, 'delete'])->name('chat.delete');
-
-    // 取引完了
-    Route::post('/items/{item_id}/complete', [ItemController::class, 'completeTransaction'])->name('items.completeTransaction');
 
     // 評価機能
     Route::post('/evaluation/{item_id}', [EvaluationController::class, 'store'])->name('evaluation.store');

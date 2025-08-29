@@ -112,7 +112,7 @@
 </div>
 
 <!-- 評価モーダル -->
-@if($showEvaluationModal && $canEvaluate)
+@if($item->is_transaction_completed && $canEvaluate && $showEvaluationModal)
   <div id="evaluation-modal" style="display: block;">
     <h3>取引が完了しました</h3>
     <form method="POST" action="{{ route('evaluation.store', $item->id) }}">
@@ -125,7 +125,6 @@
               @for($j = 1; $j <= 5; $j++)
                 <span style="font-size: 20px; color: {{ $j <= $i ? '#ffd700' : '#ddd' }}; margin-right: 2px;">★</span>
               @endfor
-              <span style="margin-left: 10px; font-weight: 500;">{{ $i }}点</span>
             </label>
           </div>
         @endfor
@@ -135,4 +134,146 @@
     </form>
   </div>
 @endif
+
+
+
+<style>
+#evaluation-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    display: block !important;
+}
+
+.modal-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.modal-content {
+    background: white !important;
+    padding: 30px !important;
+    border-radius: 10px !important;
+    max-width: 500px !important;
+    width: 90% !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    position: relative !important;
+}
+
+.modal-content h3 {
+    text-align: center !important;
+    margin-bottom: 20px !important;
+    color: #333 !important;
+}
+
+.rating-options {
+    margin: 20px 0 !important;
+}
+
+.rating-item {
+    margin: 15px 0 !important;
+    padding: 10px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+}
+
+.rating-item:hover {
+    background-color: #f5f5f5 !important;
+}
+
+.rating-item label {
+    display: flex !important;
+    align-items: center !important;
+    cursor: pointer !important;
+    width: 100% !important;
+}
+
+.rating-item input[type="radio"] {
+    margin-right: 15px !important;
+}
+
+.stars {
+    margin-right: 15px !important;
+}
+
+.star {
+    font-size: 20px !important;
+    color: #ddd !important;
+    margin-right: 2px !important;
+}
+
+.star.filled {
+    color: #ffd700 !important;
+}
+
+.rating-text {
+    font-weight: 500 !important;
+    color: #333 !important;
+}
+
+.modal-buttons {
+    text-align: center !important;
+    margin-top: 25px !important;
+}
+
+.submit-btn {
+    background-color: #007bff !important;
+    color: white !important;
+    padding: 12px 25px !important;
+    border: none !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    margin-right: 10px !important;
+    font-size: 16px !important;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3 !important;
+}
+
+.close-btn {
+    background-color: #6c757d !important;
+    color: white !important;
+    padding: 12px 25px !important;
+    border: none !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+}
+
+.close-btn:hover {
+    background-color: #545b62 !important;
+}
+</style>
+
+<script>
+function closeModal() {
+    document.getElementById('evaluation-modal').style.display = 'none';
+}
+
+// モーダル外クリックで閉じる
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('evaluation-modal');
+    const overlay = document.querySelector('.modal-overlay');
+    
+    if (overlay) {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                closeModal();
+            }
+        });
+    }
+});
+</script>
 @endsection

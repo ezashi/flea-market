@@ -171,24 +171,28 @@ class ItemController extends Controller
 
   public function completeTransaction($item_id)
   {
-    $item = Item::findOrFail($item_id);
+    try {
+      $item = Item::findOrFail($item_id);
 
-    // 購入者のみが取引完了できる
-    if (Auth::id() !== $item->buyer_id) {
-      return redirect()->back();
+      if (Auth::id() !== $item->buyer_id) {
+        return redirect()->back();
+      }
+
+      if ($item->is_transaction_completed) {
+        return redirect()->back();
+      }
+
+      $item->is_transaction_completed = true;
+      $result = $item->save();
+
+      $freshItem = Item::find($item_id);
+
+      session(['show_evaluation_modal' => true]);
+      return redirect()->route('chat.show', $item_id);
+
+    } catch (\Exception $e) {
+      return redirect()->back()->with('error', 'エラーが発生しました: ' . $e->getMessage());
     }
-
-    // 既に完了済みの場合はリダイレクト
-    if ($item->is_transaction_completed) {
-      return redirect()->back();
-    }
-
-    // 取引完了フラグを立てる
-    $item->update(['is_transaction_completed' => true]);
-
-    session(['show_evaluation_modal' => true]);
-
-    return redirect()->route('chat.show', $item_id);
   }
 
 

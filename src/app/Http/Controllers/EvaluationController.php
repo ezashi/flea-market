@@ -6,11 +6,10 @@ use App\Models\Item;
 use App\Models\Evaluation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\EvaluationRequest;
 
 class EvaluationController extends Controller
 {
-  public function store(EvaluationRequest $request, $item_id)
+  public function store(Request $request, $item_id)
   {
     $item = Item::findOrFail($item_id);
     $currentUserId = Auth::id();
@@ -54,7 +53,7 @@ class EvaluationController extends Controller
       }
     }
 
-    return redirect()->route('chat.show', $item_id);
+    return redirect()->route('index');
   }
 
   public function canEvaluate($item_id)
