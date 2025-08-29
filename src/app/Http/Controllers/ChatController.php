@@ -117,14 +117,6 @@ class ChatController extends Controller
     return redirect()->route('chat.show', $item_id);
   }
 
-  public function saveDraft(Request $request, $item_id)
-  {
-    $message = $request->input('message', '');
-    session(["draft_message_{$item_id}" => $message]);
-
-    return response()->json(['success' => true]);
-  }
-
   public function edit($message_id)
   {
     $message = ChatMessage::findOrFail($message_id);
@@ -134,7 +126,7 @@ class ChatController extends Controller
       return redirect()->back()->with('error', '権限がありません。');
     }
 
-    return view('mypage.edit-message', compact('message'));
+    return view('mypage.edit', compact('message'));
   }
 
   public function update(Request $request, $message_id)
