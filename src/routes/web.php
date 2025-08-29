@@ -68,7 +68,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat/{item_id}', [ChatController::class, 'show'])->name('chat.show')->middleware('chat.message');
     Route::post('/chat/{item_id}/send', [ChatController::class, 'send'])->name('chat.send');
     Route::get('/chat/message/{message_id}/edit', [ChatController::class, 'edit'])->name('chat.edit');
-    Route::post('/chat/message/{message_id}/edit', [ChatController::class, 'update'])->name('chat.update');
+    Route::post('/chat/message/{message_id}/update', [ChatController::class, 'update'])->name('chat.update');
+
     Route::post('/chat/message/{message_id}/delete', [ChatController::class, 'delete'])->name('chat.delete');
 
     // 取引完了

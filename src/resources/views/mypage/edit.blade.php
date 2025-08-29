@@ -5,7 +5,6 @@
   <form method="POST" action="{{ route('chat.update', $message->id) }}">
     @csrf
     <div>
-      <label for="message">メッセージ内容</label>
       <textarea id="message" name="message" required>{{ old('message', $message->message) }}</textarea>
       @error('message')
         <div style="color: red; margin-top: 5px;">{{ $message }}</div>
