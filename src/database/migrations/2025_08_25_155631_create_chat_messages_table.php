@@ -21,6 +21,9 @@ class CreateChatMessagesTable extends Migration
             $table->string('image_path')->nullable();
             $table->enum('message_type', ['text', 'both'])->default('text');
             $table->boolean('is_read')->default(false);
+            $table->index(['item_id', 'created_at']);
+            $table->index(['sender_id', 'is_read']);
+            $table->index(['item_id', 'is_deleted']);
             $table->timestamps();
         });
     }

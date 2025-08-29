@@ -125,7 +125,19 @@ class ChatController extends Controller
     return response()->json(['success' => true]);
   }
 
-  public function edit(Request $request, $message_id)
+  public function edit($message_id)
+  {
+    $message = ChatMessage::findOrFail($message_id);
+
+    // 権限チェック
+    if ($message->sender_id !== Auth::id()) {
+      return redirect()->back()->with('error', '権限がありません。');
+    }
+
+    return view('mypage.edit-message', compact('message'));
+  }
+
+  public function update(Request $request, $message_id)
   {
     $message = ChatMessage::findOrFail($message_id);
 

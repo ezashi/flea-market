@@ -74,8 +74,12 @@
         </div>
         <div>
           @if($message->sender_id === Auth::id() && !$message->isDeleted())
-            <button type="button" onclick="openEditModal({{ $message->id }}, '{{ addslashes($message->message) }}')">編集</button>
-            <button type="button" onclick="deleteMessage({{ $message->id }})">削除</button>
+            <a href="{{ route('chat.edit', $message->id) }}">編集</a>
+
+            <form action="{{ route('chat.delete', $message->id) }}" method="POST">
+              @csrf
+              <button type="submit">削除</button>
+            </form>
           @endif
         </div>
       @endforeach
@@ -86,7 +90,7 @@
     <form method="POST" action="{{ route('chat.send', $item->id) }}" enctype="multipart/form-data">
       @csrf
       <div>
-        <textarea name="message" id="message-input" placeholder="取引メッセージを記入してください" onkeyup="saveDraft()">{{ $draftMessage }}</textarea>
+        <textarea name="message" id="message-input" placeholder="取引メッセージを記入してください">{{ $draftMessage }}</textarea>
         @error('message')
           <div class="error-message">{{ $message }}</div>
         @enderror
@@ -105,16 +109,7 @@
   </div>
 </div>
 
-<div id="edit-modal" style="display: none;">
-  <h3>メッセージを編集</h3>
-  <form id="edit-form" method="POST">
-    @csrf
-    <textarea id="edit-message" name="message"></textarea>
-    <button type="button" onclick="closeEditModal()">キャンセル</button>
-    <button type="submit">更新</button>
-  </form>
-</div>
-
+<!-- 評価モーダル -->
 @if($showEvaluationModal && $canEvaluate)
   <div id="evaluation-modal" style="display: block;">
     <h3>取引が完了しました</h3>
@@ -122,219 +117,73 @@
       @csrf
       <p>今回の取引相手はどうでしたか？</p>
       <div>
-        <div data-rating="1">
-          <input type="radio" name="rating" value="1" id="rating1" required>
-          <label for="rating1">
-            <span>★</span>
-            <span>☆</span>
-            <span>☆</span>
-            <span>☆</span>
-            <span>☆</span>
+        @for($i = 1; $i <= 5; $i++)
+          <input type="radio" name="rating" value="{{ $i }}" id="rating{{ $i }}" required>
+          <label for="rating{{ $i }}" style="cursor: pointer; margin-left: 10px;">
+            @for($j = 1; $j <= 5; $j++)
+              @if($j <= $i)
+                <span style="color: #ffd700;">★</span>
+              @else
+                <span style="color: #ddd;">☆</span>
+              @endif
+            @endfor
+            ({{ $i }}点)
           </label>
-        </div>
-        <div data-rating="2">
-          <input type="radio" name="rating" value="2" id="rating2" required>
-          <label for="rating2">
-            <span>★</span>
-            <span>★</span>
-            <span>☆</span>
-            <span>☆</span>
-            <span>☆</span>
-          </label>
-        </div>
-        <div data-rating="3">
-          <input type="radio" name="rating" value="3" id="rating3" required>
-          <label for="rating3">
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>☆</span>
-            <span>☆</span>
-          </label>
-        </div>
-        <div data-rating="4">
-          <input type="radio" name="rating" value="4" id="rating4" required>
-          <label for="rating4">
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>☆</span>
-          </label>
-        </div>
-        <div data-rating="5">
-          <input type="radio" name="rating" value="5" id="rating5" required>
-          <label for="rating5">
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-          </label>
-        </div>
+        @endfor
       </div>
       <button type="submit">送信する</button>
     </form>
   </div>
 @endif
 
-
 <script>
-// 下書き保存機能
-function saveDraft() {
-  const message = document.getElementById('message-input').value;
+// 軽量な下書き保存機能（リアルタイム保存は避けてページ離脱時のみ）
+function saveDraft(textarea) {
+  const message = textarea.value;
   const itemId = {{ $item->id }};
 
-  fetch(`/chat/${itemId}/draft`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}'
-    },
-    body: JSON.stringify({ message: message })
+  // ページ離脱時に保存
+  window.addEventListener('beforeunload', function() {
+    if (message.trim() !== '') {
+      fetch(`/chat/${itemId}/draft`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ message: message }),
+        keepalive: true // ページ離脱時でも送信を完了させる
+      });
+    }
   });
 }
 
-window.addEventListener('beforeunload', function() {
-  saveDraft();
-});
-
-// メッセージ編集モーダル機能
-function openEditModal(messageId, currentMessage) {
-  const modal = document.getElementById('edit-modal');
-  const messageInput = document.getElementById('edit-message');
-  const form = document.getElementById('edit-form');
-
-  if (modal && messageInput && form) {
-    messageInput.value = currentMessage;
-    form.action = `/chat/message/${messageId}/edit`;
-    modal.style.display = 'block';
-    messageInput.focus();
-  }
-}
-
-function closeEditModal() {
-  const modal = document.getElementById('edit-modal');
-  const messageInput = document.getElementById('edit-message');
-
-  if (modal && messageInput) {
-    modal.style.display = 'none';
-    messageInput.value = '';
-  }
-}
-
-// メッセージ削除機能
-function deleteMessage(messageId) {
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = `/chat/message/${messageId}/delete`;
-    form.innerHTML = `
-      <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    `;
-    document.body.appendChild(form);
-    form.submit();
-}
-
-// モーダルの背景クリック処理
-window.addEventListener('click', function(event) {
-  const editModal = document.getElementById('edit-modal');
-  const imageModal = document.getElementById('image-modal');
-  const evaluationModal = document.getElementById('evaluation-modal');
-
-  if (event.target === editModal) {
-    closeEditModal();
-  }
-  if (event.target === imageModal) {
-    closeImageModal();
-  }
-});
-
-// ESCキーでモーダルを閉じる
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    const editModal = document.getElementById('edit-modal');
-    const imageModal = document.getElementById('image-modal');
-
-    if (editModal && editModal.style.display === 'block') {
-      closeEditModal();
-    }
-    if (imageModal && imageModal.style.display === 'block') {
-      closeImageModal();
-    }
-  }
-});
-
-// 星評価のインタラクション
+// 評価モーダルのラジオボタンハイライト
 document.addEventListener('DOMContentLoaded', function() {
-  // 評価モーダルの表示チェック
-  const evaluationModal = document.getElementById('evaluation-modal');
-  if (evaluationModal) {
-    evaluationModal.style.display = 'block';
-  }
+  const radioButtons = document.querySelectorAll('input[name="rating"]');
 
-  const starOptions = document.querySelectorAll('.star-option');
-
-  starOptions.forEach(option => {
-    const rating = parseInt(option.dataset.rating);
-
-    // クリック時の処理
-    option.addEventListener('click', function() {
-      const input = this.querySelector('input[type="radio"]');
-      if (input) {
-        input.checked = true;
-        updateStarDisplay();
+  radioButtons.forEach(radio => {
+    radio.addEventListener('change', function() {
+      // 選択時の視覚的フィードバック
+      const selectedValue = this.value;
+      const label = this.nextElementSibling;
+      if (label) {
+        label.style.fontWeight = 'bold';
+        label.style.color = '#007bff';
       }
-    });
 
-    // ホバー時の処理
-    option.addEventListener('mouseenter', function() {
-      highlightStars(rating);
-    });
-
-    option.addEventListener('mouseleave', function() {
-      updateStarDisplay();
+      // 他の選択肢をリセット
+      radioButtons.forEach(otherRadio => {
+        if (otherRadio !== this) {
+          const otherLabel = otherRadio.nextElementSibling;
+          if (otherLabel) {
+            otherLabel.style.fontWeight = 'normal';
+            otherLabel.style.color = 'black';
+          }
+        }
+      });
     });
   });
-
-  // 初期表示の更新
-  updateStarDisplay();
 });
-
-function highlightStars(rating) {
-  const starOptions = document.querySelectorAll('.star-option');
-
-  starOptions.forEach((option, index) => {
-    const stars = option.querySelectorAll('.star-display');
-    const optionRating = parseInt(option.dataset.rating);
-
-    stars.forEach((star, starIndex) => {
-      if (optionRating === rating) {
-        star.style.color = starIndex < rating ? '#ffd700' : '#ddd';
-      } else {
-        star.style.color = '#ddd';
-      }
-    });
-  });
-}
-
-function updateStarDisplay() {
-  const checkedInput = document.querySelector('input[name="rating"]:checked');
-  const checkedRating = checkedInput ? parseInt(checkedInput.value) : 0;
-
-  const starOptions = document.querySelectorAll('.star-option');
-
-  starOptions.forEach(option => {
-    const stars = option.querySelectorAll('.star-display');
-    const optionRating = parseInt(option.dataset.rating);
-
-    stars.forEach((star, starIndex) => {
-      if (optionRating === checkedRating) {
-        star.style.color = starIndex < checkedRating ? '#ffd700' : '#ddd';
-      } else {
-        star.style.color = '#ddd';
-      }
-    });
-  });
-}
 </script>
 @endsection

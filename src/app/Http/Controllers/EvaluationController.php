@@ -54,7 +54,7 @@ class EvaluationController extends Controller
       }
     }
 
-    return route('index');
+    return redirect()->route('chat.show', $item_id);
   }
 
   public function canEvaluate($item_id)
