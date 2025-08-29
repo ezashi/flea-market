@@ -266,6 +266,155 @@ body {
     color: #ff6b6b;
 }
 
+/* MyPage Specific Styles */
+.mypage-header {
+    background-color: white;
+    padding: 40px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 48px;
+    font-weight: bold;
+    overflow: hidden;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.rating-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    color: #ffd700;
+    font-size: 20px;
+}
+
+.star.empty {
+    color: #ddd;
+}
+
+.edit-profile-btn {
+    background-color: white;
+    color: #ff6b6b;
+    border: 2px solid #ff6b6b;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.edit-profile-btn:hover {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.mypage-tabs {
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-list {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tab-item {
+    flex: 1;
+}
+
+.tab-link {
+    display: block;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #666;
+    font-size: 16px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.tab-link.active {
+    color: #ff6b6b;
+    border-bottom-color: #ff6b6b;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 15px;
+    background-color: #ff6b6b;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.unread-notification {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff6b6b;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
 /* Utility Classes */
 .container {
     max-width: 1200px;
@@ -287,4 +436,11 @@ body {
 
 .hidden {
     display: none;
+}
+
+.no-items-message {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+    padding: 60px 20px;
 }
