@@ -7,13 +7,14 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>coachtechフリマ</title>
   <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 
 </head>
 <body>
   <header>
-    <div>
+    <div class="header">
       <a href="{{ route('index') }}">
-        <img src="{{ asset('image/Free Market App Logo.svg') }}" alt="coachtech logo"/>
+        <img class="logo" src="{{ asset('image/Free Market App Logo.svg') }}" alt="coachtech logo"/>
       </a>
     </div>
     <div>
@@ -22,42 +23,30 @@
           <!-- 検索フォーム -->
           <form action="{{ request()->is('mylist') ? route('mylist') : route('index') }}" method="GET">
             @csrf
-            <input type="text" name="search" placeholder=" 何をお探しですか？" value="{{ $search ?? '' }}">
+            <input class="search-input" type="text" name="search" placeholder=" 何をお探しですか？" value="{{ $search ?? '' }}">
           </form>
 
           <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit">ログアウト</button>
           </form>
-          <form method="GET" action="{{ route('mypage') }}">
-            @csrf
-            <button type="submit">マイページ</button>
-          </form>
-          <form action="{{ route('items.create') }}" method="GET">
-            @csrf
-            <button type="submit">出品</button>
-          </form>
+          <a href="{{ route('mypage') }}">マイページ</a>
+          <a href="{{ route('items.create') }}">出品</a>
         @endif
       @else
         @if (!Route::is('login') && !Route::is('register'))
           <!-- 検索フォーム -->
           <form action="{{ route('index') }}" method="GET">
             @csrf
-            <input type="text" name="search" placeholder=" 何をお探しですか？" value="{{ request('search') }}">
+            <input class="search-input" type="text" name="search" placeholder=" 何をお探しですか？" value="{{ request('search') }}">
           </form>
 
           <form method="GET" action="/login">
             @csrf
             <button type="submit">ログイン</button>
           </form>
-          <form method="GET" action="{{ route('mypage') }}">
-            @csrf
-            <button type="submit">マイページ</button>
-          </form>
-          <form action="{{ route('items.create') }}" method="GET">
-            @csrf
-            <button type="submit">出品</button>
-          </form>
+          <a href="{{ route('mypage') }}">マイページ</a>
+          <a href="{{ route('items.create') }}">出品</a>
         @endif
       @endauth
     </div>
