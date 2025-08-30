@@ -3,8 +3,9 @@
 <style>
   .trade-chat-container {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
     background-color: #f5f5f5;
+    overflow: hidden;
   }
 
   .chat-sidebar {
@@ -16,6 +17,7 @@
     height: 100vh;
     left: 0;
     overflow-y: auto;
+    z-index: 100;
   }
 
   .sidebar-title {
@@ -48,6 +50,7 @@
     margin-left: 230px;
     display: flex;
     flex-direction: column;
+    height: 100vh;
   }
 
   .chat-header {
@@ -158,7 +161,7 @@
     padding: 30px;
     background-color: #f5f5f5;
     overflow-y: auto;
-    min-height: 400px;
+    min-height: 0;
   }
 
   .message-item {
@@ -257,6 +260,7 @@
     background-color: white;
     padding: 20px 30px;
     border-top: 1px solid #ddd;
+    flex-shrink: 0;
   }
 
   .chat-input-form {
