@@ -38,11 +38,11 @@ class ProfileController extends Controller
         // プロフィール画像の処理
         if ($profileRequest->hasFile('profile_image')) {
             // 既存の画像があれば削除
-            if ($user->profile_image && file_exists(public_path($user->profile_image))) {
-                unlink(public_path($user->profile_image));
+            if ($user->profile_image) {
+                $oldImagePath = str_replace('storage/', '', $user->profile_image);
+                Storage::disk('public')->delete($oldImagePath);
             }
 
-            // 新しい画像を保存
             $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
             $profileRequest->file('profile_image')->storeAs('images/profile', $filename, 'public');
             $user->profile_image = 'storage/images/profile/' . $filename;
@@ -78,11 +78,11 @@ class ProfileController extends Controller
         // プロフィール画像の処理
         if ($profileRequest->hasFile('profile_image')) {
             // 既存の画像があれば削除
-            if ($user->profile_image && file_exists(public_path($user->profile_image))) {
-                unlink(public_path($user->profile_image));
+            if ($user->profile_image) {
+                $oldImagePath = str_replace('storage/', '', $user->profile_image);
+                Storage::disk('public')->delete($oldImagePath);
             }
 
-            // 新しい画像を保存
             $filename = Str::random(20) . '.' . $profileRequest->file('profile_image')->getClientOriginalExtension();
             $profileRequest->file('profile_image')->storeAs('images/profile', $filename, 'public');
             $user->profile_image = 'storage/images/profile/' . $filename;

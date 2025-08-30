@@ -5,6 +5,7 @@
     background-color: #f5f5f5;
     min-height: 100vh;
   }
+  
   .mypage-profile-form-container {
     background-color: white;
     max-width: 600px;
@@ -115,6 +116,12 @@
 
   .mypage-profile-update-button:hover {
     background-color: #e55555;
+  }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
   }
 </style>
 

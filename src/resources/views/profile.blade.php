@@ -117,6 +117,12 @@
   .profile-update-button:hover {
     background-color: #e55555;
   }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+  }
 </style>
 
 <div class="profile-page">
