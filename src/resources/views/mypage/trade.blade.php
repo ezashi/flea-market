@@ -13,7 +13,7 @@
 
   main {
     padding-top: 0;
-    height: calc(100vh - 82px);
+    height: calc(100vh - 62px);
     overflow: hidden;
   }
 
@@ -478,6 +478,268 @@
   .evaluation-complete {
     color: #28a745;
     font-weight: bold;
+  }
+
+  /* レスポンシブデザイン */
+
+  /* タブレット (768-1024px) */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .chat-sidebar {
+      width: 200px;
+      padding: 15px 10px;
+    }
+
+    .chat-main-content {
+      margin-left: 200px;
+    }
+
+    .chat-header {
+      padding: 15px 20px;
+    }
+
+    .product-info-section {
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .product-image {
+      width: 120px;
+      height: 120px;
+    }
+
+    .product-name {
+      font-size: 20px;
+    }
+
+    .product-price {
+      font-size: 18px;
+    }
+
+    .chat-messages {
+      padding: 20px;
+    }
+
+    .chat-input-section {
+      padding: 15px 20px;
+    }
+  }
+
+  /* モバイル (767px以下) */
+  @media (max-width: 767px) {
+    main {
+      height: calc(100vh - 140px);
+    }
+
+    .chat-sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      top: 0;
+      padding: 15px;
+      order: -1;
+    }
+
+    .trade-chat-container {
+      flex-direction: column;
+    }
+
+    .chat-main-content {
+      margin-left: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .other-trades {
+      display: none;
+    }
+
+    .chat-header {
+      padding: 10px 15px;
+      flex-shrink: 0;
+    }
+
+    .chat-user-info {
+      gap: 10px;
+    }
+
+    .chat-user-avatar {
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+    }
+
+    .chat-title {
+      font-size: 16px;
+    }
+
+    .complete-transaction-btn {
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 20px;
+    }
+
+    .product-info-section {
+      padding: 15px;
+      gap: 15px;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+
+    .product-image {
+      width: 100px;
+      height: 100px;
+      align-self: center;
+    }
+
+    .product-details {
+      text-align: center;
+      width: 100%;
+    }
+
+    .product-name {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .product-price {
+      font-size: 16px;
+    }
+
+    .chat-messages {
+      padding: 15px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .message-item {
+      margin-bottom: 15px;
+      gap: 10px;
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      font-size: 14px;
+    }
+
+    .message-content {
+      max-width: 75%;
+    }
+
+    .message-bubble {
+      padding: 10px 15px;
+      font-size: 14px;
+      border-radius: 15px;
+    }
+
+    .chat-input-section {
+      padding: 10px 15px;
+      flex-shrink: 0;
+    }
+
+    .chat-input-form {
+      gap: 10px;
+    }
+
+    .chat-textarea {
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .image-upload-btn {
+      padding: 8px 12px;
+      font-size: 12px;
+      border-radius: 20px;
+    }
+
+    .send-btn {
+      width: 40px;
+      height: 40px;
+    }
+
+    .send-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* モーダルのレスポンシブ調整 */
+    .modal-content {
+      padding: 30px 20px;
+      margin: 20px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+    }
+
+    .modal-subtitle {
+      font-size: 14px;
+    }
+
+    .rating-star-interactive {
+      font-size: 36px;
+    }
+
+    .modal-submit-btn {
+      padding: 12px 24px;
+      font-size: 14px;
+    }
+  }
+
+  /* 非常に小さい画面 (480px以下) */
+  @media (max-width: 480px) {
+    .chat-header {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .chat-user-info {
+      width: 100%;
+    }
+
+    .complete-transaction-btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .product-info-section {
+      padding: 10px;
+    }
+
+    .product-image {
+      width: 80px;
+      height: 80px;
+    }
+
+    .product-name {
+      font-size: 16px;
+    }
+
+    .product-price {
+      font-size: 14px;
+    }
+
+    .chat-input-form {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-input-actions {
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .modal-content {
+      padding: 20px 15px;
+    }
+
+    .rating-star-interactive {
+      font-size: 32px;
+    }
   }
 </style>
 
