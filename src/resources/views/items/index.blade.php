@@ -86,8 +86,8 @@
 
   .product-image-placeholder {
     width: 100%;
-    height: 0;
-    padding-bottom: 75%
+    height: 200px;
+    padding-bottom: 75%;
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -135,7 +135,7 @@
 
   .product-details {
     padding: 15px;
-    /* text-align: left; */
+    text-align: left;
   }
 
   .product-title {
