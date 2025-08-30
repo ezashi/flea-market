@@ -1,11 +1,26 @@
 @extends('layouts.app')
 @section('content')
 <style>
+  body {
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  html {
+    overflow: hidden;
+    height: 100vh;
+  }
+
   .trade-chat-container {
     display: flex;
     height: 100vh;
     background-color: #f5f5f5;
     overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 
   .chat-sidebar {
@@ -16,6 +31,7 @@
     position: fixed;
     height: 100vh;
     left: 0;
+    top: 0;
     overflow-y: auto;
     z-index: 100;
   }
@@ -51,12 +67,13 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    position: relative;
   }
 
   .chat-header {
     background-color: white;
     padding: 20px 30px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #000;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -113,7 +130,7 @@
   .product-info-section {
     background-color: white;
     padding: 30px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 3px solid #ddd;
     display: flex;
     align-items: center;
     gap: 30px;
@@ -159,7 +176,7 @@
   .chat-messages {
     flex: 1;
     padding: 30px;
-    background-color: #f5f5f5;
+    background-color: #fff;
     overflow-y: auto;
     min-height: 0;
   }
@@ -259,7 +276,6 @@
   .chat-input-section {
     background-color: white;
     padding: 20px 30px;
-    border-top: 1px solid #ddd;
     flex-shrink: 0;
   }
 
