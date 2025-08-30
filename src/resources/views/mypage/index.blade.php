@@ -2,7 +2,7 @@
 @section('content')
 <style>
   .mypage-content {
-    background-color: #f5f5f5;
+    background-color: #fff;
     min-height: 100vh;
   }
 
@@ -93,28 +93,29 @@
     color: white;
   }
 
-  .mypage-navigation {
-    background-color: white;
-    border-bottom: 1px solid #ddd;
+  .mypage-tab-navigation {
+    background-color: #fff;
+    border-bottom: 2px solid #ddd;
+    margin: 0;
+    padding: 0;
+    width: 100%;
   }
 
-  .navigation-tabs {
+  .mypage-tab-list {
     list-style: none;
     display: flex;
-    padding: 0;
+    padding: 0 0 0 150px;
     margin: 0;
-    max-width: 1200px;
-    margin: 0 auto;
   }
 
-  .navigation-tab {
-    flex: 1;
+  .mypage-tab-item {
+    margin-right: 20px;
+    position: relative;
   }
 
-  .navigation-link {
+  .mypage-tab-link {
     display: block;
-    padding: 15px 20px;
-    text-align: center;
+    padding: 0;
     text-decoration: none;
     color: #666;
     font-size: 16px;
@@ -123,15 +124,15 @@
     position: relative;
   }
 
-  .navigation-link.current {
-    color: #ff6b6b;
-    border-bottom-color: #ff6b6b;
+  .mypage-tab-link.active {
+    color: #ff0000;
+    font-weight: bold;
   }
 
   .unread-count {
     position: absolute;
-    top: 8px;
-    right: 15px;
+    top: -8px;
+    right: -8px;
     background-color: #ff6b6b;
     color: white;
     border-radius: 50%;
@@ -142,6 +143,89 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
+  }
+
+  .items-container {
+    padding: 40px 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  /* PC (1400-1540px) - 4列固定 */
+  @media (min-width: 1400px) and (max-width: 1540px) {
+    .items-container {
+      padding: 40px 60px;
+    }
+    .items-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 25px;
+    }
+  }
+
+  /* タブレット (768-850px) - 4列維持 */
+  @media (min-width: 768px) and (max-width: 850px) {
+    .items-container {
+      padding: 40px 15px;
+    }
+    .items-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+  }
+
+  .item-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    min-width: 0;
+  }
+
+  .item-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .item-image-container {
+    width: 100%;
+    height: 200px;
+    padding-bottom: 75%;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .item-image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: #fff;
+  }
+
+  /* 画像がない場合のテキスト表示 */
+  .item-image-container:not(:has(img))::before {
+    content: "商品画像";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
   }
 
   .message-notification {
@@ -160,66 +244,28 @@
     font-weight: bold;
   }
 
-  .items-container {
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .items-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px;
-  }
-
-  .item-card {
-    background-color: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-    text-decoration: none;
-    color: inherit;
-    position: relative;
-  }
-
-  .item-card:hover {
-    transform: translateY(-2px);
-  }
-
-  .item-image-container {
-    width: 100%;
-    height: 200px;
-    background-color: #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-    font-size: 18px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .item-image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
   .item-details {
     padding: 15px;
+    text-align: left;
   }
 
   .item-title {
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
+    font-size: 14px;
+    font-weight: normal;
+    color: #000;
     margin: 0;
+    text-decoration: none;
+  }
+
+  .item-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
   }
 
   .empty-state {
     text-align: center;
-    color: #666;
+    color: #000;
     font-size: 16px;
     padding: 60px 20px;
   }
@@ -255,20 +301,20 @@
     </form>
   </div>
 
-  <nav class="mypage-navigation">
-    <ul class="navigation-tabs">
-      <li class="navigation-tab">
-        <a href="{{ route('mypage', ['tab' => 'sell']) }}" class="navigation-link {{ request('tab') === 'sell' || !request('tab') ? 'current' : '' }}">
+  <div class="mypage-tab-navigation">
+    <ul class="mypage-tab-list">
+      <li class="mypage-tab-item">
+        <a href="{{ route('mypage', ['tab' => 'sell']) }}" class="mypage-tab-link {{ request('tab') === 'sell' || !request('tab') ? 'active' : '' }}">
           出品した商品
         </a>
       </li>
-      <li class="navigation-tab">
-        <a href="{{ route('mypage', ['tab' => 'buy']) }}" class="navigation-link {{ request('tab') === 'buy' ? 'current' : '' }}">
+      <li class="mypage-tab-item">
+        <a href="{{ route('mypage', ['tab' => 'buy']) }}" class="mypage-tab-link {{ request('tab') === 'buy' ? 'active' : '' }}">
           購入した商品
         </a>
       </li>
-      <li class="navigation-tab">
-        <a href="{{ route('mypage', ['tab' => 'trade']) }}" class="navigation-link {{ request('tab') === 'trade' ? 'current' : '' }}">
+      <li class="mypage-tab-item">
+        <a href="{{ route('mypage', ['tab' => 'trade']) }}" class="mypage-tab-link {{ request('tab') === 'trade' ? 'active' : '' }}">
           取引中の商品
           @if(isset($unreadCounts) && array_sum($unreadCounts) > 0)
             <span class="unread-count">{{ array_sum($unreadCounts) }}</span>
@@ -276,7 +322,7 @@
         </a>
       </li>
     </ul>
-  </nav>
+  </div>
 
   <div class="items-container">
     @if($items->isEmpty())
