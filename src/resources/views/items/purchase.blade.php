@@ -16,13 +16,15 @@
     display: flex;
     gap: 40px;
     align-items: flex-start;
+    justify-content: space-between;
   }
 
   .left-column {
-    /* flex: 1; */
     display: flex;
     flex-direction: column;
     gap: 40px;
+    flex: 0 0 66.66%;
+    box-sizing: border-box;
   }
 
   .product-summary {
@@ -34,10 +36,12 @@
   }
 
   .product-info {
+    padding: 0 350px 30px 0;
     display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 20px;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+    border-bottom: 1px solid #000;
   }
 
   .product-image-small {
@@ -80,9 +84,8 @@
   }
 
   .payment-section {
-    margin-bottom: 40px;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #ddd;
+    padding: 0 350px 30px 0;
+    border-bottom: 1px solid #000;
   }
 
   .section-label {
@@ -98,8 +101,8 @@
   }
 
   .payment-select {
-    width: 100%;
-    padding: 12px 16px;
+    width: 80%;
+    margin: 10px 200px 10px 30px;
     border: 2px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
@@ -114,9 +117,8 @@
   }
 
   .delivery-section {
-    margin-bottom: 40px;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #ddd;
+    padding: 0 350px 30px 0;
+    border-bottom: 1px solid #000;
   }
 
   .delivery-header {
@@ -139,6 +141,8 @@
   .address-info {
     color: #333;
     line-height: 1.5;
+    margin: 30px;
+    font-weight: bold;
   }
 
   .address-line {
@@ -147,7 +151,8 @@
 
   .purchase-summary-section {
     flex-shrink: 0;
-    width: 350px;
+    flex: 0 0 33.33%;
+    box-sizing: border-box;
   }
 
   .purchase-summary {
