@@ -11,27 +11,28 @@
     height: 100vh;
   }
 
+  main {
+    padding-top: 0;
+    height: calc(100vh - 82px);
+    overflow: hidden;
+  }
+
   .trade-chat-container {
     display: flex;
-    height: 100vh;
-    background-color: #f5f5f5;
+    height: 100%;
+    background-color: #fff;
     overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
   }
 
   .chat-sidebar {
-    width: 230px;
+    width: 200px;
     background-color: #666;
     color: white;
     padding: 20px 15px;
     position: fixed;
-    height: 100vh;
+    height: calc(100vh - 82px);
     left: 0;
-    top: 0;
+    top: 80px;
     overflow-y: auto;
     z-index: 100;
   }
@@ -63,10 +64,10 @@
 
   .chat-main-content {
     flex: 1;
-    margin-left: 230px;
+    margin-left: 200px;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     position: relative;
   }
 
