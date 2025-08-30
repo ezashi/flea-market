@@ -4,14 +4,17 @@
   .purchase-page {
     background-color: #f5f5f5;
     min-height: 100vh;
+    padding: 0;
   }
 
   .purchase-container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 0 20px;
+    background-color: white;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px;
+    min-height: 100vh;
     display: flex;
-    gap: 40px;
+    gap: 60px;
     align-items: flex-start;
   }
 
@@ -20,23 +23,24 @@
   }
 
   .product-image-small {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
     background-color: #ccc;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #666;
-    font-size: 14px;
+    font-size: 16px;
     border-radius: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     overflow: hidden;
   }
 
   .product-image-small img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    background-color: #f8f8f8;
   }
 
   .product-name-small {
@@ -49,13 +53,11 @@
   .product-price-small {
     font-size: 16px;
     color: #333;
+    font-weight: bold;
   }
 
   .purchase-form-section {
-    background-color: white;
     flex: 1;
-    padding: 40px;
-    border-radius: 8px;
   }
 
   .payment-section {
@@ -119,22 +121,28 @@
     margin-bottom: 5px;
   }
 
+  .purchase-summary-section {
+    margin-top: 40px;
+  }
+
   .purchase-summary {
     background-color: white;
-    padding: 30px;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    margin-top: 20px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 30px;
+    max-width: 400px;
   }
 
   .summary-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 15px 0;
     border-bottom: 1px solid #f0f0f0;
+  }
+
+  .summary-row:last-child {
+    border-bottom: none;
   }
 
   .summary-label {
@@ -221,20 +229,22 @@
             <div class="error-message">{{ $message }}</div>
           @enderror
         </div>
-      </div>
-    </div>
 
-    <div class="purchase-summary">
-      <div class="summary-row">
-        <div class="summary-label">商品代金</div>
-        <div class="summary-value">¥{{ number_format($item->price) }}</div>
-      </div>
-      <div class="summary-row">
-        <div class="summary-label">支払い方法</div>
-        <div class="summary-value" id="selected-payment">選択してください</div>
-      </div>
+        <div class="purchase-summary-section">
+          <div class="purchase-summary">
+            <div class="summary-row">
+              <div class="summary-label">商品代金</div>
+              <div class="summary-value">¥{{ number_format($item->price) }}</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-label">支払い方法</div>
+              <div class="summary-value" id="selected-payment">コンビニ払い</div>
+            </div>
 
-      <button type="submit" class="purchase-button">購入する</button>
+            <button type="submit" class="purchase-button">購入する</button>
+          </div>
+        </div>
+      </div>
     </div>
   </form>
 </div>

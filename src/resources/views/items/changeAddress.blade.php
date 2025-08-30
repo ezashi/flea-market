@@ -2,41 +2,46 @@
 @section('content')
 <style>
   .change-address-page {
-    background-color: #f5f5f5;
+    background-color: #fff;
     min-height: 100vh;
+    padding: 0;
   }
+
   .change-address-form-container {
     background-color: white;
     max-width: 600px;
-    margin: 80px auto;
+    margin: 0 auto;
     padding: 60px 40px;
-    border-radius: 8px;
+    min-height: 100vh;
     box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .change-address-title {
     text-align: center;
     font-size: 24px;
     font-weight: bold;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
     color: #333;
   }
 
   .change-address-form-group {
-    margin-bottom: 25px;
+    margin-bottom: 40px;
   }
 
   .change-address-form-label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     font-size: 16px;
     color: #333;
-    font-weight: 500;
+    font-weight: bold;
   }
 
   .change-address-form-input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 15px 20px;
     border: 2px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
@@ -50,7 +55,7 @@
 
   .change-address-update-button {
     width: 100%;
-    padding: 15px;
+    padding: 18px;
     background-color: #ff6b6b;
     color: white;
     border: none;
@@ -59,11 +64,17 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
-    margin-top: 20px;
+    margin-top: 40px;
   }
 
   .change-address-update-button:hover {
     background-color: #e55555;
+  }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
   }
 </style>
 
