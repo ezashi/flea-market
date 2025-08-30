@@ -1,66 +1,83 @@
 @extends('layouts.app')
 @section('content')
 <style>
-  .main-content {
-    background-color: #f5f5f5;
-    min-height: 100vh;
-  }
-
   .tab-navigation {
-    background-color: white;
-    border-bottom: 1px solid #ddd;
-    padding: 0;
+    background-color: #fff;
+    border-bottom: 2px solid #ddd;
     margin: 0;
-  }
+    padding: 0;
+    width: 100%;
+}
 
   .tab-list {
-    list-style: none;
-    display: flex;
-    padding: 0;
-    margin: 0;
+      list-style: none;
+      display: flex;
+      padding: 50px 0px 0px 150px;
+      margin: 0;
   }
 
   .tab-item {
-    flex: 1;
+      margin-right: 20px;
   }
 
   .tab-link {
-    display: block;
-    padding: 15px 20px;
-    text-align: center;
-    text-decoration: none;
-    color: #666;
-    font-size: 16px;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
+      display: block;
+      padding: 0;
+      text-decoration: none;
+      color: #666;
+      font-size: 16px;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
   }
 
   .tab-link.active {
-    color: #ff6b6b;
-    border-bottom-color: #ff6b6b;
+      color: #ff0000;
+      font-weight: bold;
   }
 
   .products-container {
     padding: 40px 20px;
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
   }
 
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  /* PC (1400-1540px) - 4列固定 */
+  @media (min-width: 1400px) and (max-width: 1540px) {
+    .products-container {
+      padding: 40px 60px;
+    }
+    .products-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 25px;
+    }
+  }
+
+  /* タブレット (768-850px) - 4列維持 */
+  @media (min-width: 768px) and (max-width: 850px) {
+    .products-container {
+      padding: 40px 15px;
+    }
+    .products-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
   }
 
   .product-card {
     background-color: white;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
     text-decoration: none;
     color: inherit;
     position: relative;
+    min-width: 0;
   }
 
   .product-card:hover {
@@ -69,20 +86,36 @@
 
   .product-image-placeholder {
     width: 100%;
-    height: 200px;
-    background-color: #ccc;
+    height: 0;
+    padding-bottom: 75%
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #666;
+    color: #000;
     font-size: 18px;
     position: relative;
+    overflow: hidden;
   }
 
   .product-image-placeholder img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    background-color: #fff;
+  }
+
+  /* 画像がない場合のテキスト表示 */
+  .product-image-placeholder:not(:has(img))::before {
+    content: "商品画像";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
   }
 
   .sold-overlay {
@@ -102,18 +135,27 @@
 
   .product-details {
     padding: 15px;
+    /* text-align: left; */
   }
 
   .product-title {
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
+    font-size: 14px;
+    font-weight: normal;
+    color: #000;
     margin: 0;
+    text-decoration: none;
+  }
+
+  /* aタグ全体の下線も消す */
+  .product-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
   }
 
   .no-items-message {
     text-align: center;
-    color: #666;
+    color: #000;
     font-size: 16px;
     padding: 60px 20px;
   }
@@ -139,21 +181,21 @@
     @if(count($items) > 0)
       <div class="products-grid">
         @foreach($items as $item)
-          <a href="{{ route('items.show', $item->id) }}" class="product-card">
-            <div class="product-image-placeholder">
-              @if($item->image)
-                <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
-              @else
-                商品画像
-              @endif
-              @if($item->sold)
-                <div class="sold-overlay">Sold</div>
-              @endif
-            </div>
-            <div class="product-details">
-              <h5 class="product-title">{{ $item->name }}</h5>
-            </div>
-          </a>
+          <div class="product-card">
+            <a href="{{ route('items.show', $item->id) }}">
+              <div class="product-image-placeholder">
+                @if($item->image)
+                  <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
+                @endif
+                @if($item->sold)
+                  <div class="sold-overlay">Sold</div>
+                @endif
+              </div>
+              <div class="product-details">
+                <h5 class="product-title">{{ $item->name }}</h5>
+              </div>
+            </a>
+          </div>
         @endforeach
       </div>
     @else

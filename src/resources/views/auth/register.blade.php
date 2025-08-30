@@ -2,16 +2,21 @@
 @section('content')
 <style>
   .register-page {
-    background-color: #f5f5f5;
+    background-color: #fff;
     min-height: 100vh;
-    padding-top: 0;
+    padding: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20px;
   }
 
   .register-form-container {
     background-color: white;
     max-width: 400px;
-    margin: 80px auto;
-    padding: 60px 40px;
+    width: 100%;
+    margin: 0px;
+    padding: 60px 0px;
     border-radius: 8px;
     box-shadow: none;
   }
@@ -22,6 +27,10 @@
     font-weight: bold;
     margin-bottom: 40px;
     color: #333;
+  }
+
+  .form-group * {
+    font-weight: bold;
   }
 </style>
 
