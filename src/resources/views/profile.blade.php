@@ -2,17 +2,21 @@
 @section('content')
 <style>
   .profile-page {
-    background-color: #f5f5f5;
+    background-color: #fff;
     min-height: 100vh;
+    padding: 0;
   }
 
   .profile-form-container {
     background-color: white;
     max-width: 600px;
-    margin: 40px auto;
+    margin: 0 auto;
     padding: 60px 40px;
-    border-radius: 8px;
+    min-height: 100vh;
     box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .profile-form-title {
@@ -26,10 +30,9 @@
   .profile-image-section {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
     margin-bottom: 40px;
     justify-content: center;
-    flex-direction: column;
   }
 
   .profile-avatar {
@@ -45,6 +48,7 @@
     font-weight: bold;
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
   }
 
   .profile-avatar img {
@@ -54,8 +58,8 @@
   }
 
   .image-select-button {
-    background-color: #ff6b6b;
-    color: white;
+    background-color: white;
+    color: #ff6b6b;
     padding: 8px 16px;
     border: 2px solid #ff6b6b;
     border-radius: 5px;
@@ -67,8 +71,8 @@
   }
 
   .image-select-button:hover {
-    background-color: white;
-    color: #ff6b6b;
+    background-color: #ff6b6b;
+    color: white;
   }
 
   .profile-file-input {
@@ -82,9 +86,9 @@
   .profile-form-label {
     display: block;
     margin-bottom: 8px;
-    font-size: 14px;
+    font-size: 16px;
     color: #333;
-    font-weight: 500;
+    font-weight: bold;
   }
 
   .profile-form-input {
@@ -112,6 +116,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
+    margin-top: 20px;
   }
 
   .profile-update-button:hover {

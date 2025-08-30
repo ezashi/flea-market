@@ -4,14 +4,15 @@
   .create-page {
     background-color: #f5f5f5;
     min-height: 100vh;
+    padding: 0;
   }
 
   .create-form-container {
     background-color: white;
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 40px;
-    border-radius: 8px;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 60px 60px;
+    min-height: 100vh;
     box-shadow: none;
   }
 
@@ -23,10 +24,18 @@
     color: #333;
   }
 
+  .section-label {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+  }
+
   .image-upload-area {
     border: 2px dashed #ddd;
     border-radius: 8px;
-    padding: 60px 20px;
+    padding: 80px 20px;
     text-align: center;
     background-color: #fafafa;
     position: relative;
@@ -34,9 +43,9 @@
   }
 
   .image-select-btn {
-    background-color: #ff6b6b;
-    color: white;
-    padding: 8px 16px;
+    background-color: white;
+    color: #ff6b6b;
+    padding: 10px 20px;
     border: 2px solid #ff6b6b;
     border-radius: 5px;
     font-size: 14px;
@@ -47,8 +56,8 @@
   }
 
   .image-select-btn:hover {
-    background-color: white;
-    color: #ff6b6b;
+    background-color: #ff6b6b;
+    color: white;
   }
 
   .file-input {
@@ -56,7 +65,7 @@
   }
 
   .section-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: #333;
     margin-bottom: 25px;
@@ -73,7 +82,7 @@
     margin-bottom: 15px;
     font-size: 16px;
     color: #333;
-    font-weight: 500;
+    font-weight: bold;
   }
 
   .category-tags {
@@ -94,21 +103,16 @@
     text-decoration: none;
     display: inline-block;
     user-select: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .category-tag:hover {
     background-color: #ffe6e6;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 
   .category-tag.selected {
     background-color: #ff6b6b !important;
     color: white !important;
     border-color: #ff6b6b !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
   }
 
   .category-tag.selected:hover {
@@ -129,7 +133,7 @@
     margin-bottom: 15px;
     font-size: 16px;
     color: #333;
-    font-weight: 500;
+    font-weight: bold;
   }
 
   .condition-select {
@@ -161,7 +165,7 @@
     margin-bottom: 8px;
     font-size: 16px;
     color: #333;
-    font-weight: 500;
+    font-weight: bold;
   }
 
   .create-form-input {
@@ -209,7 +213,7 @@
 
   .price-input {
     width: 100%;
-    padding: 12px 16px 12px 30px;
+    padding: 12px 16px 12px 35px;
     border: 2px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
@@ -253,12 +257,15 @@
     <form method="POST" action="{{ route('items.store') }}" enctype="multipart/form-data" novalidate>
       @csrf
 
-      <div class="image-upload-area">
-        <label for="image" class="image-select-btn">画像を選択する</label>
-        <input id="image" type="file" name="image" class="file-input" accept="image/*">
-        @error('image')
-          <div class="error-message">{{ $message }}</div>
-        @enderror
+      <div>
+        <label class="section-label">商品画像</label>
+        <div class="image-upload-area">
+          <label for="image" class="image-select-btn">画像を選択する</label>
+          <input id="image" type="file" name="image" class="file-input" accept="image/*">
+          @error('image')
+            <div class="error-message">{{ $message }}</div>
+          @enderror
+        </div>
       </div>
 
       <div class="section-title">商品の詳細</div>
@@ -366,9 +373,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
           tag.classList.remove('selected');
         }
-
-        // デバッグ用ログ
-        console.log(`Category ${checkboxId}: ${checkbox.checked ? 'selected' : 'deselected'}`);
       }
     });
   });
@@ -383,20 +387,13 @@ document.addEventListener('DOMContentLoaded', function() {
         imageLabel.textContent = this.files[0].name;
         imageLabel.style.backgroundColor = '#28a745';
         imageLabel.style.borderColor = '#28a745';
+        imageLabel.style.color = 'white';
       } else {
         imageLabel.textContent = '画像を選択する';
-        imageLabel.style.backgroundColor = '#ff6b6b';
+        imageLabel.style.backgroundColor = 'white';
         imageLabel.style.borderColor = '#ff6b6b';
+        imageLabel.style.color = '#ff6b6b';
       }
-    });
-  }
-
-  // フォーム送信前の確認（デバッグ用）
-  const form = document.querySelector('form');
-  if (form) {
-    form.addEventListener('submit', function() {
-      const selectedCategories = document.querySelectorAll('input[name="categories[]"]:checked');
-      console.log('Selected categories count:', selectedCategories.length);
     });
   }
 });
