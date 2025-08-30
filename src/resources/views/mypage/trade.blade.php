@@ -30,9 +30,9 @@
     color: white;
     padding: 20px 15px;
     position: fixed;
-    height: calc(100vh - 82px);
+    height: calc(100vh - 62px);
     left: 0;
-    top: 80px;
+    top: 62px;
     overflow-y: auto;
     z-index: 100;
   }
