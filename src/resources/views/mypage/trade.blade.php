@@ -340,7 +340,13 @@
     display: none;
   }
 
-  /* Evaluation Modal */
+  .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
+  /* 評価モーダル */
   .evaluation-modal {
     position: fixed;
     top: 0;
@@ -381,44 +387,39 @@
     margin-bottom: 30px;
   }
 
-  .rating-options {
+  .rating-section {
     margin: 30px 0;
   }
 
-  .rating-item {
+  .interactive-rating {
     display: flex;
-    align-items: center;
     justify-content: center;
-    margin: 15px 0;
-    cursor: pointer;
-    transition: transform 0.2s;
+    gap: 8px;
+    margin: 20px 0;
   }
 
-  .rating-item:hover {
-    transform: scale(1.05);
-  }
-
-  .rating-input {
-    display: none;
-  }
-
-  .rating-stars {
-    display: flex;
-    gap: 5px;
-    font-size: 30px;
-  }
-
-  .star {
+  .rating-star-interactive {
+    font-size: 48px;
     color: #ddd;
-    transition: color 0.2s;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
   }
 
-  .star.filled {
+  .rating-star-interactive:hover {
+    transform: scale(1.1);
+  }
+
+  .rating-star-interactive.active {
     color: #ffd700;
   }
 
-  .rating-input:checked + .rating-stars .star {
+  .rating-star-interactive.hover {
     color: #ffd700;
+  }
+
+  .rating-input-hidden {
+    display: none;
   }
 
   .modal-submit-btn {
@@ -432,10 +433,31 @@
     cursor: pointer;
     transition: background-color 0.2s;
     margin-top: 20px;
+    opacity: 0.5;
+    pointer-events: none;
   }
 
-  .modal-submit-btn:hover {
+  .modal-submit-btn.enabled {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-submit-btn:hover.enabled {
     background-color: #e55555;
+  }
+
+  .evaluation-status {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .evaluation-complete {
+    color: #28a745;
+    font-weight: bold;
   }
 </style>
 
@@ -512,7 +534,7 @@
               @if($message->sender_id !== Auth::id())
                 <div class="message-sender">{{ $message->sender->name }}</div>
               @else
-                <div class="message-sender">ユーザー名</div>
+                <div class="message-sender">{{ Auth::user()->name }}</div>
               @endif
 
               <div class="message-bubble {{ $message->isDeleted() ? 'deleted-message' : '' }}">
@@ -523,7 +545,7 @@
                     {{ $message->message }}
                   @endif
                   @if($message->image_path)
-                    <img src="{{ $message->getImageUrl() }}" alt="送信画像" class="message-image">
+                    <img src="{{ asset($message->image_path) }}" alt="送信画像" class="message-image">
                   @endif
                 @endif
               </div>
@@ -557,9 +579,7 @@
       <form method="POST" action="{{ route('chat.send', $item->id) }}" enctype="multipart/form-data" class="chat-input-form">
         @csrf
         <div class="chat-input-main">
-          <textarea name="message" class="chat-textarea" placeholder="取引メッセージを記入してください"rows="1">
-            {{ $draftMessage }}
-          </textarea>
+          <textarea name="message" class="chat-textarea" placeholder="取引メッセージを記入してください" rows="1">{{ $draftMessage }}</textarea>
           @error('message')
             <div class="error-message">{{ $message }}</div>
           @enderror
@@ -590,24 +610,61 @@
       <h3 class="modal-title">取引が完了しました。</h3>
       <p class="modal-subtitle">今回の取引相手はどうでしたか？</p>
 
-      <form method="POST" action="{{ route('evaluation.store', $item->id) }}">
+      <form method="POST" action="{{ route('evaluation.store', $item->id) }}" id="evaluation-form">
         @csrf
-        <div class="rating-options">
-          @for($i = 1; $i <= 5; $i++)
-            <label class="rating-item">
-              <input type="radio" name="rating" value="{{ $i }}" class="rating-input" required>
-              <div class="rating-stars">
-                @for($j = 1; $j <= 5; $j++)
-                  <span class="star {{ $j <= $i ? 'filled' : '' }}">★</span>
-                @endfor
-              </div>
-            </label>
-          @endfor
+        <div class="rating-section">
+          <div class="interactive-rating" id="star-rating">
+            @for($i = 1; $i <= 5; $i++)
+              <span class="rating-star-interactive" data-rating="{{ $i }}">★</span>
+            @endfor
+          </div>
+          <input type="hidden" name="rating" id="rating-value" required>
         </div>
 
-        <button type="submit" class="modal-submit-btn">送信する</button>
+        <button type="submit" class="modal-submit-btn" id="submit-btn">送信する</button>
       </form>
     </div>
   </div>
 @endif
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const stars = document.querySelectorAll('.rating-star-interactive');
+  const ratingInput = document.getElementById('rating-value');
+  const submitBtn = document.getElementById('submit-btn');
+  let selectedRating = 0;
+
+  stars.forEach((star, index) => {
+    star.addEventListener('mouseenter', function() {
+      const hoverRating = index + 1;
+      updateStarDisplay(hoverRating, false);
+    });
+
+    star.addEventListener('click', function() {
+      selectedRating = index + 1;
+      ratingInput.value = selectedRating;
+      updateStarDisplay(selectedRating, true);
+      enableSubmitButton();
+    });
+  });
+
+  document.getElementById('star-rating').addEventListener('mouseleave', function() {
+    updateStarDisplay(selectedRating, true);
+  });
+
+  function updateStarDisplay(rating, isSelected) {
+    stars.forEach((star, index) => {
+      star.classList.remove('active', 'hover');
+      if (index < rating) {
+        star.classList.add(isSelected ? 'active' : 'hover');
+      }
+    });
+  }
+
+  function enableSubmitButton() {
+    submitBtn.classList.add('enabled');
+  }
+});
+</script>
 @endsection
