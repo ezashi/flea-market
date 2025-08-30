@@ -367,15 +367,14 @@
       </div>
 
       <div class="section-header">商品の情報</div>
-        <div class="product-info-table">
-          <div class="info-row">
-            <div class="info-label">カテゴリー</div>
-            <div class="info-value">
-              <div class="category-badges">
-                <span class="category-badge">
-                  {{ $item->categories->pluck('name')->implode(', ') }}
-                </span>
-              </div>
+      <div class="product-info-table">
+        <div class="info-row">
+          <div class="info-label">カテゴリー</div>
+          <div class="info-value">
+            <div class="category-badges">
+              <span class="category-badge">
+                {{ $item->categories->pluck('name')->implode(', ') }}
+              </span>
             </div>
           </div>
         </div>
@@ -384,32 +383,32 @@
           <div class="info-value">{{ $item->condition }}</div>
         </div>
       </div>
-    </div>
 
-    <div class="comments-header">コメント ({{ $item->comments->count() }})</div>
+      <div class="comments-header">コメント ( {{ $item->comments->count() }} )</div>
 
-    <div class="comments-list">
-      @foreach($item->comments as $comment)
-        <div class="comment-item">
-          <div class="comment-avatar">
-            @if($comment->user->profile_image)
-              <img src="{{ asset($comment->user->profile_image) }}" alt="{{ $comment->user->name }}">
-            @else
-              {{ strtoupper(substr($comment->user->name, 0, 1)) }}
-            @endif
+      <div class="comments-list">
+        @foreach($item->comments as $comment)
+          <div class="comment-item">
+            <div class="comment-avatar">
+              @if($comment->user->profile_image)
+                <img src="{{ asset($comment->user->profile_image) }}" alt="{{ $comment->user->name }}">
+              @else
+                {{ strtoupper(substr($comment->user->name, 0, 1)) }}
+              @endif
+            </div>
+            <div class="comment-content">
+              <div class="comment-author">{{ $comment->user->name }}</div>
+              <div class="comment-text">{!! nl2br(e($comment->content)) !!}</div>
+            </div>
           </div>
-          <div class="comment-content">
-            <div class="comment-author">{{ $comment->user->name }}</div>
-            <div class="comment-text">{!! nl2br(e($comment->content)) !!}</div>
-          </div>
-        </div>
-      @endforeach
+        @endforeach
 
-      @if($item->comments->isEmpty())
-        <div style="text-align: center; color: #666; padding: 20px;">
-          こちらにコメントが入ります。
-        </div>
-      @endif
+        @if($item->comments->isEmpty())
+          <div style="text-align: center; color: #666; padding: 20px;">
+            こちらにコメントが入ります。
+          </div>
+        @endif
+      </div>
     </div>
 
     <form action="{{ route('items.comment', $item) }}" method="POST" class="comment-form">

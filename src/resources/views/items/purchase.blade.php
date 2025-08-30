@@ -2,7 +2,7 @@
 @section('content')
 <style>
   .purchase-page {
-    background-color: #f5f5f5;
+    background-color: #fff;
     min-height: 100vh;
     padding: 0;
   }
@@ -14,25 +14,26 @@
     padding: 60px;
     min-height: 100vh;
     display: flex;
-    gap: 60px;
+    gap: 40px;
     align-items: flex-start;
   }
 
   .product-summary {
     flex-shrink: 0;
+    width: 200px;
   }
 
   .product-image-small {
-    width: 150px;
-    height: 150px;
-    background-color: #ccc;
+    width: 120px;
+    height: 120px;
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #666;
-    font-size: 16px;
+    color: #fff;
+    font-size: 14px;
     border-radius: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     overflow: hidden;
   }
 
@@ -40,24 +41,31 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background-color: #f8f8f8;
+    background-color: #fff;
   }
 
   .product-name-small {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
+    color: #000;
+    margin-bottom: 8px;
   }
 
   .product-price-small {
     font-size: 16px;
-    color: #333;
+    color: #000;
     font-weight: bold;
   }
 
   .purchase-form-section {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .left-form-section {
+    flex: 1;
+    margin-right: 40px;
   }
 
   .payment-section {
@@ -122,7 +130,8 @@
   }
 
   .purchase-summary-section {
-    margin-top: 40px;
+    flex-shrink: 0;
+    width: 350px;
   }
 
   .purchase-summary {
@@ -130,7 +139,6 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 30px;
-    max-width: 400px;
   }
 
   .summary-row {
