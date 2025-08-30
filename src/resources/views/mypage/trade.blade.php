@@ -223,6 +223,7 @@
     font-size: 14px;
     color: #666;
     margin-bottom: 5px;
+    text-align: center;
   }
 
   .message-bubble {
@@ -373,7 +374,6 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
     display: none;
     align-items: center;
     justify-content: center;
@@ -385,8 +385,8 @@
   }
 
   .modal-content {
-    background: white;
-    padding: 40px;
+    background: #fcf9deff;
+    padding: 20px;
     border-radius: 15px;
     max-width: 500px;
     width: 90%;
@@ -397,18 +397,28 @@
   .modal-title {
     font-size: 24px;
     font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
+    color: #000;
+    margin: 0 -20px 20px;
+    padding: 0 20px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    display: block;
   }
 
   .modal-subtitle {
     font-size: 16px;
     color: #666;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  . evaluation-form {
+    text-align: right;
   }
 
   .rating-section {
-    margin: 30px 0;
+    margin: 0 -20px;
+    border-bottom: 1px solid #000;
   }
 
   .interactive-rating {
@@ -446,8 +456,7 @@
     background-color: #ff6b6b;
     color: white;
     border: none;
-    padding: 15px 30px;
-    border-radius: 25px;
+    padding: 10px 15px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
@@ -482,8 +491,111 @@
 
   /* レスポンシブデザイン */
 
-  /* タブレット (768-1024px) */
-  @media (min-width: 768px) and (max-width: 1024px) {
+  /* タブレット小 (768-850px) */
+  @media (min-width: 768px) and (max-width: 850px) {
+    .chat-sidebar {
+      width: 180px;
+      padding: 15px 8px;
+    }
+
+    .sidebar-title {
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .other-trade-item {
+      padding: 8px;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .chat-main-content {
+      margin-left: 180px;
+    }
+
+    .chat-header {
+      padding: 12px 15px;
+    }
+
+    .chat-user-avatar {
+      width: 45px;
+      height: 45px;
+      font-size: 18px;
+    }
+
+    .chat-title {
+      font-size: 18px;
+    }
+
+    .complete-transaction-btn {
+      padding: 10px 18px;
+      font-size: 14px;
+    }
+
+    .product-info-section {
+      padding: 20px 15px;
+      gap: 20px;
+    }
+
+    .product-image {
+      width: 110px;
+      height: 110px;
+    }
+
+    .product-name {
+      font-size: 20px;
+    }
+
+    .product-price {
+      font-size: 18px;
+    }
+
+    .chat-messages {
+      padding: 20px 15px;
+    }
+
+    .message-item {
+      gap: 12px;
+    }
+
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      font-size: 15px;
+    }
+
+    .message-bubble {
+      padding: 12px 18px;
+      font-size: 15px;
+    }
+
+    .chat-input-section {
+      padding: 15px;
+    }
+
+    .chat-textarea {
+      padding: 12px 18px;
+      font-size: 15px;
+    }
+
+    .image-upload-btn {
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+
+    .send-btn {
+      width: 45px;
+      height: 45px;
+    }
+
+    .send-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  /* タブレット大 (851-1024px) */
+  @media (min-width: 851px) and (max-width: 1024px) {
     .chat-sidebar {
       width: 200px;
       padding: 15px 10px;
@@ -498,29 +610,29 @@
     }
 
     .product-info-section {
-      padding: 20px;
-      gap: 20px;
+      padding: 25px 20px;
+      gap: 25px;
     }
 
     .product-image {
-      width: 120px;
-      height: 120px;
+      width: 130px;
+      height: 130px;
     }
 
     .product-name {
-      font-size: 20px;
+      font-size: 22px;
     }
 
     .product-price {
-      font-size: 18px;
+      font-size: 19px;
     }
 
     .chat-messages {
-      padding: 20px;
+      padding: 25px 20px;
     }
 
     .chat-input-section {
-      padding: 15px 20px;
+      padding: 18px 20px;
     }
   }
 
@@ -891,7 +1003,7 @@
       <h3 class="modal-title">取引が完了しました。</h3>
       <p class="modal-subtitle">今回の取引相手はどうでしたか？</p>
 
-      <form method="POST" action="{{ route('evaluation.store', $item->id) }}" id="evaluation-form">
+      <form method="POST" action="{{ route('evaluation.store', $item->id) }}" class="evaluation-form" id="evaluation-form">
         @csrf
         <div class="rating-section">
           <div class="interactive-rating" id="star-rating">
