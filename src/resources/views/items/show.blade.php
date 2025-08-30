@@ -2,34 +2,34 @@
 @section('content')
 <style>
   .show-page {
-    background-color: #f5f5f5;
+    background-color: #fff;
     min-height: 100vh;
+    padding: 0;
   }
 
   .product-details-container {
     background-color: white;
     max-width: 1000px;
-    margin: 40px auto;
-    padding: 0;
-    border-radius: 8px;
-    box-shadow: none;
+    margin: 0 auto;
+    padding: 40px;
+    min-height: 100vh;
     display: flex;
-    gap: 40px;
+    gap: 60px;
+    align-items: flex-start;
   }
 
   .product-image-section {
     flex: 1;
-    padding: 40px;
   }
 
   .product-main-image {
     width: 100%;
     height: 400px;
-    background-color: #ccc;
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #666;
+    color: #fff;
     font-size: 18px;
     border-radius: 8px;
     position: relative;
@@ -39,7 +39,8 @@
   .product-main-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    background-color: #fff;
   }
 
   .sold-badge {
@@ -59,11 +60,10 @@
 
   .product-info-section {
     flex: 1;
-    padding: 40px 40px 40px 0;
   }
 
   .product-title {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
     color: #333;
     margin-bottom: 8px;
@@ -76,17 +76,17 @@
   }
 
   .product-price {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   .product-actions {
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 40px;
+    gap: 30px;
+    margin-bottom: 30px;
   }
 
   .like-button {
@@ -95,7 +95,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
     font-size: 16px;
     color: #666;
   }
@@ -119,6 +119,9 @@
   .comment-count {
     color: #666;
     font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .purchase-button {
@@ -135,18 +138,11 @@
     text-decoration: none;
     display: block;
     text-align: center;
+    margin-bottom: 40px;
   }
 
   .purchase-button:hover {
     background-color: #e55555;
-  }
-
-  .product-description-section {
-    background-color: white;
-    max-width: 1000px;
-    margin: 20px auto;
-    padding: 40px;
-    border-radius: 8px;
   }
 
   .section-header {
@@ -154,8 +150,6 @@
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
   }
 
   .description-text {
@@ -165,20 +159,21 @@
   }
 
   .product-info-table {
-    margin-bottom: 30px;
+    margin-bottom: 40px;
   }
 
   .info-row {
     display: flex;
-    align-items: center;
-    padding: 10px 0;
+    align-items: flex-start;
+    padding: 15px 0;
     border-bottom: 1px solid #f0f0f0;
   }
 
   .info-label {
     width: 120px;
-    font-weight: 500;
+    font-weight: bold;
     color: #333;
+    flex-shrink: 0;
   }
 
   .info-value {
@@ -195,17 +190,9 @@
   .category-badge {
     background-color: #f0f0f0;
     color: #666;
-    padding: 4px 12px;
+    padding: 6px 12px;
     border-radius: 15px;
     font-size: 14px;
-  }
-
-  .comments-section {
-    background-color: white;
-    max-width: 1000px;
-    margin: 20px auto;
-    padding: 40px;
-    border-radius: 8px;
   }
 
   .comments-header {
@@ -213,6 +200,7 @@
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
+    margin-top: 40px;
   }
 
   .comments-list {
@@ -266,6 +254,15 @@
     color: #333;
   }
 
+  .no-comments {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    margin-bottom: 30px;
+  }
+
   .comment-form {
     margin-top: 30px;
   }
@@ -275,7 +272,7 @@
     margin-bottom: 15px;
     font-size: 16px;
     color: #333;
-    font-weight: 500;
+    font-weight: bold;
   }
 
   .comment-textarea {
@@ -311,6 +308,12 @@
   .comment-submit-button:hover {
     background-color: #e55555;
   }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+  }
 </style>
 
 <div class="show-page">
@@ -333,7 +336,7 @@
       @if($item->brand)
         <p class="product-brand">{{ $item->brand }}</p>
       @endif
-      <div class="product-price">¥{{ number_format($item->price) }}</div>
+      <div class="product-price">¥{{ number_format($item->price) }} (税込)</div>
 
       <div class="product-actions">
         <form action="{{ route('items.like', $item) }}" method="POST" style="display: inline;">
@@ -357,35 +360,32 @@
       @if($item->seller_id !== Auth::id() && !$item->sold)
         <a href="{{ route('items.purchase', $item) }}" class="purchase-button">購入手続きへ</a>
       @endif
-    </div>
-  </div>
 
-  <div class="product-description-section">
-    <div class="section-header">商品説明</div>
-    <div class="description-text">
-      {!! nl2br(e($item->description)) !!}
-    </div>
+      <div class="section-header">商品説明</div>
+      <div class="description-text">
+        {!! nl2br(e($item->description)) !!}
+      </div>
 
-    <div class="section-header">商品の情報</div>
-    <div class="product-info-table">
-      <div class="info-row">
-        <div class="info-label">カテゴリー</div>
-        <div class="info-value">
-          <div class="category-badges">
-            <span class="category-badge">
-              {{ $item->categories->pluck('name')->implode(', ') }}
-            </span>
+      <div class="section-header">商品の情報</div>
+        <div class="product-info-table">
+          <div class="info-row">
+            <div class="info-label">カテゴリー</div>
+            <div class="info-value">
+              <div class="category-badges">
+                <span class="category-badge">
+                  {{ $item->categories->pluck('name')->implode(', ') }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="info-row">
-        <div class="info-label">商品の状態</div>
-        <div class="info-value">{{ $item->condition }}</div>
+        <div class="info-row">
+          <div class="info-label">商品の状態</div>
+          <div class="info-value">{{ $item->condition }}</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="comments-section">
     <div class="comments-header">コメント ({{ $item->comments->count() }})</div>
 
     <div class="comments-list">
