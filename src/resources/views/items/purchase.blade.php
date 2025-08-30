@@ -19,7 +19,7 @@
   }
 
   .left-column {
-    flex: 1;
+    /* flex: 1; */
     display: flex;
     flex-direction: column;
     gap: 40px;
@@ -28,8 +28,16 @@
   .product-summary {
     flex-shrink: 0;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 20px;
+  }
+
+  .product-info {
+    display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
   }
 
   .product-image-small {
@@ -82,6 +90,11 @@
     font-weight: bold;
     color: #333;
     margin-bottom: 15px;
+  }
+
+  .payment-section,
+  .delivery-section {
+    margin-top: 0.5rem;
   }
 
   .payment-select {
@@ -199,16 +212,18 @@
     <div class="purchase-container">
       <div class="left-column">
         <div class="product-summary">
-          <div class="product-image-small">
-            @if($item->image)
-              <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
-            @else
-              商品画像
-            @endif
-          </div>
-          <div class="product-info-inline">
-            <div class="product-name-small">{{ $item->name }}</div>
-            <div class="product-price-small">¥{{ number_format($item->price) }}</div>
+          <div class="product-info">
+            <div class="product-image-small">
+              @if($item->image)
+                <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
+              @else
+                商品画像
+              @endif
+            </div>
+            <div class="product-info-inline">
+              <div class="product-name-small">{{ $item->name }}</div>
+              <div class="product-price-small">¥{{ number_format($item->price) }}</div>
+            </div>
           </div>
 
           <div class="payment-section">
