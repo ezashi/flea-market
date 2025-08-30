@@ -98,6 +98,11 @@
     gap: 8px;
     font-size: 16px;
     color: #666;
+    transition: color 0.2s;
+  }
+
+  .like-button.liked {
+    color: #ff6b6b;
   }
 
   .like-icon {
@@ -106,6 +111,12 @@
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
+    transition: fill 0.2s;
+  }
+
+  .like-button.liked .like-icon {
+    fill: #ff6b6b;
+    stroke: #ff6b6b;
   }
 
   .comment-icon {
@@ -339,9 +350,9 @@
       <div class="product-price">¥{{ number_format($item->price) }} (税込)</div>
 
       <div class="product-actions">
-        <form action="{{ route('items.like', $item) }}" method="POST" style="display: inline;">
+        <form action="{{ route('items.like', $item) }}" method="POST" style="display: inline;" class="like-form">
           @csrf
-          <button type="submit" class="like-button">
+          <button type="submit" class="like-button {{ Auth::user() && $item->likes()->where('user_id', Auth::id())->exists() ? 'liked' : '' }}" onclick="toggleLike(this)">
             <svg class="like-icon" viewBox="0 0 24 24">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
             </svg>
@@ -422,4 +433,10 @@
     </div>
   </div>
 </div>
+
+<script>
+function toggleLike(button) {
+  button.classList.toggle('liked');
+}
+</script>
 @endsection
