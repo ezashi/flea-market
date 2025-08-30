@@ -69,6 +69,11 @@ class ChatController extends Controller
       if ($currentUserId === $item->seller_id && !$hasEvaluated) {
         $showEvaluationModal = true;
       }
+
+      if (session('show_seller_evaluation_modal') == $item_id && $currentUserId === $item->seller_id) {
+        $showEvaluationModal = true;
+        session()->forget('show_seller_evaluation_modal');
+      }
     }
 
     return view('mypage.trade', compact(

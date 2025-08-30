@@ -50,6 +50,8 @@ class EvaluationController extends Controller
       }
     }
 
+    $bothEvaluated = Evaluation::where('item_id', $item_id)->count() >= 2;
+
     return redirect()->route('chat.show', $item_id);
   }
 

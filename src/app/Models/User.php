@@ -150,14 +150,14 @@ class User extends Authenticatable
         $count = $evaluations->count();
 
         if ($count === 0) {
-            return null;
+            return 0;
         }
 
         $average = $evaluations->avg('rating');
         return round($average);
     }
 
-    // 評価数を取得
+    // 評価数の取得
     public function getEvaluationCount()
     {
         return $this->receivedEvaluations()->count();
