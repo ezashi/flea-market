@@ -30,6 +30,7 @@
     text-align: center;
     background-color: #fafafa;
     position: relative;
+    margin-bottom: 40px;
   }
 
   .image-select-btn {
@@ -92,6 +93,11 @@
     transition: all 0.2s;
     text-decoration: none;
     display: inline-block;
+    user-select: none;
+  }
+
+  .category-tag:hover {
+    background-color: #ffe6e6;
   }
 
   .category-tag.selected {
@@ -221,6 +227,12 @@
   .submit-button:hover {
     background-color: #e55555;
   }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+  }
 </style>
 
 <div class="create-page">
@@ -315,4 +327,51 @@
     </form>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // カテゴリー選択の動的スタイル変更
+  const categoryTags = document.querySelectorAll('.category-tag');
+
+  categoryTags.forEach(tag => {
+    const checkbox = document.getElementById(tag.getAttribute('for'));
+
+    // 初期状態の設定
+    if (checkbox.checked) {
+      tag.classList.add('selected');
+    }
+
+    // クリック時の処理
+    tag.addEventListener('click', function() {
+      // チェックボックスの状態を切り替え
+      checkbox.checked = !checkbox.checked;
+
+      // 見た目の更新
+      if (checkbox.checked) {
+        tag.classList.add('selected');
+      } else {
+        tag.classList.remove('selected');
+      }
+    });
+  });
+
+  // 画像選択時のプレビュー機能
+  const imageInput = document.getElementById('image');
+  const imageLabel = document.querySelector('label[for="image"]');
+
+  if (imageInput && imageLabel) {
+    imageInput.addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        imageLabel.textContent = this.files[0].name;
+        imageLabel.style.backgroundColor = '#28a745';
+        imageLabel.style.borderColor = '#28a745';
+      } else {
+        imageLabel.textContent = '画像を選択する';
+        imageLabel.style.backgroundColor = '#ff6b6b';
+        imageLabel.style.borderColor = '#ff6b6b';
+      }
+    });
+  }
+});
+</script>
 @endsection
