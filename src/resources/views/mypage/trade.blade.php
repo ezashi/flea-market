@@ -14,7 +14,6 @@
     padding: 20px 15px;
     position: fixed;
     height: 100vh;
-    top: 0;
     left: 0;
     overflow-y: auto;
   }

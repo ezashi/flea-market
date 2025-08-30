@@ -16,7 +16,7 @@
         <img class="logo" src="{{ asset('image/Free Market App Logo.svg') }}" alt="coachtech logo"/>
       </a>
 
-      @if (!Route::is('login') && !Route::is('register'))
+      @if (!Route::is('login') && !Route::is('register') && !Route::is('chat.show'))
         <div class="search-container">
           <form action="{{ request()->is('mylist') ? route('mylist') : route('index') }}" method="GET" id="search-form">
             <input class="search-input" type="text" name="search" placeholder="何をお探しですか？" value="{{ $search ?? '' }}">
