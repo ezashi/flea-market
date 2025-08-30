@@ -46,13 +46,14 @@
     font-size: 24px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
 
   .user-rating {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    margin-bottom: 5px;
   }
 
   .rating-stars {
@@ -62,11 +63,16 @@
 
   .rating-star {
     color: #ffd700;
-    font-size: 20px;
+    font-size: 18px;
   }
 
-  .rating-star.unfilled {
+  .rating-star.empty {
     color: #ddd;
+  }
+
+  .rating-text {
+    color: #666;
+    font-size: 14px;
   }
 
   .profile-edit-button {
@@ -235,8 +241,8 @@
           <div class="user-rating">
             <div class="rating-stars">
               @for($i = 1; $i <= 5; $i++)
-                <span class="rating-star {{ $i <= $user->getAverageRating() ? '' : 'unfilled' }}">
-                  {{ $i <= $user->getAverageRating() ? '★' : '☆' }}
+                <span class="rating-star {{ $i <= $user->getAverageRating() ? '' : 'empty' }}">
+                  ★
                 </span>
               @endfor
             </div>

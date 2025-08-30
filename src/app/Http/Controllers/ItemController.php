@@ -204,11 +204,10 @@ class ItemController extends Controller
       }
 
       $item->is_transaction_completed = true;
-      $result = $item->save();
+      $item->save();
 
-      $freshItem = Item::find($item_id);
+      session(['show_buyer_evaluation_modal' => $item_id]);
 
-      session(['show_evaluation_modal' => true]);
       return redirect()->route('chat.show', $item_id);
 
     } catch (\Exception $e) {

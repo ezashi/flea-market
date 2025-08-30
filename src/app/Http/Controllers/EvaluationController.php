@@ -40,20 +40,17 @@ class EvaluationController extends Controller
       'rating' => $request->rating,
     ]);
 
-    // 相手が購入者で、まだ評価していない場合は相手にも評価モーダルを表示
-    if ($currentUserId === $item->seller_id) {
-      // 出品者が評価した場合、購入者の評価状況をチェック
-      $buyerEvaluation = Evaluation::where('item_id', $item_id)
-      ->where('evaluator_id', $item->buyer_id)
+    if ($currentUserId === $item->buyer_id) {
+      $sellerEvaluation = Evaluation::where('item_id', $item_id)
+      ->where('evaluator_id', $item->seller_id)
       ->first();
 
-      if (!$buyerEvaluation) {
-        // 購入者がまだ評価していない場合、次回アクセス時に評価モーダルを表示
-        session(['buyer_should_evaluate_' . $item_id => true]);
+      if (!$sellerEvaluation) {
+        session(['show_seller_evaluation_modal' => $item_id]);
       }
     }
 
-    return redirect()->route('index');
+    return redirect()->route('chat.show', $item_id);
   }
 
   public function canEvaluate($item_id)

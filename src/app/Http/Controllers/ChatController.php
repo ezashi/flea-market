@@ -29,9 +29,9 @@ class ChatController extends Controller
     ->update(['is_read' => true]);
 
     if ($currentUserId === $item->seller_id) {
-      $chatPartner = $item->buyer; // 出品者の場合は購入者を返す
+      $chatPartner = $item->buyer;
     } else {
-      $chatPartner = $item->seller; // 購入者の場合は出品者を返す
+      $chatPartner = $item->seller;
     }
 
     // 取引中の商品一覧を取得（新着メッセージ順）
@@ -61,10 +61,13 @@ class ChatController extends Controller
 
       $canEvaluate = !$hasEvaluated && ($currentUserId === $item->seller_id || $currentUserId === $item->buyer_id);
 
-      // セッションから取引完了直後かどうかをチェック
-      if (session('show_evaluation_modal')) {
+      if (session('show_buyer_evaluation_modal') == $item_id && $currentUserId === $item->buyer_id) {
         $showEvaluationModal = true;
-        session()->forget('show_evaluation_modal');
+        session()->forget('show_buyer_evaluation_modal');
+      }
+
+      if ($currentUserId === $item->seller_id && !$hasEvaluated) {
+        $showEvaluationModal = true;
       }
     }
 
