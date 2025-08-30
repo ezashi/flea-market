@@ -7,7 +7,7 @@
     background-color: #f5f5f5;
   }
 
-  .sidebar {
+  .chat-sidebar {
     width: 230px;
     background-color: #666;
     color: white;
@@ -43,7 +43,7 @@
     background-color: rgba(255, 255, 255, 0.1);
   }
 
-  .main-content {
+  .chat-main-content {
     flex: 1;
     margin-left: 230px;
     display: flex;
@@ -461,7 +461,7 @@
 </style>
 
 <div class="trade-chat-container">
-  <div class="sidebar">
+  <div class="chat-sidebar">
     <h3 class="sidebar-title">その他の取引</h3>
     <div class="other-trades">
       @if($tradingItems->isEmpty())
@@ -481,7 +481,7 @@
     </div>
   </div>
 
-  <div class="main-content">
+  <div class="chat-main-content">
     <div class="chat-header">
       <div class="chat-user-info">
         <div class="chat-user-avatar">
@@ -528,6 +528,15 @@
                 @endif
               </div>
             @endif
+            @if($message->sender_id === Auth::id())
+              <div class="message-avatar">
+                @if(Auth::user()->profile_image)
+                  <img src="{{ asset(Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }}">
+                @else
+                  {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                @endif
+              </div>
+            @endif
 
             <div class="message-content">
               @if($message->sender_id !== Auth::id())
@@ -559,16 +568,6 @@
                 </div>
               @endif
             </div>
-
-            @if($message->sender_id === Auth::id())
-              <div class="message-avatar">
-                @if(Auth::user()->profile_image)
-                  <img src="{{ asset(Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }}">
-                @else
-                  {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                @endif
-              </div>
-            @endif
           </div>
         @endforeach
       @endif
