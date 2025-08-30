@@ -90,19 +90,30 @@
     border-radius: 20px;
     font-size: 14px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     text-decoration: none;
     display: inline-block;
     user-select: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .category-tag:hover {
     background-color: #ffe6e6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 
   .category-tag.selected {
-    background-color: #ff6b6b;
-    color: white;
+    background-color: #ff6b6b !important;
+    color: white !important;
+    border-color: #ff6b6b !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+  }
+
+  .category-tag.selected:hover {
+    background-color: #e55555 !important;
+    border-color: #e55555 !important;
   }
 
   .category-checkbox {
@@ -334,28 +345,35 @@ document.addEventListener('DOMContentLoaded', function() {
   const categoryTags = document.querySelectorAll('.category-tag');
 
   categoryTags.forEach(tag => {
-    const checkbox = document.getElementById(tag.getAttribute('for'));
+    const checkboxId = tag.getAttribute('for');
+    const checkbox = document.getElementById(checkboxId);
 
-    // 初期状態の設定
-    if (checkbox.checked) {
+    if (checkbox && checkbox.checked) {
       tag.classList.add('selected');
     }
 
     // クリック時の処理
-    tag.addEventListener('click', function() {
-      // チェックボックスの状態を切り替え
-      checkbox.checked = !checkbox.checked;
+    tag.addEventListener('click', function(e) {
+      e.preventDefault();
 
-      // 見た目の更新
-      if (checkbox.checked) {
-        tag.classList.add('selected');
-      } else {
-        tag.classList.remove('selected');
+      if (checkbox) {
+        // チェックボックスの状態を切り替え
+        checkbox.checked = !checkbox.checked;
+
+        // 見た目の更新
+        if (checkbox.checked) {
+          tag.classList.add('selected');
+        } else {
+          tag.classList.remove('selected');
+        }
+
+        // デバッグ用ログ
+        console.log(`Category ${checkboxId}: ${checkbox.checked ? 'selected' : 'deselected'}`);
       }
     });
   });
 
-  // 画像選択時のプレビュー機能
+  // 画像選択時に選択した画像名を表示
   const imageInput = document.getElementById('image');
   const imageLabel = document.querySelector('label[for="image"]');
 
@@ -370,6 +388,15 @@ document.addEventListener('DOMContentLoaded', function() {
         imageLabel.style.backgroundColor = '#ff6b6b';
         imageLabel.style.borderColor = '#ff6b6b';
       }
+    });
+  }
+
+  // フォーム送信前の確認（デバッグ用）
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', function() {
+      const selectedCategories = document.querySelectorAll('input[name="categories[]"]:checked');
+      console.log('Selected categories count:', selectedCategories.length);
     });
   }
 });
