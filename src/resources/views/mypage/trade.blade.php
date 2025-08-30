@@ -386,7 +386,7 @@
 
   .modal-content {
     background: #fcf9deff;
-    padding: 20px;
+    padding: 18px;
     border-radius: 15px;
     max-width: 500px;
     width: 90%;
@@ -412,7 +412,7 @@
     text-align: left;
   }
 
-  . evaluation-form {
+  .evaluation-form {
     text-align: right;
   }
 
