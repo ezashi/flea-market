@@ -114,7 +114,9 @@
   }
 
   .mypage-tab-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     padding: 0;
     text-decoration: none;
     color: #666;
@@ -130,9 +132,6 @@
   }
 
   .unread-count {
-    position: absolute;
-    top: -8px;
-    right: -8px;
     background-color: #ff6b6b;
     color: white;
     border-radius: 50%;
@@ -143,6 +142,7 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    flex-shrink: 0;
   }
 
   .items-container {
@@ -197,7 +197,6 @@
   .item-image-container {
     width: 100%;
     height: 200px;
-    padding-bottom: 75%;
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -230,8 +229,8 @@
 
   .message-notification {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 8px;
+    left: 8px;
     background-color: #ff6b6b;
     color: white;
     border-radius: 50%;
@@ -242,6 +241,7 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    z-index: 10;
   }
 
   .item-details {
