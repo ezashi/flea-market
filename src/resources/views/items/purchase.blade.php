@@ -18,9 +18,18 @@
     align-items: flex-start;
   }
 
+  .left-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
   .product-summary {
     flex-shrink: 0;
-    width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
   }
 
   .product-image-small {
@@ -33,7 +42,6 @@
     color: #fff;
     font-size: 14px;
     border-radius: 8px;
-    margin-bottom: 15px;
     overflow: hidden;
   }
 
@@ -42,6 +50,12 @@
     height: 100%;
     object-fit: contain;
     background-color: #fff;
+  }
+
+  .product-info-inline {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .product-name-small {
@@ -55,17 +69,6 @@
     font-size: 16px;
     color: #000;
     font-weight: bold;
-  }
-
-  .purchase-form-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .left-form-section {
-    flex: 1;
-    margin-right: 40px;
   }
 
   .payment-section {
@@ -194,68 +197,71 @@
     @csrf
 
     <div class="purchase-container">
-      <div class="product-summary">
-        <div class="product-image-small">
-          @if($item->image)
-            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
-          @else
-            商品画像
-          @endif
+      <div class="left-column">
+        <div class="product-summary">
+          <div class="product-image-small">
+            @if($item->image)
+              <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
+            @else
+              商品画像
+            @endif
+          </div>
+          <div class="product-info-inline">
+            <div class="product-name-small">{{ $item->name }}</div>
+            <div class="product-price-small">¥{{ number_format($item->price) }}</div>
+          </div>
+
+          <div class="payment-section">
+            <div class="section-label">支払い方法</div>
+            <select id="payment_method" name="payment_method" class="payment-select" required>
+              <option value="">選択してください</option>
+              <option value="コンビニ払い" {{ old('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>
+                コンビニ払い
+              </option>
+              <option value="カード払い" {{ old('payment_method') == 'カード払い' ? 'selected' : '' }}>
+                カード払い
+              </option>
+            </select>
+            @error('payment_method')
+              <div class="error-message">{{ $message }}</div>
+            @enderror
+          </div>
+
+          <div class="delivery-section">
+            <div class="delivery-header">
+              <div class="section-label">配送先</div>
+              <a href="{{ route('items.changeAddress', $item->id) }}" class="change-address-link">変更する</a>
+            </div>
+            <div class="address-info">
+              <div class="address-line">〒{{ Auth::user()->postal_code ?? '未設定' }}</div>
+              <div class="address-line">{{ Auth::user()->address ?? '未設定' }}{{ Auth::user()->building ?? '' }}</div>
+            </div>
+            <input type="hidden" name="delivery_address" value="{{ Auth::user()->postal_code }} {{ Auth::user()->address }}{{ Auth::user()->building }}">
+            @error('delivery_address')
+              <div class="error-message">{{ $message }}</div>
+            @enderror
+          </div>
         </div>
-        <div class="product-name-small">{{ $item->name }}</div>
-        <div class="product-price-small">¥{{ number_format($item->price) }}</div>
       </div>
 
-      <div class="purchase-form-section">
-        <div class="payment-section">
-          <div class="section-label">支払い方法</div>
-          <select id="payment_method" name="payment_method" class="payment-select" required>
-            <option value="">選択してください</option>
-            <option value="コンビニ払い" {{ old('payment_method') == 'コンビニ払い' ? 'selected' : '' }}>
-              コンビニ払い
-            </option>
-            <option value="カード払い" {{ old('payment_method') == 'カード払い' ? 'selected' : '' }}>
-              カード払い
-            </option>
-          </select>
-          @error('payment_method')
-            <div class="error-message">{{ $message }}</div>
-          @enderror
-        </div>
-
-        <div class="delivery-section">
-          <div class="delivery-header">
-            <div class="section-label">配送先</div>
-            <a href="{{ route('items.changeAddress', $item->id) }}" class="change-address-link">変更する</a>
+      <div class="purchase-summary-section">
+        <div class="purchase-summary">
+          <div class="summary-row">
+            <div class="summary-label">商品代金</div>
+            <div class="summary-value">¥{{ number_format($item->price) }}</div>
           </div>
-          <div class="address-info">
-            <div class="address-line">〒{{ Auth::user()->postal_code ?? '未設定' }}</div>
-            <div class="address-line">{{ Auth::user()->address ?? '未設定' }}{{ Auth::user()->building ?? '' }}</div>
+          <div class="summary-row">
+            <div class="summary-label">支払い方法</div>
+            <div class="summary-value" id="selected-payment">コンビニ払い</div>
           </div>
-          <input type="hidden" name="delivery_address" value="{{ Auth::user()->postal_code }} {{ Auth::user()->address }}{{ Auth::user()->building }}">
-          @error('delivery_address')
-            <div class="error-message">{{ $message }}</div>
-          @enderror
-        </div>
 
-        <div class="purchase-summary-section">
-          <div class="purchase-summary">
-            <div class="summary-row">
-              <div class="summary-label">商品代金</div>
-              <div class="summary-value">¥{{ number_format($item->price) }}</div>
-            </div>
-            <div class="summary-row">
-              <div class="summary-label">支払い方法</div>
-              <div class="summary-value" id="selected-payment">コンビニ払い</div>
-            </div>
-
-            <button type="submit" class="purchase-button">購入する</button>
-          </div>
+          <button type="submit" class="purchase-button">購入する</button>
         </div>
       </div>
     </div>
   </form>
 </div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
