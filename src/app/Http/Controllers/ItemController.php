@@ -11,11 +11,13 @@ use App\Models\Condition;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\PurchaseRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ExhibitionRequest;
+use App\Mail\TransactionCompletedMail;
 
 class ItemController extends Controller
 {
@@ -206,11 +208,37 @@ class ItemController extends Controller
       $item->is_transaction_completed = true;
       $item->save();
 
+      // 出品者と購入者の情報を取得
+      $seller = User::findOrFail($item->seller_id);
+      $buyer = Auth::user();
+
+      // 出品者にメール通知を送信
+      try {
+        Mail::to($seller->email)->send(new TransactionCompletedMail($item, $seller, $buyer));
+        \Log::info('Transaction completion email sent', [
+          'item_id' => $item->id,
+          'seller_email' => $seller->email,
+          'buyer_id' => $buyer->id
+        ]);
+      } catch (\Exception $e) {
+        \Log::error('Failed to send transaction completion email', [
+          'item_id' => $item->id,
+          'seller_email' => $seller->email,
+          'buyer_id' => $buyer->id,
+          'error' => $e->getMessage()
+        ]);
+      }
+
       session(['show_buyer_evaluation_modal' => $item_id]);
 
       return redirect()->route('chat.show', $item_id);
 
     } catch (\Exception $e) {
+      \Log::error('Transaction completion failed', [
+        'item_id' => $item_id,
+        'user_id' => Auth::id(),
+        'error' => $e->getMessage()
+      ]);
       return redirect()->back()->with('error', 'エラーが発生しました: ' . $e->getMessage());
     }
   }
