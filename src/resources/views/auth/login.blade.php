@@ -36,7 +36,7 @@
 
 <div class="login-page">
   <div class="login-form-container">
-    <div class="login-title">ログイン</div>
+    <h1 class="login-title">ログイン</h1>
     <form method="POST" action="{{ route('login') }}">
       @csrf
       <div class="form-group">

@@ -857,7 +857,7 @@
 
 <div class="trade-chat-container">
   <div class="chat-sidebar">
-    <h3 class="sidebar-title">その他の取引</h3>
+    <p class="sidebar-title">その他の取引</p>
     <div class="other-trades">
       @if($tradingItems->isEmpty())
         <p style="color: #ccc; font-size: 14px;">取引中の商品はありません</p>
@@ -886,7 +886,7 @@
             {{ strtoupper(substr($chatPartner->name, 0, 1)) }}
           @endif
         </div>
-        <h2 class="chat-title">「{{ $chatPartner->name }}」さんとの取引画面</h2>
+        <h1 class="chat-title">「{{ $chatPartner->name }}」さんとの取引画面</h1>
       </div>
       @if(Auth::id() === $item->buyer_id && !$item->is_transaction_completed)
         <form action="{{ route('items.completeTransaction', $item->id) }}" method="POST">

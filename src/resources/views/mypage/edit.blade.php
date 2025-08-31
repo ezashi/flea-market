@@ -96,7 +96,7 @@
 
 <div class="edit-page">
   <div class="edit-form-container">
-    <h3 class="edit-form-title">メッセージを編集</h3>
+    <h1 class="edit-form-title">メッセージを編集</h1>
 
     <form method="POST" action="{{ route('chat.update', $message->id) }}">
       @csrf

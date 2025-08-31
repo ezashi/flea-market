@@ -36,7 +36,7 @@
 
 <div class="register-page">
   <div class="register-form-container">
-    <div class="register-title">会員登録</div>
+    <h1 class="register-title">会員登録</h1>
     <form method="POST" action="{{ route('register') }}">
       @csrf
       <div class="form-group">

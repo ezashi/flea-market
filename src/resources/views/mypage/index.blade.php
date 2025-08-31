@@ -282,7 +282,7 @@
         @endif
       </div>
       <div class="user-details">
-        <h2>{{ Auth::user()->name }}</h2>
+        <h1>{{ Auth::user()->name }}</h1>
         @if($user->getEvaluationCount() > 0)
           <div class="user-rating">
             <div class="rating-stars">

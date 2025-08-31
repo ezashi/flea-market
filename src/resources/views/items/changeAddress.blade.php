@@ -80,7 +80,7 @@
 
 <div class="change-address-page">
   <div class="change-address-form-container">
-    <div class="change-address-title">住所の変更</div>
+    <h1 class="change-address-title">住所の変更</h1>
 
     <form method="POST" action="{{ route('items.AddressUpdate', $item) }}">
       @csrf

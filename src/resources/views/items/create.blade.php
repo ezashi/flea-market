@@ -252,7 +252,7 @@
 
 <div class="create-page">
   <div class="create-form-container">
-    <div class="create-form-title">商品の出品</div>
+    <h1 class="create-form-title">商品の出品</h1>
 
     <form method="POST" action="{{ route('items.store') }}" enctype="multipart/form-data" novalidate>
       @csrf
