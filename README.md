@@ -123,16 +123,18 @@ erDiagram
 - **出品履歴**: 出品した商品の一覧表示
 - **取引中商品**: 現在取引中の商品とチャット機能
 
-#### テストユーザー情報
-## 出品者アカウント1
+## テストユーザー情報
+### 出品者アカウント1
 - ユーザー名: Test_seller1
 - メールアドレス: seller1@example.com
 - パスワード: 12345678
-## 出品者アカウント2
+
+### 出品者アカウント2
 - ユーザー名: Test_seller2
 - メールアドレス: seller2@example.com
 - パスワード: 12345678
-## ユーザーデータ
+
+### ユーザーデータ
 - ユーザー名: Test_buyer
 - メールアドレス: buyer@example.com
 - パスワード: 12345678
@@ -152,10 +154,10 @@ erDiagram
 | email_verified_at | TIMESTAMP | NULL | メール認証日時 |
 | password | VARCHAR(255) | NOT NULL | パスワード（ハッシュ化） |
 | profile_image | VARCHAR(255) | NULL | プロフィール画像パス |
+| is_profile_completed | BOOLEAN | DEFAULT FALSE | プロフィール完了フラグ |
 | postal_code | VARCHAR(255) | NULL | 郵便番号 |
 | address | VARCHAR(255) | NULL | 住所 |
 | building | VARCHAR(255) | NULL | 建物名 |
-| is_profile_completed | BOOLEAN | DEFAULT FALSE | プロフィール完了フラグ |
 | remember_token | VARCHAR(100) | NULL | ログイン維持トークン |
 | created_at | TIMESTAMP | NULL | 作成日時 |
 | updated_at | TIMESTAMP | NULL | 更新日時 |
@@ -164,12 +166,12 @@ erDiagram
 | カラム名 | データ型 | 制約 | 説明 |
 |---------|---------|------|------|
 | id | BIGINT UNSIGNED | PRIMARY KEY, AUTO_INCREMENT | 商品ID |
+| image | VARCHAR(255) | NULL | 商品画像パス |
+| condition | VARCHAR(255) | NOT NULL | 商品状態 |
 | name | VARCHAR(255) | NOT NULL | 商品名 |
 | brand | VARCHAR(255) | NULL | ブランド名 |
 | description | TEXT | NOT NULL | 商品説明 |
 | price | INT | NOT NULL | 価格 |
-| condition | VARCHAR(255) | NOT NULL | 商品状態 |
-| image | VARCHAR(255) | NULL | 商品画像パス |
 | seller_id | BIGINT UNSIGNED | NOT NULL, FOREIGN KEY | 出品者ID（usersテーブル参照） |
 | buyer_id | BIGINT UNSIGNED | NULL, FOREIGN KEY | 購入者ID（usersテーブル参照） |
 | sold | BOOLEAN | DEFAULT FALSE | 売却済みフラグ |
