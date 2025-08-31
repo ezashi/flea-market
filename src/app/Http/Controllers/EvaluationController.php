@@ -6,53 +6,72 @@ use App\Models\Item;
 use App\Models\Evaluation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EvaluationController extends Controller
 {
   public function store(Request $request, $item_id)
   {
-    $item = Item::findOrFail($item_id);
-    $currentUserId = Auth::id();
+    try {
+      DB::beginTransaction();
 
-    if (!$item->is_transaction_completed) {
-      return redirect()->back();
-    }
+      $item = Item::findOrFail($item_id);
+      $currentUserId = Auth::id();
 
-    if ($currentUserId !== $item->seller_id && $currentUserId !== $item->buyer_id) {
-      return redirect()->back();
-    }
+      if (!$item->is_transaction_completed) {
+        return redirect()->back();
+      }
 
-    $evaluatedId = ($currentUserId === $item->buyer_id) ? $item->seller_id : $item->buyer_id;
+      if ($currentUserId !== $item->seller_id && $currentUserId !== $item->buyer_id) {
+        return redirect()->back();
+      }
 
-    // 既に評価済みかチェック
-    $existingEvaluation = Evaluation::where('item_id', $item_id)
-    ->where('evaluator_id', $currentUserId)
-    ->first();
-
-    if ($existingEvaluation) {
-      return redirect()->back();
-    }
-
-    Evaluation::create([
-      'item_id' => $item_id,
-      'evaluator_id' => $currentUserId,
-      'evaluated_id' => $evaluatedId,
-      'rating' => $request->rating,
-    ]);
-
-    if ($currentUserId === $item->buyer_id) {
-      $sellerEvaluation = Evaluation::where('item_id', $item_id)
-      ->where('evaluator_id', $item->seller_id)
+      $existingEvaluation = Evaluation::where('item_id', $item_id)
+      ->where('evaluator_id', $currentUserId)
       ->first();
 
-      if (!$sellerEvaluation) {
-        session(['show_seller_evaluation_modal' => $item_id]);
+      if ($existingEvaluation) {
+        return redirect()->back();
       }
+
+      $evaluatedId = ($currentUserId === $item->buyer_id) ? $item->seller_id : $item->buyer_id;
+
+      Evaluation::create([
+        'item_id' => $item_id,
+        'evaluator_id' => $currentUserId,
+        'evaluated_id' => $evaluatedId,
+        'rating' => $request->rating,
+      ]);
+
+      $totalEvaluations = Evaluation::where('item_id', $item_id)->count();
+
+      DB::commit();
+
+      if ($totalEvaluations >= 2) {
+        return redirect()->route('chat.show', $item_id);
+      } else {
+        if ($currentUserId === $item->buyer_id) {
+          $sellerEvaluation = Evaluation::where('item_id', $item_id)
+          ->where('evaluator_id', $item->seller_id)
+          ->first();
+
+          if (!$sellerEvaluation) {
+            session(['show_seller_evaluation_modal' => $item_id]);
+          }
+        }
+
+        return redirect()->route('chat.show', $item_id);
+      }
+
+    } catch (\Exception $e) {
+      DB::rollBack();
+      \Log::error('Evaluation store failed', [
+        'item_id' => $item_id,
+        'user_id' => $currentUserId,
+        'error' => $e->getMessage()
+      ]);
+      return redirect()->back();
     }
-
-    $bothEvaluated = Evaluation::where('item_id', $item_id)->count() >= 2;
-
-    return redirect()->route('chat.show', $item_id);
   }
 
   public function canEvaluate($item_id)
@@ -60,7 +79,6 @@ class EvaluationController extends Controller
     $item = Item::findOrFail($item_id);
     $currentUserId = Auth::id();
 
-    // 取引完了済みでない場合は評価不可
     if (!$item->is_transaction_completed) {
       return false;
     }
@@ -69,7 +87,6 @@ class EvaluationController extends Controller
       return false;
     }
 
-    // 既に評価済みの場合は評価不可
     $existingEvaluation = Evaluation::where('item_id', $item_id)
     ->where('evaluator_id', $currentUserId)
     ->first();
@@ -77,9 +94,6 @@ class EvaluationController extends Controller
     return !$existingEvaluation;
   }
 
-  /**
-   * 評価状況を取得
-   */
   public function getEvaluationStatus($item_id)
   {
     $item = Item::findOrFail($item_id);
@@ -88,7 +102,8 @@ class EvaluationController extends Controller
       return [
         'buyer_evaluated' => false,
         'seller_evaluated' => false,
-        'both_evaluated' => false
+        'both_evaluated' => false,
+        'transaction_fully_completed' => false
       ];
     }
 
@@ -100,16 +115,16 @@ class EvaluationController extends Controller
     ->where('evaluator_id', $item->seller_id)
     ->exists();
 
+    $bothEvaluated = $buyerEvaluation && $sellerEvaluation;
+
     return [
       'buyer_evaluated' => $buyerEvaluation,
       'seller_evaluated' => $sellerEvaluation,
-      'both_evaluated' => $buyerEvaluation && $sellerEvaluation
+      'both_evaluated' => $bothEvaluated,
+      'transaction_fully_completed' => $bothEvaluated
     ];
   }
 
-  /**
-   * 評価一覧を取得（マイページ用）
-   */
   public function getUserEvaluations($userId)
   {
     $evaluations = Evaluation::where('evaluated_id', $userId)

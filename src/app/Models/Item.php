@@ -19,12 +19,14 @@ class Item extends Model
         'seller_id',
         'buyer_id',
         'sold',
-        'payment_method'
+        'payment_method',
+        'is_transaction_completed'
     ];
 
     protected $casts = [
         'price' => 'integer',
         'sold' => 'boolean',
+        'is_transaction_completed' => 'boolean',
     ];
 
     // 出品者のリレーション
@@ -73,5 +75,59 @@ class Item extends Model
     public function evaluations()
     {
         return $this->hasMany(Evaluation::class);
+    }
+
+    /**
+     * 双方の評価が完了しているかチェック
+     */
+    public function isBothEvaluated()
+    {
+        return $this->evaluations()->count() >= 2;
+    }
+
+    /**
+     * 指定ユーザーが評価済みかチェック
+     */
+    public function isEvaluatedBy($userId)
+    {
+        return $this->evaluations()
+            ->where('evaluator_id', $userId)
+            ->exists();
+    }
+
+    /**
+     * 取引が完全に終了しているかチェック
+     * (取引完了 + 双方評価完了)
+     */
+    public function isFullyCompleted()
+    {
+        return $this->is_transaction_completed && $this->isBothEvaluated();
+    }
+
+    /**
+     * 指定ユーザーにとって取引中かどうかを判定
+     */
+    public function isTradingFor($userId)
+    {
+        $isParticipant = ($this->seller_id === $userId || $this->buyer_id === $userId);
+
+        if (!$this->sold || !$isParticipant) {
+            return false;
+        }
+
+        if (!$this->is_transaction_completed) {
+            return true;
+        }
+
+        return !$this->isEvaluatedBy($userId);
+    }
+
+    /**
+     * 評価待ちの状態かチェック
+     */
+    public function isPendingEvaluation($userId)
+    {
+        // 取引完了済みかつ自分が未評価の場合
+        return $this->is_transaction_completed && !$this->isEvaluatedBy($userId) && ($this->seller_id === $userId || $this->buyer_id === $userId);
     }
 }

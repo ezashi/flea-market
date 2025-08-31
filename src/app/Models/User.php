@@ -65,12 +65,37 @@ class User extends Authenticatable
             $query->where('seller_id', $userId)->orWhere('buyer_id', $userId);
         })
         ->where('sold', true)
+        ->where(function($query) use ($userId) {
+            $query->where('is_transaction_completed', false)
+                ->orWhereDoesntHave('evaluations', function($subQuery) use ($userId) {
+                    $subQuery->where('evaluator_id', $userId);
+                })
+                ->orWhereHas('evaluations', function($subQuery) use ($userId) {
+                    $subQuery->selectRaw('item_id, COUNT(*) as evaluation_count')
+                    ->groupBy('item_id')
+                    ->havingRaw('evaluation_count < 2');
+                });
+        })
         ->with(['chatMessages' => function($query) {
             $query->where('is_deleted', false)
             ->latest('created_at')
             ->limit(1);
-        }, 'buyer', 'seller'])
+        }, 'buyer', 'seller', 'evaluations'])
         ->get()
+        ->filter(function($item) use ($userId) {
+            $evaluationCount = $item->evaluations->count();
+
+            if ($evaluationCount >= 2) {
+                return false;
+            }
+
+            if ($item->is_transaction_completed) {
+                $myEvaluation = $item->evaluations->where('evaluator_id', $userId)->first();
+                return !$myEvaluation;
+            }
+
+            return true;
+        })
         ->sortByDesc(function($item) {
             $latestMessage = $item->chatMessages->first();
             return $latestMessage ? $latestMessage->created_at : $item->updated_at;
@@ -91,11 +116,7 @@ class User extends Authenticatable
     {
         $userId = $this->id;
 
-        $itemIds = Item::where(function($q) use ($userId) {
-            $q->where('seller_id', $userId)->orWhere('buyer_id', $userId);
-        })
-        ->where('sold', true)
-        ->pluck('id');
+        $itemIds = $this->tradingItems()->pluck('id');
 
         if ($itemIds->isEmpty()) {
             return [];
