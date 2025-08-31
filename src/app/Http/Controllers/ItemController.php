@@ -159,7 +159,7 @@ class ItemController extends Controller
         return redirect()->route('index');
       }
 
-      if ($item->seller_id === Auth::id()) {
+      if ($item->seller_id == Auth::id()) {
         return redirect()->route('index');
       }
 
@@ -187,7 +187,7 @@ class ItemController extends Controller
     try {
       $item = Item::findOrFail($item_id);
 
-      if (Auth::id() !== $item->buyer_id) {
+      if (Auth::id() != $item->buyer_id) {
         return redirect()->back();
       }
 
@@ -227,7 +227,7 @@ class ItemController extends Controller
         'user_id' => Auth::id(),
         'error' => $e->getMessage()
       ]);
-      return redirect()->back()->with($e->getMessage());
+      return redirect()->back();
     }
   }
 
