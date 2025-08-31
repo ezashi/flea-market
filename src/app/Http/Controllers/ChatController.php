@@ -22,7 +22,6 @@ class ChatController extends Controller
     ->orderBy('created_at', 'asc')
     ->get();
 
-    // 未読メッセージを既読に更新
     ChatMessage::where('item_id', $item_id)
     ->where('sender_id', '!=', Auth::id())
     ->where('is_read', false)
@@ -34,24 +33,20 @@ class ChatController extends Controller
       $chatPartner = $item->seller;
     }
 
-    // 取引中の商品一覧を取得（新着メッセージ順）
     $tradingItems = Auth::user()->tradingItems();
 
     $draftMessage = session("draft_message_{$item_id}", '');
 
-    // 評価関連の情報を取得
     $canEvaluate = false;
     $showEvaluationModal = false;
     $hasEvaluated = false;
     $partnerHasEvaluated = false;
 
     if ($item->is_transaction_completed) {
-      // 自分の評価状況をチェック
       $myEvaluation = Evaluation::where('item_id', $item_id)
       ->where('evaluator_id', $currentUserId)
       ->first();
 
-      // 相手の評価状況をチェック
       $partnerEvaluation = Evaluation::where('item_id', $item_id)
       ->where('evaluated_id', $currentUserId)
       ->first();
@@ -120,7 +115,6 @@ class ChatController extends Controller
   {
     $message = ChatMessage::findOrFail($message_id);
 
-    // 権限チェック
     if ($message->sender_id !== Auth::id()) {
       return redirect()->back()->with('error', '権限がありません。');
     }
@@ -132,7 +126,6 @@ class ChatController extends Controller
   {
     $message = ChatMessage::findOrFail($message_id);
 
-    // 権限チェック
     if ($message->sender_id !== Auth::id()) {
       return redirect()->back();
     }
@@ -150,7 +143,6 @@ class ChatController extends Controller
   {
     $message = ChatMessage::findOrFail($message_id);
 
-    // 権限チェック
     if ($message->sender_id !== Auth::id()) {
       return redirect()->back();
     }
@@ -167,13 +159,11 @@ class ChatController extends Controller
   {
     $currentUserId = Auth::id();
 
-    // 共通の未読メッセージ
     $unreadBaseQuery = function() use ($currentUserId) {
       return ChatMessage::where('sender_id', '!=', $currentUserId)
       ->where('is_read', false)
       ->where('is_deleted', false);
     };
-    // 取引中アイテムの未読メッセージ
     $tradingItemsQuery = function() use ($currentUserId) {
       return Item::where(function($query) use ($currentUserId) {
         $query->where('seller_id', $currentUserId)
@@ -182,9 +172,8 @@ class ChatController extends Controller
       ->where('sold', true);
     };
 
-    // 特定アイテムの未読数を取得
     if ($item_id) {
-      $count = (clone $unreadBaseQuery)
+      $count = (clone $unreadBaseQuery())
       ->where('item_id', $item_id)
       ->count();
 
@@ -193,7 +182,6 @@ class ChatController extends Controller
 
     $tradingItemIds = $tradingItemsQuery()->pluck('id');
 
-    // 取引中アイテムごとの未読数を取得
     $unreadCounts = $unreadBaseQuery()
     ->whereIn('item_id', $tradingItemIds)
     ->select('item_id', \DB::raw('COUNT(*) as unread_count'))

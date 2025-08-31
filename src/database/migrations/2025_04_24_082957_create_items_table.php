@@ -18,12 +18,11 @@ class CreateItemsTable extends Migration
             $table->string('image')->nullable();
             $table->string('condition');
             $table->string('name');
-            $table->string('brand');
+            $table->string('brand')->nullable();
             $table->text('description');
             $table->integer('price');
             $table->foreignId('seller_id')->constrained('users');
             $table->foreignId('buyer_id')->nullable()->constrained('users');
-            $table->foreignId('trader_id')->nullable()->constrained('users');
             $table->boolean('sold')->default(false);
             $table->boolean('is_transaction_completed')->default(false);
             $table->string('payment_method')->nullable();

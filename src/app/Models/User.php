@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -48,19 +47,16 @@ class User extends Authenticatable
         'is_profile_completed' => 'boolean',
     ];
 
-    // 出品中の商品
     public function sellingItems()
     {
         return $this->hasMany(Item::class, 'seller_id');
     }
 
-    // 購入した商品
     public function purchasedItems()
     {
         return $this->hasMany(Item::class, 'buyer_id');
     }
 
-    // 取引中の商品
     public function tradingItems()
     {
         $userId = $this->id;
@@ -79,11 +75,9 @@ class User extends Authenticatable
             $latestMessage = $item->chatMessages->first();
             return $latestMessage ? $latestMessage->created_at : $item->updated_at;
         })
-        ->values(); // インデックスを再構築
+        ->values();
     }
 
-
-    //未読メッセージ数を取得
     public function getUnreadMessagesCount($itemId)
     {
         return ChatMessage::where('item_id', $itemId)
@@ -93,7 +87,6 @@ class User extends Authenticatable
         ->count();
     }
 
-    // 自分が関わる取引中のアイテムIDを取得
     public function getAllUnreadCounts()
     {
         $userId = $this->id;
@@ -119,31 +112,26 @@ class User extends Authenticatable
         return $unreadCountsQuery->pluck('unread_count', 'item_id')->toArray();
     }
 
-    // いいねした商品
     public function likes()
     {
         return $this->hasMany(Like::class);
     }
 
-    // コメント
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
-    // 受けた評価
     public function receivedEvaluations()
     {
         return $this->hasMany(Evaluation::class, 'evaluated_id');
     }
 
-    // 送った評価
     public function sentEvaluations()
     {
         return $this->hasMany(Evaluation::class, 'evaluator_id');
     }
 
-    // 平均評価を取得
     public function getAverageRating()
     {
         $evaluations = $this->receivedEvaluations();
@@ -157,7 +145,6 @@ class User extends Authenticatable
         return round($average);
     }
 
-    // 評価数の取得
     public function getEvaluationCount()
     {
         return $this->receivedEvaluations()->count();

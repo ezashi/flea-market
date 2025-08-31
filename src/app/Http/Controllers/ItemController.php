@@ -15,9 +15,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\PurchaseRequest;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\ExhibitionRequest;
 use App\Mail\TransactionCompletedMail;
+use App\Http\Requests\ExhibitionRequest;
 
 class ItemController extends Controller
 {
@@ -29,8 +28,7 @@ class ItemController extends Controller
     $search = $request->input('search', '');
     $tab = $request->input('tab', 'recommend');
 
-    // 検索機能の実装
-    if ('search') {
+    if ($search) {
       $query->where('name', 'like', '%' . $search . '%');
     }
 
@@ -44,7 +42,6 @@ class ItemController extends Controller
       }
     }
 
-    // 自分が出品した商品を除外
     if (Auth::check()) {
       $query->where('seller_id', '!=', Auth::id());
     }
@@ -57,7 +54,7 @@ class ItemController extends Controller
 
   public function mypage(Request $request)
   {
-    $tab = $request->input('tab', 'buy');
+    $tab = $request->input('tab', 'sell');
     $user = Auth::user();
     $unreadCounts = [];
 
@@ -88,8 +85,6 @@ class ItemController extends Controller
     return view('items.create', compact('categories', 'conditions'));
   }
 
-
-  // 商品出品
   public function store(ExhibitionRequest $request)
   {
     $data = $request->validated();
@@ -107,8 +102,6 @@ class ItemController extends Controller
     return redirect()->route('mypage', ['tab' => 'sell']);
   }
 
-
-  //商品詳細
   public function show($item_id)
   {
     session()->forget(['selected_payment', 'current_purchase_item_id']);
@@ -162,17 +155,14 @@ class ItemController extends Controller
     try {
       $item = Item::findOrFail($item_id);
 
-      // 既に売却済みの場合はエラー
       if ($item->sold) {
         return redirect()->route('index');
       }
 
-      // 自分の商品は購入できない
       if ($item->seller_id === Auth::id()) {
         return redirect()->route('index');
       }
 
-      // 購入処理
       $item->update([
         'buyer_id' => Auth::id(),
         'sold' => true,
@@ -208,11 +198,9 @@ class ItemController extends Controller
       $item->is_transaction_completed = true;
       $item->save();
 
-      // 出品者と購入者の情報を取得
       $seller = User::findOrFail($item->seller_id);
       $buyer = Auth::user();
 
-      // 出品者にメール通知を送信
       try {
         Mail::to($seller->email)->send(new TransactionCompletedMail($item, $seller, $buyer));
         \Log::info('Transaction completion email sent', [
@@ -254,13 +242,11 @@ class ItemController extends Controller
 
     if ($existing) {
       $existing->delete();
-      $action = 'unliked';
     } else {
       Like::create([
         'user_id' => Auth::id(),
         'item_id' => $item->id
       ]);
-      $action = 'liked';
     }
 
     return redirect()->back();
