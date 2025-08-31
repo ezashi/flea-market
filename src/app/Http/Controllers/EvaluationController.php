@@ -23,7 +23,7 @@ class EvaluationController extends Controller
         return redirect()->back();
       }
 
-      if ($currentUserId !== $item->seller_id && $currentUserId !== $item->buyer_id) {
+      if ($currentUserId != $item->seller_id && $currentUserId != $item->buyer_id) {
         DB::rollBack();
         return redirect()->back();
       }
@@ -37,7 +37,7 @@ class EvaluationController extends Controller
         return redirect()->back();
       }
 
-      $evaluatedId = ($currentUserId === $item->buyer_id) ? $item->seller_id : $item->buyer_id;
+      $evaluatedId = ($currentUserId == $item->buyer_id) ? $item->seller_id : $item->buyer_id;
 
       Evaluation::create([
         'item_id' => $item_id,
