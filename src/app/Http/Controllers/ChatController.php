@@ -116,7 +116,7 @@ class ChatController extends Controller
     $message = ChatMessage::findOrFail($message_id);
 
     if ($message->sender_id !== Auth::id()) {
-      return redirect()->back()->with('error', '権限がありません。');
+      return redirect()->back();
     }
 
     return view('mypage.edit', compact('message'));

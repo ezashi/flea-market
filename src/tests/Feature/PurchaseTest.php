@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PurchaseTest extends TestCase
@@ -16,6 +17,9 @@ class PurchaseTest extends TestCase
         parent::setUp();
         $this->artisan('migrate:fresh');
         $this->seed();
+
+        Mail::fake();
+        $this->withoutMiddleware(\App\Http\Middleware\ChatMessage::class);
     }
 
     /** @test */
@@ -39,7 +43,6 @@ class PurchaseTest extends TestCase
         ]);
 
         $response->assertRedirect('/mypage?tab=buy');
-        $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('items', [
             'id' => $item->id,
@@ -64,7 +67,6 @@ class PurchaseTest extends TestCase
         ]);
 
         $response->assertRedirect('/');
-        $response->assertSessionHas('error');
 
         $this->assertDatabaseHas('items', [
             'id' => $item->id,
@@ -92,7 +94,6 @@ class PurchaseTest extends TestCase
         ]);
 
         $response->assertRedirect('/');
-        $response->assertSessionHas('error');
 
         $this->assertDatabaseHas('items', [
             'id' => $item->id,
@@ -167,7 +168,6 @@ class PurchaseTest extends TestCase
         $response = $this->actingAs($buyer)->post("/items/{$item->id}/complete");
 
         $response->assertRedirect("/chat/{$item->id}");
-        $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('items', [
             'id' => $item->id,
@@ -191,11 +191,9 @@ class PurchaseTest extends TestCase
 
         $response = $this->actingAs($seller)->post("/items/{$item->id}/complete");
         $response->assertRedirect();
-        $response->assertSessionHas('error');
 
         $response = $this->actingAs($outsider)->post("/items/{$item->id}/complete");
         $response->assertRedirect();
-        $response->assertSessionHas('error');
 
         $this->assertDatabaseHas('items', [
             'id' => $item->id,

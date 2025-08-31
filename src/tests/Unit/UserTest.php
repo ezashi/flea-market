@@ -74,11 +74,11 @@ class UserTest extends TestCase
         $sellerTradingItems = $seller->tradingItems();
         $buyerTradingItems = $buyer->tradingItems();
 
-        $this->assertCount(1, $sellerTradingItems); // tradingItemのみ
-        $this->assertCount(2, $buyerTradingItems);   // tradingItem + completedItem（買い手は未評価）
+        $this->assertCount(1, $sellerTradingItems);
+        $this->assertCount(2, $buyerTradingItems);
 
         $this->assertTrue($sellerTradingItems->contains($tradingItem));
-        $this->assertFalse($sellerTradingItems->contains($completedItem)); // 売り手は評価済みなので除外
+        $this->assertFalse($sellerTradingItems->contains($completedItem));
     }
 
     /** @test */

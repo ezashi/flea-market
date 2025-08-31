@@ -227,7 +227,7 @@ class ItemController extends Controller
         'user_id' => Auth::id(),
         'error' => $e->getMessage()
       ]);
-      return redirect()->back()->with('error', 'エラーが発生しました: ' . $e->getMessage());
+      return redirect()->back()->with($e->getMessage());
     }
   }
 
