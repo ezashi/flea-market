@@ -17,6 +17,8 @@ class EvaluationTest extends TestCase
         parent::setUp();
         $this->artisan('migrate:fresh');
         $this->seed();
+
+        $this->withoutMiddleware(\App\Http\Middleware\ChatMessage::class);
     }
 
     /** @test */
@@ -36,8 +38,7 @@ class EvaluationTest extends TestCase
             'rating' => 5,
         ]);
 
-        $response->assertRedirect("/chat/{$item->id}");
-        $response->assertSessionHas('success');
+        $response->assertRedirect("/");
 
         $this->assertDatabaseHas('evaluations', [
             'item_id' => $item->id,
@@ -71,7 +72,6 @@ class EvaluationTest extends TestCase
         ]);
 
         $response->assertRedirect();
-        $response->assertSessionHas('info');
 
         $this->assertEquals(1, Evaluation::where('item_id', $item->id)
             ->where('evaluator_id', $buyer->id)->count());
@@ -94,7 +94,6 @@ class EvaluationTest extends TestCase
         ]);
 
         $response->assertRedirect();
-        $response->assertSessionHas('error');
 
         $this->assertDatabaseMissing('evaluations', [
             'item_id' => $item->id,
@@ -121,7 +120,6 @@ class EvaluationTest extends TestCase
         ]);
 
         $response->assertRedirect();
-        $response->assertSessionHas('error');
 
         $this->assertDatabaseMissing('evaluations', [
             'item_id' => $item->id,

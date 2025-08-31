@@ -19,10 +19,12 @@ class EvaluationController extends Controller
       $currentUserId = Auth::id();
 
       if (!$item->is_transaction_completed) {
+        DB::rollBack();
         return redirect()->back();
       }
 
       if ($currentUserId !== $item->seller_id && $currentUserId !== $item->buyer_id) {
+        DB::rollBack();
         return redirect()->back();
       }
 
@@ -31,6 +33,7 @@ class EvaluationController extends Controller
       ->first();
 
       if ($existingEvaluation) {
+        DB::rollBack();
         return redirect()->back();
       }
 
@@ -48,7 +51,7 @@ class EvaluationController extends Controller
       DB::commit();
 
       if ($totalEvaluations >= 2) {
-        return redirect()->route('chat.show', $item_id);
+        return redirect()->route('index');
       } else {
         if ($currentUserId === $item->buyer_id) {
           $sellerEvaluation = Evaluation::where('item_id', $item_id)
@@ -60,7 +63,7 @@ class EvaluationController extends Controller
           }
         }
 
-        return redirect()->route('chat.show', $item_id);
+        return redirect()->route('index');
       }
 
     } catch (\Exception $e) {
