@@ -7,7 +7,7 @@
     margin: 0;
     padding: 0;
     width: 100%;
-}
+  }
 
   .tab-list {
       list-style: none;
@@ -159,23 +159,65 @@
     font-size: 16px;
     padding: 60px 20px;
   }
+
+  /* 検索結果表示エリア */
+  .search-result-info {
+    padding: 20px 20px 0 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .search-keyword {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .clear-search-btn {
+    background: none;
+    border: none;
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+  }
+
+  .clear-search-btn:hover {
+    color: #0056b3;
+  }
 </style>
 
 <div class="main-content">
   <div class="tab-navigation">
     <ul class="tab-list">
       <li class="tab-item">
-        <a href="{{ route('index') }}" class="tab-link {{ !request('tab') || request('tab') !== 'mylist' ? 'active' : '' }}">
+        <a href="{{ route('index', array_merge(['tab' => 'recommend'], $search ? ['search' => $search] : [])) }}" 
+           class="tab-link {{ (!request('tab') || request('tab') === 'recommend') ? 'active' : '' }}">
           おすすめ
         </a>
       </li>
       <li class="tab-item">
-        <a href="{{ route('index', ['tab' => 'mylist', 'search' => request('search')]) }}" class="tab-link {{ request('tab') === 'mylist' ? 'active' : '' }}">
+        <a href="{{ route('index', array_merge(['tab' => 'mylist'], $search ? ['search' => $search] : [])) }}" 
+           class="tab-link {{ request('tab') === 'mylist' ? 'active' : '' }}">
           マイリスト
         </a>
       </li>
     </ul>
   </div>
+
+  @if($search)
+  <div class="search-result-info">
+    検索キーワード「<span class="search-keyword">{{ $search }}</span>」での検索結果
+    <form method="GET" action="{{ route('index') }}" style="display: inline;">
+      @if(request('tab'))
+        <input type="hidden" name="tab" value="{{ request('tab') }}">
+      @endif
+      <button type="submit" class="clear-search-btn">検索をクリア</button>
+    </form>
+  </div>
+  @endif
 
   <div class="products-container">
     @if(count($items) > 0)
@@ -201,9 +243,17 @@
     @else
       <div class="no-items-message">
         @if(request('tab') === 'mylist')
-          いいねした商品がありません。
+          @if($search)
+            検索キーワード「{{ $search }}」に一致するいいねした商品がありません。
+          @else
+            いいねした商品がありません。
+          @endif
         @else
-          商品がありません。
+          @if($search)
+            検索キーワード「{{ $search }}」に一致する商品がありません。
+          @else
+            商品がありません。
+          @endif
         @endif
       </div>
     @endif

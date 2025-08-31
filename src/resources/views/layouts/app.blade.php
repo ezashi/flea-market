@@ -18,8 +18,11 @@
 
       @if (!Route::is('login') && !Route::is('register') && !Route::is('chat.show'))
         <div class="search-container">
-          <form action="{{ request()->is('mylist') ? route('mylist') : route('index') }}" method="GET" id="search-form">
-            <input class="search-input" type="text" name="search" placeholder="何をお探しですか？" value="{{ $search ?? '' }}">
+          <form action="{{ route('index') }}" method="GET" id="search-form">
+            @if(request('tab'))
+              <input type="hidden" name="tab" value="{{ request('tab') }}">
+            @endif
+            <input class="search-input" type="text" name="search" placeholder="何をお探しですか？" value="{{ request('search', '') }}">
           </form>
         </div>
 

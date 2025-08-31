@@ -34,8 +34,8 @@ class ItemController extends Controller
 
     if ($tab === 'mylist'){
       if(Auth::check()){
-      $likedItems = Auth::user()->likes()->pluck('item_id');
-      $query->whereIn('id', $likedItems);
+        $likedItems = Auth::user()->likes()->pluck('item_id');
+        $query->whereIn('id', $likedItems);
       }else{
         $items = collect();
         return view('items.index', compact('items', 'search', 'tab'));
