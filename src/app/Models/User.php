@@ -47,16 +47,21 @@ class User extends Authenticatable
         'is_profile_completed' => 'boolean',
     ];
 
+    // 出品中の商品
     public function sellingItems()
     {
         return $this->hasMany(Item::class, 'seller_id');
     }
 
+    // 購入した商品
     public function purchasedItems()
     {
         return $this->hasMany(Item::class, 'buyer_id');
     }
 
+    /**
+     * 取引中の商品を取得（各ユーザーの評価状況に基づいて個別に判定）
+     */
     public function tradingItems()
     {
         $userId = $this->id;
@@ -65,17 +70,6 @@ class User extends Authenticatable
             $query->where('seller_id', $userId)->orWhere('buyer_id', $userId);
         })
         ->where('sold', true)
-        ->where(function($query) use ($userId) {
-            $query->where('is_transaction_completed', false)
-                ->orWhereDoesntHave('evaluations', function($subQuery) use ($userId) {
-                    $subQuery->where('evaluator_id', $userId);
-                })
-                ->orWhereHas('evaluations', function($subQuery) use ($userId) {
-                    $subQuery->selectRaw('item_id, COUNT(*) as evaluation_count')
-                    ->groupBy('item_id')
-                    ->havingRaw('evaluation_count < 2');
-                });
-        })
         ->with(['chatMessages' => function($query) {
             $query->where('is_deleted', false)
             ->latest('created_at')
@@ -83,18 +77,8 @@ class User extends Authenticatable
         }, 'buyer', 'seller', 'evaluations'])
         ->get()
         ->filter(function($item) use ($userId) {
-            $evaluationCount = $item->evaluations->count();
-
-            if ($evaluationCount >= 2) {
-                return false;
-            }
-
-            if ($item->is_transaction_completed) {
-                $myEvaluation = $item->evaluations->where('evaluator_id', $userId)->first();
-                return !$myEvaluation;
-            }
-
-            return true;
+            // Itemモデルの isTradingFor メソッドを使用（個別評価対応）
+            return $item->isTradingFor($userId);
         })
         ->sortByDesc(function($item) {
             $latestMessage = $item->chatMessages->first();
@@ -103,15 +87,21 @@ class User extends Authenticatable
         ->values();
     }
 
+    /**
+     * 指定商品の未読メッセージ数を取得
+     */
     public function getUnreadMessagesCount($itemId)
     {
         return ChatMessage::where('item_id', $itemId)
-        ->where('sender_id', '!=', $this->id)
-        ->where('is_read', false)
-        ->where('is_deleted', false)
-        ->count();
+            ->where('sender_id', '!=', $this->id)
+            ->where('is_read', false)
+            ->where('is_deleted', false)
+            ->count();
     }
 
+    /**
+     * 自分が関わる取引中のアイテムの未読メッセージ数を全て取得
+     */
     public function getAllUnreadCounts()
     {
         $userId = $this->id;
@@ -133,26 +123,31 @@ class User extends Authenticatable
         return $unreadCountsQuery->pluck('unread_count', 'item_id')->toArray();
     }
 
+    // いいねした商品
     public function likes()
     {
         return $this->hasMany(Like::class);
     }
 
+    // コメント
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
+    // 受けた評価
     public function receivedEvaluations()
     {
         return $this->hasMany(Evaluation::class, 'evaluated_id');
     }
 
+    // 送った評価
     public function sentEvaluations()
     {
         return $this->hasMany(Evaluation::class, 'evaluator_id');
     }
 
+    // 平均評価を取得
     public function getAverageRating()
     {
         $evaluations = $this->receivedEvaluations();
@@ -166,6 +161,7 @@ class User extends Authenticatable
         return round($average);
     }
 
+    // 評価数の取得
     public function getEvaluationCount()
     {
         return $this->receivedEvaluations()->count();
