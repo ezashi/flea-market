@@ -421,7 +421,7 @@
         @endif
       </div>
 
-      <form action="{{ route('items.comment', $item) }}" method="POST" class="comment-form">
+      <form action="{{ route('items.comment', $item) }}" method="POST" class="comment-form" novalidate>
         @csrf
         <label for="content" class="comment-form-label">商品へのコメント</label>
         <textarea name="content" id="content" class="comment-textarea" required></textarea>

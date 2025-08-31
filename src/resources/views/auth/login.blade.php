@@ -37,7 +37,7 @@
 <div class="login-page">
   <div class="login-form-container">
     <h1 class="login-title">ログイン</h1>
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" novalidate>
       @csrf
       <div class="form-group">
         <label for="email" class="form-label">メールアドレス</label>

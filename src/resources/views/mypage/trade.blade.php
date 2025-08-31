@@ -969,7 +969,7 @@
     </div>
 
     <div class="chat-input-section">
-      <form method="POST" action="{{ route('chat.send', $item->id) }}" enctype="multipart/form-data" class="chat-input-form">
+      <form method="POST" action="{{ route('chat.send', $item->id) }}" enctype="multipart/form-data" class="chat-input-form" novalidate>
         @csrf
         <div class="chat-input-main">
           <textarea name="message" class="chat-textarea" placeholder="取引メッセージを記入してください" rows="1">{{ $draftMessage }}</textarea>

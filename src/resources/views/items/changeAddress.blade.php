@@ -82,7 +82,7 @@
   <div class="change-address-form-container">
     <h1 class="change-address-title">住所の変更</h1>
 
-    <form method="POST" action="{{ route('items.AddressUpdate', $item) }}">
+    <form method="POST" action="{{ route('items.AddressUpdate', $item) }}" novalidate>
       @csrf
 
       <div class="change-address-form-group">

@@ -136,7 +136,7 @@
   <div class="profile-form-container">
     <h1 class="profile-form-title">プロフィール設定</h1>
 
-    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" novalidate>
       @csrf
       <div class="profile-image-section">
         <div class="profile-avatar">
