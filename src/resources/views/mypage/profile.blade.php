@@ -157,7 +157,7 @@
 
       <div class="profile-form-group">
         <label for="name" class="profile-form-label">ユーザー名</label>
-        <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" class="profile-form-input" placeholder="既存の値が入力されている" required>
+        <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" class="profile-form-input" required>
         @error('name')
           <div class="error-message">{{ $message }}</div>
         @enderror
