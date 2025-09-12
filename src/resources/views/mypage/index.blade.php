@@ -174,6 +174,7 @@
     .trade-items-grid {
       grid-template-columns: repeat(4, 1fr);
       gap: 25px;
+      grid-auto-flow: row;
     }
   }
 
@@ -183,6 +184,7 @@
     .trade-items-grid {
       grid-template-columns: repeat(4, 1fr);
       gap: 22px;
+      grid-auto-flow: row;
     }
   }
 
@@ -192,6 +194,7 @@
     .trade-items-grid {
       grid-template-columns: repeat(4, 1fr);
       gap: 18px;
+      grid-auto-flow: row;
     }
   }
 
@@ -204,6 +207,7 @@
     .trade-items-grid {
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
+      grid-auto-flow: row;
     }
   }
 
@@ -216,6 +220,7 @@
     .trade-items-grid {
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
+      grid-auto-flow: row;
     }
   }
 
@@ -228,6 +233,7 @@
     .trade-items-grid {
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
+      grid-auto-flow: row;
     }
   }
 

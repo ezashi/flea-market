@@ -106,6 +106,8 @@ class ChatController extends Controller
 
     ChatMessage::create($messageData);
 
+    $item->touch();
+
     session()->forget("draft_message_{$item_id}");
 
     return redirect()->route('chat.show', $item_id);
@@ -135,6 +137,8 @@ class ChatController extends Controller
       'is_edited' => true,
       'edited_at' => now(),
     ]);
+
+    $message->item->touch();
 
     return redirect()->route('chat.show', $message->item_id);
   }

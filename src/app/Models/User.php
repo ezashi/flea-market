@@ -73,7 +73,7 @@ class User extends Authenticatable
         ->with([
             'chatMessages' => function($query) {
                 $query->where('is_deleted', false)
-                ->latest('created_at')
+                ->orderBy('created_at', 'desc')
                 ->limit(1);
             }, 'buyer', 'seller', 'evaluations' => function($query) {
                 $query->select('item_id', 'evaluator_id', 'evaluated_id');
@@ -93,7 +93,10 @@ class User extends Authenticatable
 
         return $tradingItems->sortByDesc(function($item) {
             $latestMessage = $item->chatMessages->first();
-            return $latestMessage ? $latestMessage->created_at : $item->updated_at;
+            if ($latestMessage) {
+                return $latestMessage->created_at;
+            }
+            return $item->updated_at;
         })->values();
     }
 
