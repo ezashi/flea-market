@@ -9,9 +9,9 @@
 
   .purchase-container {
     background-color: white;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 60px;
+    padding: 40px 20px;
     min-height: 100vh;
     display: flex;
     gap: 40px;
@@ -23,8 +23,8 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
-    flex: 0 0 66.66%;
-    box-sizing: border-box;
+    flex: 1;
+    min-width: 0;
   }
 
   .product-summary {
@@ -36,12 +36,13 @@
   }
 
   .product-info {
-    padding: 0 350px 30px 0;
+    padding: 0 0 30px 0;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 50px;
+    gap: 30px;
     border-bottom: 1px solid #000;
+    width: 100%;
   }
 
   .product-image-small {
@@ -55,6 +56,7 @@
     font-size: 14px;
     border-radius: 8px;
     overflow: hidden;
+    flex-shrink: 0;
   }
 
   .product-image-small img {
@@ -68,6 +70,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex: 1;
   }
 
   .product-name-small {
@@ -83,9 +86,11 @@
     font-weight: bold;
   }
 
-  .payment-section {
-    padding: 0 350px 30px 0;
+  .payment-section,
+  .delivery-section {
+    padding: 0 0 30px 0;
     border-bottom: 1px solid #000;
+    width: 100%;
   }
 
   .section-label {
@@ -101,8 +106,10 @@
   }
 
   .payment-select {
-    width: 80%;
-    margin: 10px 200px 10px 30px;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 16px;
+    margin: 10px 0;
     border: 2px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
@@ -116,16 +123,13 @@
     border-color: #ff6b6b;
   }
 
-  .delivery-section {
-    padding: 0 350px 30px 0;
-    border-bottom: 1px solid #000;
-  }
-
   .delivery-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .change-address-link {
@@ -141,7 +145,7 @@
   .address-info {
     color: #333;
     line-height: 1.5;
-    margin: 30px;
+    margin: 20px 0;
     font-weight: bold;
   }
 
@@ -151,8 +155,8 @@
 
   .purchase-summary-section {
     flex-shrink: 0;
-    flex: 0 0 33.33%;
-    box-sizing: border-box;
+    flex: 0 0 320px;
+    min-width: 280px;
   }
 
   .purchase-summary {
@@ -207,6 +211,174 @@
     color: #dc3545;
     font-size: 12px;
     margin-top: 5px;
+  }
+
+  /* PC大画面対応 (1400px以上) */
+  @media (min-width: 1400px) {
+    .purchase-container {
+      max-width: 1400px;
+      padding: 60px 40px;
+    }
+
+    .purchase-summary-section {
+      flex: 0 0 360px;
+    }
+
+    .product-info {
+      gap: 50px;
+    }
+  }
+
+  /* PC標準サイズ対応 (1200px-1399px) */
+  @media (min-width: 1200px) and (max-width: 1399px) {
+    .purchase-container {
+      padding: 50px 30px;
+    }
+  }
+
+  /* タブレット大画面対応 (851px-1199px) */
+  @media (min-width: 851px) and (max-width: 1199px) {
+    .purchase-container {
+      padding: 40px 20px;
+      gap: 30px;
+    }
+
+    .purchase-summary-section {
+      flex: 0 0 280px;
+    }
+
+    .purchase-summary {
+      padding: 25px;
+    }
+  }
+
+  /* タブレット標準サイズ対応 (765px-850px) */
+  @media (min-width: 765px) and (max-width: 850px) {
+    .purchase-container {
+      padding: 30px 15px;
+      gap: 25px;
+    }
+
+    .left-column {
+      gap: 30px;
+    }
+
+    .product-info {
+      gap: 20px;
+      padding-bottom: 20px;
+    }
+
+    .product-image-small {
+      width: 100px;
+      height: 100px;
+    }
+
+    .product-name-small,
+    .product-price-small {
+      font-size: 14px;
+    }
+
+    .purchase-summary-section {
+      flex: 0 0 250px;
+      min-width: 250px;
+    }
+
+    .purchase-summary {
+      padding: 20px;
+    }
+
+    .section-label {
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+
+    .payment-select {
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+
+    .summary-label,
+    .summary-value {
+      font-size: 14px;
+    }
+
+    .purchase-button {
+      padding: 12px;
+      font-size: 14px;
+    }
+  }
+
+  /* モバイル対応 (764px以下) */
+  @media (max-width: 764px) {
+    .purchase-container {
+      flex-direction: column;
+      padding: 20px 15px;
+      gap: 30px;
+    }
+
+    .left-column {
+      flex: none;
+      width: 100%;
+    }
+
+    .purchase-summary-section {
+      flex: none;
+      width: 100%;
+    }
+
+    .product-info {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 15px;
+    }
+
+    .product-image-small {
+      width: 80px;
+      height: 80px;
+    }
+
+    .delivery-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    .change-address-link {
+      align-self: flex-end;
+    }
+
+    .address-info {
+      margin: 15px 0;
+    }
+
+    .purchase-summary {
+      padding: 20px;
+    }
+  }
+
+  /* 極小画面対応 (480px以下) */
+  @media (max-width: 480px) {
+    .purchase-container {
+      padding: 15px 10px;
+    }
+
+    .product-info {
+      padding-bottom: 15px;
+    }
+
+    .payment-section,
+    .delivery-section {
+      padding-bottom: 20px;
+    }
+
+    .purchase-summary {
+      padding: 15px;
+    }
+
+    .summary-row {
+      padding: 10px 0;
+    }
   }
 </style>
 
@@ -281,7 +453,6 @@
     </div>
   </form>
 </div>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
