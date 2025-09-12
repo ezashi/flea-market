@@ -68,7 +68,7 @@ class Item extends Model
     // チャットメッセージのリレーション
     public function chatMessages()
     {
-    return $this->hasMany(ChatMessage::class);
+        return $this->hasMany(ChatMessage::class);
     }
 
     // 評価のリレーション
@@ -109,9 +109,11 @@ class Item extends Model
      */
     public function isTradingFor($userId)
     {
-        $isParticipant = ($this->seller_id === $userId || $this->buyer_id === $userId);
+        if ($this->seller_id !== $userId && $this->buyer_id !== $userId) {
+            return false;
+        }
 
-        if (!$this->sold || !$isParticipant) {
+        if (!$this->sold) {
             return false;
         }
 
@@ -119,7 +121,11 @@ class Item extends Model
             return true;
         }
 
-        return !$this->isEvaluatedBy($userId);
+        $hasEvaluated = $this->evaluations()
+            ->where('evaluator_id', $userId)
+            ->exists();
+
+        return !$hasEvaluated;
     }
 
     /**

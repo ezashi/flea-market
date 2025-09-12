@@ -66,25 +66,35 @@ class User extends Authenticatable
     {
         $userId = $this->id;
 
-        return Item::where(function($query) use ($userId) {
+        $items = Item::where(function($query) use ($userId) {
             $query->where('seller_id', $userId)->orWhere('buyer_id', $userId);
         })
         ->where('sold', true)
-        ->with(['chatMessages' => function($query) {
-            $query->where('is_deleted', false)
-            ->latest('created_at')
-            ->limit(1);
-        }, 'buyer', 'seller', 'evaluations'])
-        ->get()
-        ->filter(function($item) use ($userId) {
-            // Itemモデルの isTradingFor メソッドを使用（個別評価対応）
-            return $item->isTradingFor($userId);
-        })
-        ->sortByDesc(function($item) {
+        ->with([
+            'chatMessages' => function($query) {
+                $query->where('is_deleted', false)
+                ->latest('created_at')
+                ->limit(1);
+            }, 'buyer', 'seller', 'evaluations' => function($query) {
+                $query->select('item_id', 'evaluator_id', 'evaluated_id');
+            }
+        ])
+        ->get();
+
+        $tradingItems = $items->filter(function($item) use ($userId) {
+            if (!$item->is_transaction_completed) {
+                return true;
+            }
+
+            $myEvaluation = $item->evaluations->firstWhere('evaluator_id', $userId);
+
+            return $myEvaluation === null;
+        });
+
+        return $tradingItems->sortByDesc(function($item) {
             $latestMessage = $item->chatMessages->first();
             return $latestMessage ? $latestMessage->created_at : $item->updated_at;
-        })
-        ->values();
+        })->values();
     }
 
     /**
