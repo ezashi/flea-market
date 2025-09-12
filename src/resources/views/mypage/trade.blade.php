@@ -333,6 +333,26 @@
     border-color: #ff6b6b;
   }
 
+  .draft-status {
+    position: absolute;
+    right: 25px;
+    bottom: -25px;
+    font-size: 12px;
+    color: #999;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .draft-status.saving {
+    opacity: 1;
+    color: #007bff;
+  }
+
+  .draft-status.saved {
+    opacity: 1;
+    color: #28a745;
+  }
+
   .chat-input-actions {
     display: flex;
     align-items: center;
@@ -1222,7 +1242,14 @@
       <form method="POST" action="{{ route('chat.send', $item->id) }}" enctype="multipart/form-data" class="chat-input-form" novalidate>
         @csrf
         <div class="chat-input-main">
-          <textarea name="message" class="chat-textarea" placeholder="取引メッセージを記入してください" rows="1">{{ $draftMessage }}</textarea>
+          <textarea
+            name="message"
+            id="chat-message-input"
+            class="chat-textarea"
+            placeholder="取引メッセージを記入してください"
+            rows="1"
+          >{{ $draftMessage }}</textarea>
+          <div class="draft-status" id="draft-status"></div>
           @error('message')
             <div class="error-message">{{ $message }}</div>
           @enderror
@@ -1270,43 +1297,143 @@
   </div>
 @endif
 
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  const csrfToken = document.querySelector('meta[name="csrf-token"]');
+  const token = csrfToken ? csrfToken.getAttribute('content') : '';
+
+  const messageInput = document.getElementById('chat-message-input');
+  const draftStatus = document.getElementById('draft-status');
+  const itemId = {{ $item->id }};
+
+  let draftTimer = null;
+  let lastSavedContent = messageInput.value;
+
+  function saveDraft() {
+    const currentContent = messageInput.value;
+
+    if (currentContent === lastSavedContent) {
+      return;
+    }
+
+    draftStatus.textContent = '保存中...';
+    draftStatus.className = 'draft-status saving';
+
+    fetch(`/chat/${itemId}/save-draft`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': token,
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        message: currentContent
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        lastSavedContent = currentContent;
+        draftStatus.textContent = '下書き保存済み';
+        draftStatus.className = 'draft-status saved';
+
+        setTimeout(() => {
+          draftStatus.className = 'draft-status';
+        }, 3000);
+      }
+    })
+    .catch(error => {
+      console.error('下書き保存エラー:', error);
+      draftStatus.textContent = '保存に失敗しました';
+      draftStatus.className = 'draft-status';
+    });
+  }
+
+  function clearDraft() {
+    fetch(`/chat/${itemId}/clear-draft`, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': token,
+        'Accept': 'application/json',
+      }
+    })
+    .then(response => response.json())
+    .catch(error => {
+      console.error('下書き削除エラー:', error);
+    });
+  }
+
+  messageInput.addEventListener('input', function() {
+    if (draftTimer) {
+      clearTimeout(draftTimer);
+    }
+
+    draftTimer = setTimeout(() => {
+      saveDraft();
+    }, 2000);
+  });
+
+  document.querySelector('.chat-input-form').addEventListener('submit', function(e) {
+    if (draftTimer) {
+      clearTimeout(draftTimer);
+    }
+    clearDraft();
+  });
+
+  window.addEventListener('beforeunload', function() {
+    const currentContent = messageInput.value.trim();
+    if (currentContent !== lastSavedContent.trim() && currentContent !== '') {
+      const formData = new FormData();
+      formData.append('message', currentContent);
+      navigator.sendBeacon && navigator.sendBeacon(`/chat/${itemId}/save-draft`, formData);
+    }
+  });
+
+  document.addEventListener('visibilitychange', function() {
+    const currentContent = messageInput.value.trim();
+    if (document.hidden && currentContent !== lastSavedContent.trim() && currentContent !== '') {
+      saveDraft();
+    }
+  });
+
   const stars = document.querySelectorAll('.rating-star-interactive');
   const ratingInput = document.getElementById('rating-value');
   const submitBtn = document.getElementById('submit-btn');
   let selectedRating = 0;
 
-  stars.forEach((star, index) => {
-    star.addEventListener('mouseenter', function() {
-      const hoverRating = index + 1;
-      updateStarDisplay(hoverRating, false);
-    });
-
-    star.addEventListener('click', function() {
-      selectedRating = index + 1;
-      ratingInput.value = selectedRating;
-      updateStarDisplay(selectedRating, true);
-      enableSubmitButton();
-    });
-  });
-
-  document.getElementById('star-rating').addEventListener('mouseleave', function() {
-    updateStarDisplay(selectedRating, true);
-  });
-
-  function updateStarDisplay(rating, isSelected) {
+  if (stars.length > 0) {
     stars.forEach((star, index) => {
-      star.classList.remove('active', 'hover');
-      if (index < rating) {
-        star.classList.add(isSelected ? 'active' : 'hover');
-      }
-    });
-  }
+      star.addEventListener('mouseenter', function() {
+        const hoverRating = index + 1;
+        updateStarDisplay(hoverRating, false);
+      });
 
-  function enableSubmitButton() {
-    submitBtn.classList.add('enabled');
+      star.addEventListener('click', function() {
+        selectedRating = index + 1;
+        ratingInput.value = selectedRating;
+        updateStarDisplay(selectedRating, true);
+        enableSubmitButton();
+      });
+    });
+
+    document.getElementById('star-rating').addEventListener('mouseleave', function() {
+      updateStarDisplay(selectedRating, true);
+    });
+
+    function updateStarDisplay(rating, isSelected) {
+      stars.forEach((star, index) => {
+        star.classList.remove('active', 'hover');
+        if (index < rating) {
+          star.classList.add(isSelected ? 'active' : 'hover');
+        }
+      });
+    }
+
+    function enableSubmitButton() {
+      if (submitBtn) {
+        submitBtn.classList.add('enabled');
+      }
+    }
   }
 });
 </script>

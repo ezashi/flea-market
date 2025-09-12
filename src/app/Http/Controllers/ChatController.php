@@ -113,6 +113,25 @@ class ChatController extends Controller
     return redirect()->route('chat.show', $item_id);
   }
 
+  public function saveDraft(Request $request, $item_id)
+  {
+    $message = trim($request->input('message', ''));
+
+    if (empty($message)) {
+      session()->forget("draft_message_{$item_id}");
+    } else {
+      session(["draft_message_{$item_id}" => $message]);
+    }
+
+    return response()->json(['status' => 'success']);
+  }
+
+  public function clearDraft(Request $request, $item_id)
+  {
+    session()->forget("draft_message_{$item_id}");
+    return response()->json(['status' => 'success']);
+  }
+
   public function edit($message_id)
   {
     $message = ChatMessage::findOrFail($message_id);

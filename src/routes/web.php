@@ -72,8 +72,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/chat/{item_id}/send', [ChatController::class, 'send'])->name('chat.send');
     Route::get('/chat/message/{message_id}/edit', [ChatController::class, 'edit'])->name('chat.edit');
     Route::post('/chat/message/{message_id}/update', [ChatController::class, 'update'])->name('chat.update');
-
     Route::post('/chat/message/{message_id}/delete', [ChatController::class, 'delete'])->name('chat.delete');
+
+    Route::post('/chat/{item_id}/save-draft', [ChatController::class, 'saveDraft'])->name('chat.saveDraft');
+    Route::post('/chat/{item_id}/clear-draft', [ChatController::class, 'clearDraft'])->name('chat.clearDraft');
 
     // 評価機能
     Route::post('/evaluation/{item_id}', [EvaluationController::class, 'store'])->name('evaluation.store');
