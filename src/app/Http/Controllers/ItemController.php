@@ -8,8 +8,10 @@ use App\Models\Like;
 use App\Models\Comment;
 use App\Models\Category;
 use App\Models\Condition;
+use App\Models\ChatMessage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CommentRequest;
@@ -63,7 +65,47 @@ class ItemController extends Controller
     } elseif ($tab === 'buy') {
       $items = Auth::user()->purchasedItems()->latest()->get();
     } else {
-      $items = Auth::user()->tradingItems();
+      // 取引中商品を新しいメッセージ順に並べる
+      $currentUserId = Auth::id();
+
+      $items = Item::where(function($query) use ($currentUserId) {
+          $query->where('seller_id', $currentUserId)
+                ->orWhere('buyer_id', $currentUserId);
+      })
+      ->where('sold', true)
+      ->leftJoin('chat_messages', function($join) use ($currentUserId) {
+        $join->on('items.id', '=', 'chat_messages.item_id')
+        ->where('chat_messages.sender_id', '!=', $currentUserId)
+        ->where('chat_messages.is_deleted', false);
+      })
+      ->select(
+        'items.*',
+        DB::raw('MAX(chat_messages.created_at) as latest_message_time'),
+        DB::raw('COUNT(CASE WHEN chat_messages.is_read = false THEN 1 END) as unread_count')
+      )
+      ->groupBy(
+        'items.id',
+        'items.image',
+        'items.condition',
+        'items.name',
+        'items.brand',
+        'items.description',
+        'items.price',
+        'items.seller_id',
+        'items.buyer_id',
+        'items.sold',
+        'items.is_transaction_completed',
+        'items.payment_method',
+        'items.created_at',
+        'items.updated_at'
+      )
+      ->orderByRaw('
+        CASE WHEN latest_message_time IS NOT NULL THEN 0 ELSE 1 END,
+        latest_message_time DESC,
+        items.updated_at DESC
+      ')
+      ->get();
+
       $unreadCounts = Auth::user()->getAllUnreadCounts();
     }
 

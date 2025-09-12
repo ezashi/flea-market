@@ -157,25 +157,77 @@
     gap: 20px;
   }
 
+  /* 取引中商品を新しいメッセージ順に左から表示 */
+  .trade-items-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    grid-auto-flow: row;
+  }
+
   /* PC (1400-1540px) - 4列固定 */
   @media (min-width: 1400px) and (max-width: 1540px) {
     .items-container {
       padding: 40px 60px;
     }
-    .items-grid {
+    .items-grid,
+    .trade-items-grid {
       grid-template-columns: repeat(4, 1fr);
       gap: 25px;
     }
   }
 
-  /* タブレット (768-850px) - 4列維持 */
+  /* PC大画面 (1200px-1399px) */
+  @media (min-width: 1200px) and (max-width: 1399px) {
+    .items-grid,
+    .trade-items-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+  }
+
+  /* タブレット大 (851px-1199px) */
+  @media (min-width: 851px) and (max-width: 1199px) {
+    .items-grid,
+    .trade-items-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+  }
+
+  /* タブレット (768px-850px) - 4列維持 */
   @media (min-width: 768px) and (max-width: 850px) {
     .items-container {
       padding: 40px 15px;
     }
-    .items-grid {
+    .items-grid,
+    .trade-items-grid {
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
+    }
+  }
+
+  /* タブレット小 (481px-764px) - 3列 */
+  @media (min-width: 481px) and (max-width: 764px) {
+    .items-container {
+      padding: 30px 15px;
+    }
+    .items-grid,
+    .trade-items-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+  }
+
+  /* モバイル (480px以下) - 2列 */
+  @media (max-width: 480px) {
+    .items-container {
+      padding: 20px 10px;
+    }
+    .items-grid,
+    .trade-items-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
   }
 
@@ -192,6 +244,31 @@
 
   .item-card:hover {
     transform: translateY(-2px);
+  }
+
+  .trade-item-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    min-width: 0;
+  }
+
+  .trade-item-card.has-new-message {
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
+    border: 2px solid rgba(255, 107, 107, 0.3);
+  }
+
+  .trade-item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  .trade-item-card.has-new-message:hover {
+    box-shadow: 0 6px 16px rgba(255, 107, 107, 0.3);
   }
 
   .item-image-container {
@@ -242,6 +319,28 @@
     justify-content: center;
     font-weight: bold;
     z-index: 10;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .message-notification.high-priority {
+    background-color: #dc3545;
+    font-weight: bold;
+    animation: pulse 1s infinite;
   }
 
   .item-details {
@@ -255,9 +354,20 @@
     color: #000;
     margin: 0;
     text-decoration: none;
+    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   .item-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .trade-item-card a {
     text-decoration: none;
     color: inherit;
     display: block;
@@ -268,6 +378,92 @@
     color: #000;
     font-size: 16px;
     padding: 60px 20px;
+  }
+
+  .trade-status-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    z-index: 5;
+  }
+
+  .trade-status-indicator.active {
+    background-color: #28a745;
+  }
+
+  .trade-status-indicator.waiting {
+    background-color: #ffc107;
+  }
+
+  /* レスポンシブ対応でのユーザープロフィール部分 */
+  @media (max-width: 850px) {
+    .user-profile-section {
+      padding: 30px 15px;
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .user-info-group {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .user-avatar {
+      width: 100px;
+      height: 100px;
+      font-size: 40px;
+    }
+
+    .mypage-tab-list {
+      padding: 0 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .mypage-tab-item {
+      margin-right: 0;
+    }
+
+    .mypage-tab-link {
+      padding: 10px 15px;
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .user-profile-section {
+      padding: 20px 10px;
+    }
+
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      font-size: 32px;
+    }
+
+    .item-image-container {
+      height: 150px;
+      font-size: 14px;
+    }
+
+    .item-details {
+      padding: 10px;
+    }
+
+    .item-title {
+      font-size: 13px;
+    }
+
+    .message-notification {
+      width: 20px;
+      height: 20px;
+      font-size: 11px;
+    }
   }
 </style>
 
@@ -336,10 +532,11 @@
         @endif
       </div>
     @else
-      <div class="items-grid">
+      <div class="{{ request('tab') === 'trade' ? 'trade-items-grid' : 'items-grid' }}">
         @foreach($items as $item)
           @if(request('tab') === 'trade')
-            <a href="{{ route('chat.show', $item->id) }}" class="item-card">
+            <a href="{{ route('chat.show', $item->id) }}" 
+               class="trade-item-card {{ isset($unreadCounts) && isset($unreadCounts[$item->id]) && $unreadCounts[$item->id] > 0 ? 'has-new-message' : '' }}">
               <div class="item-image-container">
                 @if($item->image)
                   <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
@@ -347,7 +544,9 @@
                   商品画像
                 @endif
                 @if(isset($unreadCounts) && isset($unreadCounts[$item->id]) && $unreadCounts[$item->id] > 0)
-                  <div class="message-notification">{{ $unreadCounts[$item->id] }}</div>
+                  <div class="message-notification {{ $unreadCounts[$item->id] >= 5 ? 'high-priority' : '' }}">
+                    {{ $unreadCounts[$item->id] > 99 ? '99+' : $unreadCounts[$item->id] }}
+                  </div>
                 @endif
               </div>
               <div class="item-details">
