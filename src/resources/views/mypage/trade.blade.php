@@ -35,10 +35,11 @@
     top: 62px;
     overflow-y: auto;
     z-index: 100;
+    flex-shrink: 0;
   }
 
   .sidebar-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     margin-bottom: 20px;
     color: white;
@@ -56,6 +57,8 @@
     padding: 10px;
     border-radius: 5px;
     transition: background-color 0.2s;
+    word-wrap: break-word;
+    line-height: 1.4;
   }
 
   .other-trade-item:hover {
@@ -69,6 +72,7 @@
     flex-direction: column;
     height: 100%;
     position: relative;
+    min-width: 0;
   }
 
   .chat-header {
@@ -78,12 +82,17 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    flex-shrink: 0;
   }
 
   .chat-user-info {
     display: flex;
     align-items: center;
     gap: 15px;
+    min-width: 0;
+    flex: 1;
   }
 
   .chat-user-avatar {
@@ -98,6 +107,7 @@
     font-size: 20px;
     font-weight: bold;
     overflow: hidden;
+    flex-shrink: 0;
   }
 
   .chat-user-avatar img {
@@ -110,6 +120,10 @@
     font-size: 20px;
     font-weight: bold;
     color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
 
   .complete-transaction-btn {
@@ -122,6 +136,8 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .complete-transaction-btn:hover {
@@ -135,6 +151,7 @@
     display: flex;
     align-items: center;
     gap: 30px;
+    flex-shrink: 0;
   }
 
   .product-image {
@@ -159,6 +176,7 @@
 
   .product-details {
     flex: 1;
+    min-width: 0;
   }
 
   .product-name {
@@ -166,6 +184,7 @@
     font-weight: bold;
     color: #333;
     margin-bottom: 10px;
+    word-wrap: break-word;
   }
 
   .product-price {
@@ -217,6 +236,7 @@
   .message-content {
     max-width: 60%;
     position: relative;
+    min-width: 0;
   }
 
   .message-sender {
@@ -224,6 +244,7 @@
     color: #666;
     margin-bottom: 5px;
     text-align: center;
+    word-wrap: break-word;
   }
 
   .message-bubble {
@@ -234,6 +255,7 @@
     line-height: 1.4;
     color: #333;
     position: relative;
+    word-wrap: break-word;
   }
 
   .message-item.own .message-bubble {
@@ -285,11 +307,13 @@
     display: flex;
     align-items: flex-end;
     gap: 15px;
+    flex-wrap: wrap;
   }
 
   .chat-input-main {
     flex: 1;
     position: relative;
+    min-width: 200px;
   }
 
   .chat-textarea {
@@ -313,6 +337,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 0;
   }
 
   .image-upload-btn {
@@ -326,6 +351,7 @@
     transition: all 0.2s;
     text-decoration: none;
     display: inline-block;
+    white-space: nowrap;
   }
 
   .image-upload-btn:hover {
@@ -345,6 +371,7 @@
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s;
+    flex-shrink: 0;
   }
 
   .send-btn:hover {
@@ -426,6 +453,7 @@
     justify-content: center;
     gap: 8px;
     margin: 20px 0;
+    flex-wrap: wrap;
   }
 
   .rating-star-interactive {
@@ -489,113 +517,159 @@
     font-weight: bold;
   }
 
-  /* レスポンシブデザイン */
-
-  /* タブレット小 (768-850px) */
-  @media (min-width: 768px) and (max-width: 850px) {
+  /* PC大画面対応 (1400px以上) */
+  @media (min-width: 1400px) {
     .chat-sidebar {
-      width: 180px;
-      padding: 15px 8px;
+      width: 250px;
+      padding: 25px 20px;
     }
 
     .sidebar-title {
-      font-size: 16px;
-      margin-bottom: 15px;
+      font-size: 20px;
+      margin-bottom: 25px;
     }
 
     .other-trade-item {
-      padding: 8px;
-      font-size: 14px;
-      margin-bottom: 8px;
+      padding: 12px;
+      font-size: 18px;
+      margin-bottom: 12px;
     }
 
     .chat-main-content {
-      margin-left: 180px;
+      margin-left: 250px;
     }
 
     .chat-header {
-      padding: 12px 15px;
-    }
-
-    .chat-user-avatar {
-      width: 45px;
-      height: 45px;
-      font-size: 18px;
-    }
-
-    .chat-title {
-      font-size: 18px;
-    }
-
-    .complete-transaction-btn {
-      padding: 10px 18px;
-      font-size: 14px;
-    }
-
-    .product-info-section {
-      padding: 20px 15px;
+      padding: 25px 40px;
       gap: 20px;
     }
 
+    .chat-user-avatar {
+      width: 55px;
+      height: 55px;
+      font-size: 22px;
+    }
+
+    .chat-title {
+      font-size: 22px;
+    }
+
+    .complete-transaction-btn {
+      padding: 14px 28px;
+      font-size: 17px;
+    }
+
+    .product-info-section {
+      padding: 35px 40px;
+      gap: 35px;
+    }
+
     .product-image {
-      width: 110px;
-      height: 110px;
+      width: 170px;
+      height: 170px;
     }
 
     .product-name {
-      font-size: 20px;
+      font-size: 26px;
+      margin-bottom: 12px;
     }
 
     .product-price {
-      font-size: 18px;
+      font-size: 22px;
     }
 
     .chat-messages {
-      padding: 20px 15px;
+      padding: 35px 40px;
     }
 
     .message-item {
-      gap: 12px;
+      gap: 18px;
+      margin-bottom: 25px;
     }
 
     .message-avatar {
-      width: 36px;
-      height: 36px;
-      font-size: 15px;
+      width: 45px;
+      height: 45px;
+      font-size: 18px;
     }
 
     .message-bubble {
-      padding: 12px 18px;
-      font-size: 15px;
+      padding: 18px 24px;
+      font-size: 17px;
     }
 
     .chat-input-section {
-      padding: 15px;
+      padding: 25px 40px;
     }
 
     .chat-textarea {
-      padding: 12px 18px;
-      font-size: 15px;
+      padding: 18px 24px;
+      font-size: 17px;
     }
 
     .image-upload-btn {
-      padding: 10px 16px;
-      font-size: 13px;
+      padding: 14px 24px;
+      font-size: 15px;
     }
 
     .send-btn {
-      width: 45px;
-      height: 45px;
+      width: 55px;
+      height: 55px;
     }
 
     .send-icon {
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
     }
   }
 
-  /* タブレット大 (851-1024px) */
-  @media (min-width: 851px) and (max-width: 1024px) {
+  /* PC標準サイズ対応 (1200px-1399px) */
+  @media (min-width: 1200px) and (max-width: 1399px) {
+    .chat-sidebar {
+      width: 220px;
+      padding: 20px 18px;
+    }
+
+    .sidebar-title {
+      font-size: 20px;
+      margin-bottom: 22px;
+    }
+
+    .other-trade-item {
+      padding: 11px;
+      font-size: 18px;
+      margin-bottom: 11px;
+    }
+
+    .chat-main-content {
+      margin-left: 220px;
+    }
+
+    .chat-header {
+      padding: 22px 35px;
+    }
+
+    .product-info-section {
+      padding: 32px 35px;
+      gap: 32px;
+    }
+
+    .product-image {
+      width: 160px;
+      height: 160px;
+    }
+
+    .chat-messages {
+      padding: 32px 35px;
+    }
+
+    .chat-input-section {
+      padding: 22px 35px;
+    }
+  }
+
+  /* タブレット大画面対応 (851px-1199px) */
+  @media (min-width: 851px) and (max-width: 1199px) {
     .chat-sidebar {
       width: 200px;
       padding: 15px 10px;
@@ -636,8 +710,156 @@
     }
   }
 
-  /* モバイル (767px以下) */
-  @media (max-width: 767px) {
+  /* タブレット標準サイズ対応 (765px-850px) */
+  @media (min-width: 765px) and (max-width: 850px) {
+    .chat-sidebar {
+      width: 180px;
+      padding: 15px 10px;
+      height: calc(100vh - 51px);
+      top: 51px;
+      left: 0;
+      position: fixed;
+      box-sizing: border-box;
+    }
+
+    .sidebar-title {
+      font-size: 20px;
+      margin-bottom: 18px;
+    }
+
+    .other-trade-item {
+      padding: 8px;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .chat-main-content {
+      margin-left: 180px;
+      height: calc(100vh - 62px);
+    }
+
+    .chat-header {
+      padding: 15px 18px;
+      gap: 12px;
+    }
+
+    .chat-user-avatar {
+      width: 45px;
+      height: 45px;
+      font-size: 18px;
+    }
+
+    .chat-title {
+      font-size: 18px;
+    }
+
+    .complete-transaction-btn {
+      padding: 10px 18px;
+      font-size: 14px;
+    }
+
+    .product-info-section {
+      padding: 20px 18px;
+      gap: 20px;
+    }
+
+    .product-image {
+      width: 120px;
+      height: 120px;
+    }
+
+    .product-name {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .product-price {
+      font-size: 18px;
+    }
+
+    .chat-messages {
+      padding: 20px 18px;
+    }
+
+    .message-item {
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      font-size: 15px;
+    }
+
+    .message-content {
+      max-width: 65%;
+    }
+
+    .message-bubble {
+      padding: 12px 18px;
+      font-size: 15px;
+    }
+
+    .chat-input-section {
+      padding: 15px 18px;
+    }
+
+    .chat-input-form {
+      gap: 12px;
+    }
+
+    .chat-input-main {
+      min-width: 180px;
+    }
+
+    .chat-textarea {
+      padding: 12px 18px;
+      font-size: 15px;
+    }
+
+    .image-upload-btn {
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+
+    .send-btn {
+      width: 45px;
+      height: 45px;
+    }
+
+    .send-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* モーダルの調整 */
+    .modal-content {
+      width: 85%;
+      padding: 25px 15px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      margin-bottom: 18px;
+    }
+
+    .modal-subtitle {
+      font-size: 14px;
+    }
+
+    .rating-star-interactive {
+      font-size: 42px;
+    }
+
+    .modal-submit-btn {
+      padding: 12px 20px;
+      font-size: 15px;
+    }
+  }
+
+  /* モバイル (764px以下) */
+  @media (max-width: 764px) {
     main {
       height: calc(100vh - 140px);
     }
@@ -669,10 +891,14 @@
     .chat-header {
       padding: 10px 15px;
       flex-shrink: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
     }
 
     .chat-user-info {
       gap: 10px;
+      width: 100%;
     }
 
     .chat-user-avatar {
@@ -683,12 +909,14 @@
 
     .chat-title {
       font-size: 16px;
+      white-space: normal;
     }
 
     .complete-transaction-btn {
       padding: 8px 16px;
       font-size: 14px;
       border-radius: 20px;
+      width: 100%;
     }
 
     .product-info-section {
@@ -753,6 +981,19 @@
 
     .chat-input-form {
       gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chat-input-main {
+      min-width: auto;
+      width: 100%;
+      order: 1;
+    }
+
+    .chat-input-actions {
+      order: 2;
+      justify-content: space-between;
+      width: 100%;
     }
 
     .chat-textarea {
@@ -781,6 +1022,7 @@
     .modal-content {
       padding: 30px 20px;
       margin: 20px;
+      width: calc(100% - 40px);
     }
 
     .modal-title {
@@ -804,17 +1046,15 @@
   /* 非常に小さい画面 (480px以下) */
   @media (max-width: 480px) {
     .chat-header {
-      flex-direction: column;
-      gap: 10px;
-      align-items: flex-start;
+      padding: 8px 10px;
     }
 
     .chat-user-info {
-      width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .complete-transaction-btn {
-      width: 100%;
       margin-top: 10px;
     }
 
@@ -835,22 +1075,32 @@
       font-size: 14px;
     }
 
-    .chat-input-form {
+    .chat-input-actions {
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .chat-input-actions {
-      justify-content: space-between;
+    .image-upload-btn,
+    .send-btn {
       width: 100%;
+    }
+
+    .send-btn {
+      height: 40px;
+      border-radius: 20px;
     }
 
     .modal-content {
       padding: 20px 15px;
+      margin: 15px;
     }
 
     .rating-star-interactive {
       font-size: 32px;
+    }
+
+    .interactive-rating {
+      gap: 5px;
     }
   }
 </style>
